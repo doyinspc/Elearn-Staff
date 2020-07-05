@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CKEditor from 'ckeditor4-react';
-import {getCoursematerials, getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
+import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,  FormText } from 'reactstrap';
 
-import CardFitb from './CardFitb';
-import CardMulti from './CardMulti';
-import CardQuestion from './CardQuestion';
-import CardFitbForm from './../Form/CardFitbForm';
-import CardMultiForm from './../Form/CardMultiForm';
-import CardQuestionForm from './../Form/CardQuestionForm';
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [title, setTitle] = useState(null);
   const [type, setType] = useState(0);
-
-  const [question, setQuestion] = useState([]);
-  const [multi, setMulti] = useState([]);
-  const [fitb, setFitb] = useState([]);
+  const [files, setFiles] = useState(null);
  
   const toggle = () => setModal(!modal);
   const toggles = (rid) => {
@@ -37,6 +29,25 @@ const Modals = (props) => {
 
   
   const handleSubmit = (e) =>{
+        e.preventDefault();
+        const datax = new FormData();
+        if(type === 1 )
+        {
+          datax.append('description',  files);
+        }
+        if(type === 6 || type === 7)
+        {
+          datax.append('links',  files);
+        }
+        if(type === 2 || type === 3 || type === 4 || type === 5)
+        {
+          datax.append('files',  files);
+        }
+        
+        datax.append('title', title);
+        datax.append('types', type);
+        datax.append('table', 'course_materials');
+        
         if(id && id > 0)
         {
           datax.append('cat','update');
@@ -51,13 +62,13 @@ const Modals = (props) => {
   }
 
   const populate = async(data) =>{
-    let ques = data.questions;
-    ques[0] && Array.isArray(ques[0]) && ques[0].length > 0 ? setMulti(ques[0]) : setMulti([]);
-    ques[1] && Array.isArray(ques[1]) && ques[1].length > 0 ? setFitb(ques[1]) : setFitb([]);
-    ques[2] && Array.isArray(ques[2]) && ques[2].length > 0 ? setQuestion(ques[2]) : setQuestion([]);
+        setTitle(data.title);
+        setType(data.types);
     }
 
-   
+    const handleInputChange = (evt) => {
+      setFiles(evt.target.files[0]);
+    }
 
     const handleLoad = sid => {
       let ar = {};
@@ -89,44 +100,95 @@ const Modals = (props) => {
           <a class="dropdown-item" href="#" onClick={()=>toggles(9)}><i class='fa fa-question'></i> Questions only</a>    
         </div>
       </div>
+     
       <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={toggle}>{editName} Materials</ModalHeader>
+        <ModalHeader toggle={toggle}>{editName} Assessment</ModalHeader>
         <ModalBody>
-          <Container>
-            <Row>
-              <Col sm="6">
-                {loadMulti}
-              </Col>
-              <Col sm="6">
-                <CardMultiForm data={multi}/>
-              </Col>
-            </Row>
-          </Container>
+        <Form>
+            <FormGroup row>
+                <Label for="name" sm={3}>Title </Label>
+                <Col sm={9}>
+                <Input 
+                    type="text" 
+                    name="title" 
+                    id="title"  
+                    required
+                    defaultValue={title}
+                    onChange={e=>setTitle(e.target.value)} 
+                     /><FormText class='muted'>Briefly tile or describe the attachment</FormText>
+                </Col>
+            </FormGroup>
+            {type === 1 ? 
+           <FormGroup row>
+           <Label for="link" sm={12}>Type in yur data (format appropriately) </Label>
+           <Col sm={12}>
+             <CKEditor
+             data ={files}
+             onChange={e=>setFiles(e.editor.getData())}
+             
 
-          <Container>
-          <Row>
-              <Col sm="6">
-                {loadFitb}
-              </Col>
-              <Col sm="6">
-                <CardFitbForm data={fitb}/>
-              </Col>
-            </Row>
-          </Container>
+             />
 
-          <Container>
-          <Row>
-              <Col sm="6">
-                {loadQuestion}
-              </Col>
-              <Col sm="6">
-                <CardQuestionForm data={multi}/>
-              </Col>
-            </Row>
-          </Container>
+           </Col>
+       </FormGroup>
+              : ''}
+
+              {type === 2 || type === 3 ||type === 4 || type === 5  ? 
+            <FormGroup row>
+            <Label for="files" sm={3}>Link/Code </Label>
+            <Col sm={9}>
+            <Input 
+                type="file" 
+                name="files" 
+                id="files" 
+                defaultValue={files}
+                onChange={handleInputChange} 
+                placeholder="" />
+            </Col>
+        </FormGroup>
+              : ''}
+          {type === 6  ? 
+            <FormGroup row>
+            <Label for="files" sm={3}>Link/Code </Label>
+            <Col sm={9}>
+            <Input 
+                type="text" 
+                name="files" 
+                id="files"  
+                required
+                defaultValue={files}
+                onChange={e=>setFiles(e.target.value)} 
+                placeholder="" />
+                
+            </Col>
+            
+        </FormGroup>
+              : ''}
+
+{type === 7  ? 
+            <FormGroup row>
+            <Label for="files" sm={3}>Link/Code </Label>
+            <Col sm={9}>
+            <Input 
+                type="text" 
+                name="files" 
+                id="files"  
+                required
+                defaultValue={files}
+                onChange={e=>setFiles(e.target.value)} 
+                placeholder="" />
+                <FormText class='muted'>Websites, Document links, Google meet or Zoom code</FormText>
+            </Col>
+            
+        </FormGroup>
+              : ''}
+
+
+            
+        </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color={editColor} onClick={handleSubmit}>Save</Button>{' '}
+          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
@@ -138,4 +200,4 @@ const mapStateToProps = (state, ownProps) => ({
     coursematerials: state.coursematerialReducer,
   })
   
-export default connect(mapStateToProps, {getCoursematerials, getCoursematerial, registerCoursematerial, updateCoursematerial })(Modals)
+export default connect(mapStateToProps, { getCoursematerials, getCoursematerial, registerCoursematerial, updateCoursematerial })(Modals)

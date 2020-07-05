@@ -55,7 +55,7 @@ class Course extends React.Component {
               <div class="card-body">
                 <p>{this.props.data.description}</p>
                 <p>{this.props.data.objective}</p>
-                <CourseFormMaterial moduleId={this.props.data.id} />
+                <CourseFormMaterial moduleId={this.props.data.id} data={this.props.data} />
                 <Container>
                   <Table responsive id={`tabl${this.props.data.id}`}>
                   <tbody>

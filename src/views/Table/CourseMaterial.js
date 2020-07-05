@@ -2,8 +2,9 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { Link }  from 'react-router-dom';
-import { getCourses, getCourse, updateCourse } from './../../actions/course';
+import { getCoursematerials, getCoursematerial, updateCoursematerial, deleteCoursematerial } from './../../actions/coursematerial';
 import CourseFormAssessment from './../Form/CourseFormAssessment';
+import CourseMaterialForm from './../Form/CourseFormMaterial'
 import { SERVER_PATHS } from './../../actions/common';
 // reactstrap components
 import {
@@ -33,15 +34,25 @@ class Material extends React.Component {
     }
   }
 
+  handleActive = id =>{
+    this.props.updateCoursematerial({'is_active':id}, this.props.data.id)
+  }
+  handleEdit = id =>{
+    return <CourseMaterialForm mid={this.props.data.id}/>
+  }
+  handleDelete = id =>{
+    this.props.deleteCoursematerial({'id':this.props.data.id})
+  }
+
   render() {
      
     return (
       <>
          <tr>
-            <td><a href={`${SERVER_PATHS}/${this.props.data.links}`} target="_blank" download><h4><i class={`fa ${pics[this.props.data.types]}`}></i> <small style={{fontSize:14}}> {this.props.data.title}</small></h4></a></td>
-            <td className="text-right">
+            <td><a href={`${SERVER_PATHS}/${this.props.data.links}`} target="_blank" download><h4><i class={`fa ${pics[this.props.data.types]}`}></i> <small style={{fontSize:14}}>{this.props.data.title}</small></h4></a></td>
+            <td className="text-right"> 
               <div class='btn-group'>
-                <CourseFormAssessment />
+                <CourseFormAssessment id={this.props.data.id} data={this.props.data}/>
                 {parseInt(this.props.data.is_active) === 0 ? 
                 <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(1)}><i class="fa fa-eye"></i></Button>:
                 <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(0)}><i class="fa fa-eye-slash"></i></Button>}
@@ -60,4 +71,4 @@ const mapStateToProps = (state, ownProps) => ({
   courses: state.courseReducer
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse })(Material)
+export default connect(mapStateToProps, { getCoursematerials, getCoursematerial, updateCoursematerial , deleteCoursematerial})(Material)

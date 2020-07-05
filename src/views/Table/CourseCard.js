@@ -118,7 +118,8 @@ handleStudent=id=>{
                       </ul>
                   </div>
               </div>
-          </div><div class="card-body ">
+          </div>
+          <div class="card-body ">
               <div class="tab-content ">
                   <div class="tab-pane active" id={`stage1${this.props.data.id}`}>
                   <div class="card-body">
