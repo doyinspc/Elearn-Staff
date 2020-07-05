@@ -1,0 +1,70 @@
+{
+  "name": "staffporal",
+  "version": "1.2.0",
+  "main": "dist/index.js",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bootstrap": "4.3.1",
+    "chart.js": "2.8.0",
+    "ckeditor4-react": "^1.1.1",
+    "history": "4.9.0",
+    "node-sass": "^4.14.1",
+    "perfect-scrollbar": "1.4.0",
+    "prop-types": "^15.7.2",
+    "react": "16.8.6",
+    "react-audio-player": "^0.13.0",
+    "react-chartjs-2": "2.7.6",
+    "react-chat-widget": "^3.0.5",
+    "react-dom": "16.8.6",
+    "react-download-link": "^2.3.0",
+    "react-file-viewer": "^1.2.1",
+    "react-google-maps": "9.4.5",
+    "react-imageview": "^1.2.1",
+    "react-notification-alert": "0.0.12",
+    "react-player": "^2.5.0",
+    "react-redux": "^7.2.0",
+    "react-router": "5.0.0",
+    "react-router-dom": "5.0.0",
+    "react-scripts": "^3.4.1",
+    "react-select": "^3.1.0",
+    "reactstrap": "8.0.0",
+    "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "compile-sass": "node-sass src/assets/scss/now-ui-dashboard.scss src/assets/css/now-ui-dashboard.css",
+    "minify-sass": "node-sass src/assets/scss/now-ui-dashboard.scss src/assets/css/now-ui-dashboard.min.css --output-style compressed",
+    "map-sass": "node-sass src/assets/scss/now-ui-dashboard.scss src/assets/css/now-ui-dashboard.css --source-map true",
+    "proxy": "http://localhost:3000/"
+  },
+  "optionalDependencies": {
+    "@types/googlemaps": "3.36.2",
+    "@types/markerclustererplus": "2.1.33",
+    "@types/react": "16.8.19",
+    "jquery": "3.4.1",
+    "typescript": "3.5.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
