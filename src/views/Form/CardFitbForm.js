@@ -22,15 +22,10 @@ class Course extends React.Component {
   
 
   render() {
-     let {firstname, lastname, middlename, gender, department, } = this.props.data;
+     let { } = this.props.data;
     return (
       <>
-         <tr>
-          <td>Dakota Rice</td>
-          <td>Niger</td>
-          <td>Oud-Turnhout</td>
-          <td className="text-right">$36,738</td>
-        </tr>
+        
       </>
     );
   }

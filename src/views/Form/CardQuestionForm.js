@@ -9,7 +9,8 @@ import {
   Col,
   FormText,
   Form,
-  CustomInput
+  CustomInput,
+  Button
 } from "reactstrap";
 
 class Course extends React.Component {
@@ -19,20 +20,43 @@ class Course extends React.Component {
       question:null,
       answer: null,
       score: 1,
-      submission: 1
+      submission: 1,
+      indx:null
     }
   }
 
   componentDidMount(){
+    let {data} = this.props;
+    if(data && Object.keys(data).length > 0 )
+    {
+      this.setState({
+        question:data.question,
+        answer: data.answer,
+        score: data.score,
+        submission: data.submission,
+        indx:data.indx
+      })
 
+    }
+
+  }
+  handleSubmit = () =>{
+    let { question, answer, score, submission } = this.state;
+    let data = { question, answer, score, submission };
+    if(this.state.indx && parseInt(this.state.indx) > 0)
+    {
+      this.props.setUpdateQuestion(data, this.props.id);
+    }else{
+      this.props.setSubmitQuestion(data);
+    }
+    
   }
   
 
   render() {
      let { question, answer, score, submission } = this.state;
     return (
-      <>
-              <Form>
+      <><Form>
                 <FormGroup row>
                 <Label for="question" sm={12}>Question</Label>
                 <Col sm={12}>
@@ -52,11 +76,11 @@ class Course extends React.Component {
                 </Col>
               </FormGroup>
               <FormGroup>
-              <Label for="exampleCheckbox">Radios</Label>
+              <Label for="exampleCheckbox">Submission</Label>
               <div>
-                <CustomInput type="radio" id="exampleCustomRadio" name="customRadio" label="Submit as attachment" />
-                <CustomInput type="radio" id="exampleCustomRadio2" name="customRadio" label="Paste content" />
-                <CustomInput type="radio" id="exampleCustomRadio3" name="customRadio" label="Provide link" />
+                <CustomInput type="radio" onChange={()=>this.setState({submission:1})} id="examplesubmission" value={1} checked ={submission === 1 ? true : false} name="submission" label="Submit as attachment" />
+                <CustomInput type="radio" onChange={()=>this.setState({submission:2})} id="examplesubmission2" value={2} checked ={submission === 2 ? true : false} name="submission" label="Paste content" />
+                <CustomInput type="radio" onChange={()=>this.setState({submission:3})} id="examplesubmission3" value={3} checked ={submission === 3 ? true : false} name="submission" label="Provide link" />
               </div>
             </FormGroup>
               <FormGroup row>
@@ -72,7 +96,12 @@ class Course extends React.Component {
                      /><FormText class='muted'>Maximum score attainable</FormText>
                 </Col>
             </FormGroup>
+            <FormGroup row>
+              <Button className="btn-sm" color="info" onClick={this.handleSubmit}>Save</Button>
+            </FormGroup>
+           
           </Form>
+          
       </>
     );
   }

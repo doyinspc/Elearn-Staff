@@ -8,9 +8,6 @@ import CourseMaterialForm from './../Form/CourseFormMaterial'
 import { SERVER_PATHS } from './../../actions/common';
 // reactstrap components
 import {
-  Container,
-  Row,
-  Col,
   Button
 } from "reactstrap";
 
@@ -54,7 +51,7 @@ class Material extends React.Component {
               <div class='btn-group'>
                 <CourseFormAssessment id={this.props.data.id} data={this.props.data}/>
                 {parseInt(this.props.data.is_active) === 0 ? 
-                <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(1)}><i class="fa fa-eye"></i></Button>:
+                <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(1)}><i class="fa fa-eye text-danger"></i></Button>:
                 <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(0)}><i class="fa fa-eye-slash"></i></Button>}
                 <Button class="btn-primary btn-sm" onClick={()=>this.handleEdit(1)}><i class="fa fa-edit"></i></Button>
                 <Button class="btn-danger btn-sm" onClick={()=>this.handleDelete(1)}><i class="fa fa-trash"></i></Button>

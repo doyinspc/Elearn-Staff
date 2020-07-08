@@ -125,8 +125,6 @@ const Modals = (props) => {
              <CKEditor
              data ={files}
              onChange={e=>setFiles(e.editor.getData())}
-             
-
              />
 
            </Col>
