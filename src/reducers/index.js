@@ -5,6 +5,8 @@ import coursematerial from "./coursematerial";
 import coursetutor from "./coursetutor";
 import coursestudent from "./coursestudent";
 import courseprogress from "./courseprogress";
+import userstudent from "./userstudent";
+import userstaff from "./userstaff";
 
 
 export default combineReducers({
@@ -13,6 +15,7 @@ export default combineReducers({
     coursematerialReducer: coursematerial,
     coursetutorReducer: coursetutor,
     coursestudentReducer: coursestudent,
-    courseprogressReducer: courseprogress
-
+    courseprogressReducer: courseprogress,
+    userstaffReducer: userstaff,
+    userstudentReducer: userstudent
 });
