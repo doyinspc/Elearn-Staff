@@ -1,22 +1,22 @@
 import axios from 'axios';
 import {
-    USERSTAFFCOURSE_GET,
-    USERSTAFFCOURSE_GET_ONE,
-    USERSTAFFCOURSEX_GET_ONE,
-    USERSTAFFCOURSE_GET_MULTIPLE,
-    USERSTAFFCOURSEX_GET_MULTIPLE,
-    USERSTAFFCOURSE_REGISTER_SUCCESS,
-    USERSTAFFCOURSE_REGISTER_FAIL,
-    USERSTAFFCOURSE_LOADING,
-    USERSTAFFCOURSEX_LOADING,
-    USERSTAFFCOURSE_LOADING_ERROR,
-    USERSTAFFCOURSEX_LOADING_ERROR,
-    USERSTAFFCOURSE_UPDATE_SUCCESS,
-    USERSTAFFCOURSE_UPDATE_FAIL,
-    USERSTAFFCOURSE_DELETE_SUCCESS,
-    USERSTAFFCOURSE_DELETE_FAIL,
-    USERSTAFFCOURSE_EDIT,
-} from "../types/userstaffcourse";
+    USERSTUDENTCOURSE_GET,
+    USERSTUDENTCOURSE_GET_ONE,
+    USERSTUDENTCOURSEX_GET_ONE,
+    USERSTUDENTCOURSE_GET_MULTIPLE,
+    USERSTUDENTCOURSEX_GET_MULTIPLE,
+    USERSTUDENTCOURSE_REGISTER_SUCCESS,
+    USERSTUDENTCOURSE_REGISTER_FAIL,
+    USERSTUDENTCOURSE_LOADING,
+    USERSTUDENTCOURSEX_LOADING,
+    USERSTUDENTCOURSE_LOADING_ERROR,
+    USERSTUDENTCOURSEX_LOADING_ERROR,
+    USERSTUDENTCOURSE_UPDATE_SUCCESS,
+    USERSTUDENTCOURSE_UPDATE_FAIL,
+    USERSTUDENTCOURSE_DELETE_SUCCESS,
+    USERSTUDENTCOURSE_DELETE_FAIL,
+    USERSTUDENTCOURSE_EDIT,
+} from "../types/userstudentcourse";
 import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'course_tutors';
@@ -28,60 +28,60 @@ let params = {
     table:TABLE_NAME,
     token:MAIN_TOKEN
   }
-//GET ALL USERSTAFFCOURSE 
-export const getUserstaffcourses = data => (dispatch, getState) => {
+//GET ALL USERSTUDENTCOURSE 
+export const getUserstudentcourses = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = data;
     params.cat = 'createdcourse';
-    dispatch({type : USERSTAFFCOURSE_LOADING});
+    dispatch({type : USERSTUDENTCOURSE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
-                    type: USERSTAFFCOURSE_GET_MULTIPLE,
+                    type: USERSTUDENTCOURSE_GET_MULTIPLE,
                     payload: res.data
                 })
             })
             .catch(err => {
                 dispatch({
-                    type : USERSTAFFCOURSE_LOADING_ERROR,
+                    type : USERSTUDENTCOURSE_LOADING_ERROR,
                     payload:err
                 })
             })
 };
-export const getUserstaffcoursesx = data => (dispatch, getState) => {
+export const getUserstudentcoursesx = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = data;
     params.cat = 'joinedcourse';
-    dispatch({type : USERSTAFFCOURSEX_LOADING});
+    dispatch({type : USERSTUDENTCOURSEX_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
-                    type: USERSTAFFCOURSEX_GET_MULTIPLE,
+                    type: USERSTUDENTCOURSEX_GET_MULTIPLE,
                     payload: res.data
                 })
             })
             .catch(err => {
                 dispatch({
-                    type : USERSTAFFCOURSEX_LOADING_ERROR,
+                    type : USERSTUDENTCOURSEX_LOADING_ERROR,
                     payload:err
                 })
             })
 };
-//GET SINGLE USERSTAFFCOURSE 
-export const getUserstaffcourse = id => (dispatch, getState) => {
+//GET SINGLE USERSTUDENTCOURSE 
+export const getUserstudentcourse = id => (dispatch, getState) => {
     //SET PAGE LOADING
     dispatch(
         {
-        type : USERSTAFFCOURSE_GET_ONE,
+        type : USERSTUDENTCOURSE_GET_ONE,
         payload: id
     });  
 };
-//GET SINGLE USERSTAFFCOURSE 
-export const getUserstaffcoursex = id => (dispatch, getState) => {
+//GET SINGLE USERSTUDENTCOURSE 
+export const getUserstudentcoursex = id => (dispatch, getState) => {
     //SET PAGE LOADING
     dispatch(
         {
-        type : USERSTAFFCOURSEX_GET_ONE,
+        type : USERSTUDENTCOURSEX_GET_ONE,
         payload: id
     });  
 };

@@ -24,13 +24,6 @@ var dashRoutes = [
     icon: "design_app",
     component: Course,
     layout: "/admin"
-  },
-  {
-    path: "/user-page",
-    name: "User Profile",
-    icon: "users_single-02",
-    component: UserPage,
-    layout: "/admin"
   }
 ];
 export default dashRoutes;

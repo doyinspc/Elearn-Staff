@@ -1,6 +1,9 @@
 import axios from 'axios';
 import {
-    USERSTAFF_GET,
+    USERSTAFF_LOGIN,
+    USERSTAFF_LOGIN_ERROR,
+    USERSTAFF_LOGOUT_SUCCESS,
+    USERSTAFF_LOGOUT_FAIL,
     USERSTAFF_GET_ONE,
     USERSTAFF_GET_MULTIPLE,
     USERSTAFF_REGISTER_SUCCESS,
@@ -44,6 +47,41 @@ export const getUserstaffs = data => (dispatch, getState) => {
                 })
             })
 };
+export const getUserstaffLogin = data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    data.cat = 'login';
+    data.table = 'staffs';
+    const fd = new FormData();
+    fd.append('username' , data.username);
+    fd.append('password' , data.password);
+    fd.append('cat' , 'login');
+    fd.append('table' , 'staffs');
+    const body = JSON.stringify(fd);
+    
+    dispatch({type : USERSTAFF_LOADING});
+        axios.post(path, fd, axiosConfig1)
+            .then(res => {                                                                                                                                                                                                                                       
+                dispatch({
+                    type: USERSTAFF_LOGIN,
+                    payload: res.data.data,
+                    token: res.data.token
+                })
+            })
+            .catch(err => {
+                console.log(err);
+                // dispatch({
+                //     type : USERSTAFF_LOGIN_ERROR,
+                //     payload:err
+                // })
+            })
+};
+export const getUserstaffLogout = () => (dispatch, getState) => {
+    dispatch({
+        type: USERSTAFF_LOGOUT_SUCCESS
+    })
+       
+};
+
 //GET SINGLE USERSTAFF 
 export const getUserstaff = id => (dispatch, getState) => {
     //SET PAGE LOADING

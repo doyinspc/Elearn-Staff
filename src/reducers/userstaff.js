@@ -1,4 +1,8 @@
 import {
+    USERSTAFF_LOGIN,
+    USERSTAFF_LOGIN_ERROR,
+    USERSTAFF_LOGOUT_SUCCESS,
+    USERSTAFF_LOGOUT_FAIL,
     USERSTAFF_GET_MULTIPLE,
     USERSTAFF_GET_ONE,
     USERSTAFF_REGISTER_SUCCESS,
@@ -17,7 +21,12 @@ import {
 let userstaffStore = JSON.parse(localStorage.getItem('userstaff'))
 
 const initialState = {
+    token: localStorage.getItem('token'),
+    isAuthenticated: localStorage.getItem('auth'),
     isLoading: false,
+    isAdmin: userstaffStore ? userstaffStore.is_admin : null,
+    isRegistered: userstaffStore && userstaffStore.id > 1 ? true: false,
+    user: userstaffStore,
     userstaffs: userstaffStore,
     userstaff:{},
     msg: null,
@@ -49,6 +58,18 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case USERSTAFF_LOGIN:
+            localStorage.setItem('token', action.token)
+            localStorage.setItem('auth', true);
+            localStorage.setItem('userstaff', JSON.stringify(action.payload))
+            return {
+                ...state,
+                ...action.payload,
+                isLoading: false,
+                isAuthenticated: true,
+                userstaff: action.payload,
+                isAdmin: action.payload.is_admin
+            }; 
         case USERSTAFF_GET_MULTIPLE:
             localStorage.setItem('userstaff', JSON.stringify(action.payload));
             return {
@@ -108,6 +129,21 @@ export default function(state = initialState, action){
                 isLoading: false,
                 msg: action.msg
             };
+        case USERSTAFF_LOGIN_ERROR:
+        case USERSTAFF_LOGOUT_SUCCESS:
+        case USERSTAFF_LOGOUT_FAIL:
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth')
+            localStorage.removeItem('userstaff')
+            return{
+                ...state,
+                token: null,
+                isRegistered: true,
+                isAuthenticated: false,
+                isLoading: false,
+                userstaff: null,
+                isAdmin : null
+            } 
         default:
             return state;
     }

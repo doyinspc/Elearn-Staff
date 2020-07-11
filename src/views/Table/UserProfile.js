@@ -8,13 +8,15 @@ import {
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 import CardUserProfile from "./CardUserProfile";
+import CardUserData from "./CardUserData";
 import CardUserCourse from "./CardUserCourse";
 import { getUserstaff } from "./../../actions/userstaff";
-import { getUserstaffcourse } from "./../../actions/userstaffcourse";
+import { getUserstaffcourses } from "./../../actions/userstaffcourse";
 
 class UserProfile extends React.Component {
   componentDidMount(){
-        this.props.getUserstaffcourse({'staffId':this.props.userstaffs.userstaff.id})
+        this.props.getUserstaffcourses({'staffId':1});
+        //this.props.userstaffs.userstaff.id
   }
   
   render() {
@@ -39,4 +41,4 @@ const mapStateToProps = (state) => ({
     userstaffcourses: state.userstaffcourseReducer,
   })
   
-  export default connect(mapStateToProps, { getUserstaff, getUserstaffcourse })(UserProfile)
+  export default connect(mapStateToProps, { getUserstaff, getUserstaffcourses})(UserProfile)

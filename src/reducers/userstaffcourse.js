@@ -1,25 +1,30 @@
 import {
-    USERSTAFFCOURSE_GET_MULTIPLE,
+    USERSTAFFCOURSE_GET,
     USERSTAFFCOURSE_GET_ONE,
+    USERSTAFFCOURSEX_GET_ONE,
+    USERSTAFFCOURSE_GET_MULTIPLE,
+    USERSTAFFCOURSEX_GET_MULTIPLE,
     USERSTAFFCOURSE_REGISTER_SUCCESS,
     USERSTAFFCOURSE_REGISTER_FAIL,
     USERSTAFFCOURSE_LOADING,
+    USERSTAFFCOURSEX_LOADING,
     USERSTAFFCOURSE_LOADING_ERROR,
-    USERSTAFFCOURSE_ACTIVATE_FAIL,
-    USERSTAFFCOURSE_ACTIVATE_SUCCESS,
+    USERSTAFFCOURSEX_LOADING_ERROR,
     USERSTAFFCOURSE_UPDATE_SUCCESS,
     USERSTAFFCOURSE_UPDATE_FAIL,
     USERSTAFFCOURSE_DELETE_SUCCESS,
     USERSTAFFCOURSE_DELETE_FAIL,
-    USERSTAFFCOURSE_EDIT
+    USERSTAFFCOURSE_EDIT,
 } from "../types/userstaffcourse";
 
 let userstaffcourseStore = JSON.parse(localStorage.getItem('userstaffcourse'))
-
+let userstaffcoursexStore = JSON.parse(localStorage.getItem('userstaffcoursex'))
 const initialState = {
     isLoading: false,
     userstaffcourses: userstaffcourseStore,
+    userstaffcoursexs: userstaffcoursexStore,
     userstaffcourse:{},
+    userstaffcoursex:{},
     msg: null,
     isEdit:-1,
     ref:null,
@@ -49,11 +54,23 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case USERSTAFFCOURSEX_LOADING:
+            return {
+                ...state,
+                isLoadingx : true
+            };
         case USERSTAFFCOURSE_GET_MULTIPLE:
             localStorage.setItem('userstaffcourse', JSON.stringify(action.payload));
             return {
                 ...state,
                 userstaffcourses : action.payload,
+                msg:'DONE!!!'
+            };
+        case USERSTAFFCOURSEX_GET_MULTIPLE:
+            localStorage.setItem('userstaffcourseX', JSON.stringify(action.payload));
+            return {
+                ...state,
+                userstaffcoursesx : action.payload,
                 msg:'DONE!!!'
             };
         case USERSTAFFCOURSE_GET_ONE:
@@ -62,6 +79,14 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 userstaffcourse : ses,
+                MSG:"DONE!!!"
+            };
+        case USERSTAFFCOURSE_GET_ONE:
+            let all = [...state.userstaffcourses];
+            let ses = all.filter(row=>row.id == action.payload)[0];
+            return {
+                ...state,
+                userstaffcourseX : ses,
                 MSG:"DONE!!!"
             };
         case USERSTAFFCOURSE_REGISTER_SUCCESS:

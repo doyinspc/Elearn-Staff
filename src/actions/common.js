@@ -12,3 +12,14 @@ export const axiosConfig1 = {
         "Content-Type": "multipart/form-data"
     }
   };
+
+  export const checkImage = imageSrc =>{
+      var img = new Image();
+      try{
+        img.src = imageSrc;
+        return true;
+      }catch(err){
+        return false;
+      }
+
+  }

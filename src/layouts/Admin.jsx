@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux';
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
@@ -42,15 +43,25 @@ class Dashboard extends React.Component {
     this.setState({ backgroundColor: color });
   };
   render() {
+    let user = {};
+    if(this.props.userstaffs.isAuthenticated)
+    {
+        user = this.props.userstaffs.user;
+    }
+    else if(this.props.userstudents.isAuthenticated)
+    {
+        user = this.props.userstudents.userstudent;
+    }
     return (
       <div className="wrapper">
         <Sidebar
           {...this.props}
+          user={user}
           routes={routes}
           backgroundColor={this.state.backgroundColor}
         />
         <div className="main-panel" ref={this.mainPanel}>
-          <DemoNavbar {...this.props} />
+          <DemoNavbar {...this.props} user={user} />
           <Switch>
             {routes.map((prop, key) => {
               return (
@@ -70,5 +81,10 @@ class Dashboard extends React.Component {
     );
   }
 }
+const mapStateToProps = (state) => ({ 
+  userstaffs: state.userstaffReducer,
+  userstudents: state.userstudentReducer
+})
 
-export default Dashboard;
+export default connect(mapStateToProps, { })(Dashboard)
+
