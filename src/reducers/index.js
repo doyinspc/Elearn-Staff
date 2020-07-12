@@ -7,7 +7,8 @@ import coursestudent from "./coursestudent";
 import courseprogress from "./courseprogress";
 import userstudent from "./userstudent";
 import userstaff from "./userstaff";
-
+import userstudentcourse from "./userstudentcourse";
+import userstaffcourse from "./userstaffcourse";
 
 export default combineReducers({
     courseReducer: course,
@@ -17,5 +18,7 @@ export default combineReducers({
     coursestudentReducer: coursestudent,
     courseprogressReducer: courseprogress,
     userstaffReducer: userstaff,
-    userstudentReducer: userstudent
+    userstudentReducer: userstudent,
+    userstudentcourseReducer: userstudentcourse,
+    userstaffcourseReducer: userstaffcourse,
 });

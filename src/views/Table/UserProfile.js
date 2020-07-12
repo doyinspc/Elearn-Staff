@@ -11,25 +11,26 @@ import CardUserProfile from "./CardUserProfile";
 import CardUserData from "./CardUserData";
 import CardUserCourse from "./CardUserCourse";
 import { getUserstaff } from "./../../actions/userstaff";
-import { getUserstaffcourses } from "./../../actions/userstaffcourse";
+import { getUserstaffcourses, getUserstaffcoursesx } from "./../../actions/userstaffcourse";
 
 class UserProfile extends React.Component {
   componentDidMount(){
-        this.props.getUserstaffcourses({'staffId':1});
-        //this.props.userstaffs.userstaff.id
+        this.props.getUserstaffcourses({'staffId': 1});
+        this.props.getUserstaffcoursesx({'staffId': 1});
   }
   
   render() {
-      let user = this.props.userstaffs;
+      let user = this.props.userstaffs.user;
       let course = this.props.userstaffcourses;
+      let coursex = this.props.userstaffcoursesx;
     return (
       <>
         <PanelHeader size="sm" />
         <div className="content">
           <Row>
-              <CardUserProfile data={user} />
-              <CardUserData data={user} />
-              <CardUserCourse data={course} />
+              <CardUserProfile user={user} />
+              <CardUserData user={user} />
+              <CardUserCourse user={user} data={course} datax={coursex} />
           </Row>
         </div>
       </>
@@ -38,7 +39,8 @@ class UserProfile extends React.Component {
 }
 const mapStateToProps = (state) => ({ 
     userstaffs: state.userstaffReducer,
-    userstaffcourses: state.userstaffcourseReducer,
+    userstaffcourses: state.userstaffcourseReducer.userstaffcourses,
+    userstaffcoursesx: state.userstaffcourseReducer.userstaffcoursesx,
   })
   
-  export default connect(mapStateToProps, { getUserstaff, getUserstaffcourses})(UserProfile)
+  export default connect(mapStateToProps, { getUserstaff, getUserstaffcourses, getUserstaffcoursesx})(UserProfile)

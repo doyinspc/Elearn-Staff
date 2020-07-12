@@ -102,8 +102,11 @@ handleStudent=id=>{
               <div class="nav-tabs-navigation">
                   <div class="nav-tabs-wrapper">
                       <ul class="nav nav-tabs" data-tabs="tabs">
+                      <li class="nav-item">
+                              <a class="nav-link active"  href={`#stage0${this.props.data.id}`} data-toggle="tab"><i class="fa fa-home"></i> <span class="d-none d-md-inline">Home</span></a>
+                          </li>
                           <li class="nav-item">
-                              <a class="nav-link active"  href={`#stage1${this.props.data.id}`} data-toggle="tab"><i class="fa fa-home"></i> <span class="d-none d-md-inline">Dashboard</span></a>
+                              <a class="nav-link"  href={`#stage1${this.props.data.id}`} data-toggle="tab"><i class="fa fa-dashboard"></i> <span class="d-none d-md-inline">Dashboard</span></a>
                           </li>
                           
                           <li class="nav-item">
@@ -121,7 +124,14 @@ handleStudent=id=>{
           </div>
           <div class="card-body ">
               <div class="tab-content ">
-                  <div class="tab-pane active" id={`stage1${this.props.data.id}`}>
+              <div class="tab-pane active" id={`stage0${this.props.data.id}`}>
+                  <div class="card-body">
+                    <p class="card-text">
+                   
+                      </p>
+                  </div>
+                  </div>
+                  <div class="tab-pane" id={`stage1${this.props.data.id}`}>
                   <div class="card-body">
                     <p class="card-text">
                     <h5 className='title'>Introduction</h5>

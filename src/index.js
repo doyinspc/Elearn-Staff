@@ -14,6 +14,7 @@ import StaffLayout from "layouts/Staff.jsx";
 import AccountLayout from "layouts/Account.jsx";
 import InventoryLayout from "layouts/Inventory.jsx";
 import EmployeeLoginPage from "views/EmployeeLoginPage";
+import UserStaffEditPage from "views/Table/UserProfileEdit";
 
 const hist = createBrowserHistory();
 
@@ -27,6 +28,7 @@ ReactDOM.render(
               <Route path="/account" render={props => <AccountLayout {...props} />} />
               <Route path="/inventory" render={props => <InventoryLayout {...props} />} />
               <Route path="/" render={props => <EmployeeLoginPage {...props} />} />
+              <Route path="/admin/useredit" render={props => <UserStaffEditPage {...props} />} />
               <Redirect to="/admin/dashboard" />
             </Switch>
           </Switch>

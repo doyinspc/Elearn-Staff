@@ -22,7 +22,7 @@ let userstaffcoursexStore = JSON.parse(localStorage.getItem('userstaffcoursex'))
 const initialState = {
     isLoading: false,
     userstaffcourses: userstaffcourseStore,
-    userstaffcoursexs: userstaffcoursexStore,
+    userstaffcoursesx: userstaffcoursexStore,
     userstaffcourse:{},
     userstaffcoursex:{},
     msg: null,
@@ -67,18 +67,18 @@ export default function(state = initialState, action){
                 msg:'DONE!!!'
             };
         case USERSTAFFCOURSEX_GET_MULTIPLE:
-            localStorage.setItem('userstaffcourseX', JSON.stringify(action.payload));
+            localStorage.setItem('userstaffcoursex', JSON.stringify(action.payload));
             return {
                 ...state,
                 userstaffcoursesx : action.payload,
                 msg:'DONE!!!'
             };
-        case USERSTAFFCOURSE_GET_ONE:
-            let all = [...state.userstaffcourses];
-            let ses = all.filter(row=>row.id == action.payload)[0];
+        case USERSTAFFCOURSEX_GET_ONE:
+            let allx = [...state.userstaffcoursesx];
+            let sesx = allx.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
-                userstaffcourse : ses,
+                userstaffcoursex : sesx,
                 MSG:"DONE!!!"
             };
         case USERSTAFFCOURSE_GET_ONE:
@@ -96,14 +96,7 @@ export default function(state = initialState, action){
                 userstaffcourses: [...state.userstaffcourses, action.payload],
                 msg:action.msg
             }; 
-        case USERSTAFFCOURSE_ACTIVATE_SUCCESS:
-            let ac = changeState(state.userstaffcourses, action.payload);
-            localStorage.setItem('userstaffcourse', JSON.stringify(ac));
-            return{
-                ...state,
-                msg:'DONE!!!',
-                userstaffcourses: ac
-            }
+       
         case USERSTAFFCOURSE_DELETE_SUCCESS:
             let rem = state.userstaffcourses.filter(cat => cat.id != action.payload.id);
             localStorage.setItem('userstaffcourse', JSON.stringify(rem));
@@ -123,7 +116,6 @@ export default function(state = initialState, action){
                 userstaffcourses : newState
             }; 
         case USERSTAFFCOURSE_LOADING_ERROR:
-        case USERSTAFFCOURSE_ACTIVATE_FAIL:
         case USERSTAFFCOURSE_REGISTER_FAIL:
         case USERSTAFFCOURSE_DELETE_FAIL:
         case USERSTAFFCOURSE_UPDATE_FAIL:

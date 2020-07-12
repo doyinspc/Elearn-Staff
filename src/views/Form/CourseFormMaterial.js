@@ -66,7 +66,7 @@ const Modals = (props) => {
         setType(data.types);
     }
 
-    const handleInputChange = (evt) => {
+  const handleInputChange = (evt) => {
       setFiles(evt.target.files[0]);
     }
 

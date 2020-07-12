@@ -1,5 +1,6 @@
 import Dashboard from "views/Dashboard.jsx";
 import Course from "views/Table/CourseList.jsx";
+import Edit from "views/Table/UserProfileEdit";
 import UserPage from "views/UserPage.jsx";
 import UserProfilePage from "views/Table/UserProfile.js";
 
@@ -23,6 +24,13 @@ var dashRoutes = [
     name: "Courses",
     icon: "design_app",
     component: Course,
+    layout: "/admin"
+  },
+  {
+    path: "/useredit",
+    name: "Edit",
+    icon: "design_app",
+    component: Edit,
     layout: "/admin"
   }
 ];

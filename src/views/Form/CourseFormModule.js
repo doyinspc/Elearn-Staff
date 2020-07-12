@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CKEditor from 'ckeditor4-react';
-import Select , { components } from 'react-select';
+import Select  from 'react-select';
 import { getCoursemodule, registerCoursemodule, updateCoursemodule } from './../../actions/coursemodule';
 import { getCoursematerials } from './../../actions/coursematerial';
 

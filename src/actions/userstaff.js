@@ -68,11 +68,10 @@ export const getUserstaffLogin = data => (dispatch, getState) => {
                 })
             })
             .catch(err => {
-                console.log(err);
-                // dispatch({
-                //     type : USERSTAFF_LOGIN_ERROR,
-                //     payload:err
-                // })
+                dispatch({
+                    type : USERSTAFF_LOGIN_ERROR,
+                    payload:err
+                })
             })
 };
 export const getUserstaffLogout = () => (dispatch, getState) => {
@@ -124,6 +123,24 @@ export const registerUserstaff = data => dispatch => {
         .catch(err => {
             dispatch({
                 type : USERSTAFF_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
+
+//USERSTAFF REGISTER
+export const registerUserstaffPost = data => dispatch => {
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: USERSTAFF_LOGIN,
+                payload: res.data.data,
+                token: res.data.token
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USERSTAFF_UPDATE_FAIL,
                 payload: err
             })
         })

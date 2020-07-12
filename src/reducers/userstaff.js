@@ -18,7 +18,8 @@ import {
     USERSTAFF_EDIT
 } from "../types/userstaff";
 
-let userstaffStore = JSON.parse(localStorage.getItem('userstaff'))
+let userstaffStore = JSON.parse(localStorage.getItem('userstaff'));
+let user = JSON.parse(localStorage.getItem('user'));
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -26,7 +27,7 @@ const initialState = {
     isLoading: false,
     isAdmin: userstaffStore ? userstaffStore.is_admin : null,
     isRegistered: userstaffStore && userstaffStore.id > 1 ? true: false,
-    user: userstaffStore,
+    user: user,
     userstaffs: userstaffStore,
     userstaff:{},
     msg: null,
@@ -61,13 +62,15 @@ export default function(state = initialState, action){
         case USERSTAFF_LOGIN:
             localStorage.setItem('token', action.token)
             localStorage.setItem('auth', true);
-            localStorage.setItem('userstaff', JSON.stringify(action.payload))
+            localStorage.setItem('userstaff', JSON.stringify(action.payload));
+            localStorage.setItem('user', JSON.stringify(action.payload))
             return {
                 ...state,
                 ...action.payload,
                 isLoading: false,
                 isAuthenticated: true,
                 userstaff: action.payload,
+                user: action.payload,
                 isAdmin: action.payload.is_admin
             }; 
         case USERSTAFF_GET_MULTIPLE:
@@ -75,6 +78,7 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 userstaffs : action.payload,
+
                 msg:'DONE!!!'
             };
         case USERSTAFF_GET_ONE:

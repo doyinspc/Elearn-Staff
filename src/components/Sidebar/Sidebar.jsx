@@ -31,7 +31,7 @@ class Sidebar extends React.Component {
     }
   }
   render() {
-    let {username} = this.props.user;
+    let {username} = this.props.user || {};
     return (
       <div className="sidebar" data-color={this.props.backgroundColor}>
         <div className="logo">

@@ -50,7 +50,7 @@ class User extends React.Component {
                     <Row>
                       <Col className="pr-1" md="5">
                         <FormGroup>
-                          <label>Company (disabled)</label>
+                          <label>Username</label>
                           <Input
                             defaultValue="Creative Code Inc."
                             disabled
@@ -61,7 +61,7 @@ class User extends React.Component {
                       </Col>
                       <Col className="px-1" md="3">
                         <FormGroup>
-                          <label>Username</label>
+                          <label>Password</label>
                           <Input
                             defaultValue="michael23"
                             placeholder="Username"
