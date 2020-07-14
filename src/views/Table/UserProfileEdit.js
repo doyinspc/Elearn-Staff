@@ -2,11 +2,10 @@ import React from "react";
 import { connect } from 'react-redux';
 import axios from "axios";
 import Select  from 'react-select';
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, SERVER_URL} from './../../actions/common';
 import {
   Row, CardFooter, CardHeader, Col, Form, FormGroup, Card, CardBody, Input, Button, Container
 } from "reactstrap";
-import { SERVER_URL } from "./../../actions/common.js"
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 import { getUserstaff } from "./../../actions/userstaff";
@@ -17,6 +16,7 @@ const customStyles = {
     option: (provided, state) => ({
       ...provided,
       borderBottom: '2px dotted green',
+      marginTop: '-5px',
       color: state.isSelected ? 'yellow' : 'black',
       backgroundColor: state.isSelected ? 'green' : 'white'
     }),
@@ -25,6 +25,12 @@ const customStyles = {
       marginTop: "5%",
     })
   }
+
+
+const genders = [
+  {'value': 0, 'label': 'Male'},
+  {'value': 1, 'label': 'Female'}
+]
    
 class UserProfileEdit extends React.Component {
     constructor(props){
@@ -35,6 +41,7 @@ class UserProfileEdit extends React.Component {
           lastname:'',
           middlename:'',
           email:'',
+          gender:{},
           phone:'',
           photo:'',
           department:{},
@@ -57,10 +64,11 @@ class UserProfileEdit extends React.Component {
           firstname:user.firstname,
           lastname:user.lastname,
           middlename:user.middlename,
+          gender:parseInt(user.gender) === 0 ? {'value':0, 'label':'Male'} : {'value':1, 'label':'Female'},
           email:user.email,
           phone:user.phone,
           photo:user.photo,
-          department:user.department,
+          department:{'value':user.department, 'label':user.departmentname } ,
           professional:user.professional,
           title:user.title,
           dob:user.dob,
@@ -73,12 +81,19 @@ class UserProfileEdit extends React.Component {
   onChange = e => {this.setState({
     [e.target.name] : e.target.value
   })}
+  handleChangeGender = (selected) => {
+    this.setState({ gender:selected });
+  }
+  handleChange = (selected) => {
+    this.setState({ department:selected });
+  }
   handleInputChange = (evt) => {
     this.setState({files:evt.target.files[0]});
   }
 
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     let us = this.state;
     let fd = new FormData();
     fd.append('id', us.id );
@@ -113,9 +128,7 @@ class UserProfileEdit extends React.Component {
     this.props.registerUserstaffPost(fd);
   }
 
-  handleChange = (selected) => {
-    this.setState({ files:selected });
-  }
+  
 
   launchDep = () =>{
     let params = {
@@ -146,8 +159,9 @@ class UserProfileEdit extends React.Component {
   
   render() {
       
-      let {username, password, firstname, lastname, middlename, email, phone, photo, department, professional, title, dob, description, address, dep, files } = this.state;
-    return (
+      let {username, password, firstname, lastname, middlename, email, phone, photo, gender, department, professional, title, dob, description, address, dep, files } = this.state;
+    console.log(dob);
+      return (
       <>
          <PanelHeader size="sm" />
         <div className="content">
@@ -165,7 +179,7 @@ class UserProfileEdit extends React.Component {
                           <label>Username</label>
                           <Input
                             defaultValue={username}
-                            name={username}
+                            name='username'
                             onChange={this.onChange}
                             placeholder="Username"
                             type="text"
@@ -178,7 +192,7 @@ class UserProfileEdit extends React.Component {
                           <label>Password</label>
                           <Input
                             defaultValue={password}
-                            name={password}
+                            name='password'
                             onChange={this.onChange}
                             placeholder="******"
                             type="password"
@@ -191,7 +205,7 @@ class UserProfileEdit extends React.Component {
                           <label>Title</label>
                           <Input
                             defaultValue={title}
-                            name={title}
+                            name='title'
                             onChange={this.onChange}
                             placeholder="Prof., Dr., Mr., etc"
                             type="text"
@@ -206,7 +220,7 @@ class UserProfileEdit extends React.Component {
                           <label>Firstname</label>
                           <Input
                             defaultValue={firstname}
-                            name={firstname}
+                            name='firstname'
                             onChange={this.onChange}
                             placeholder="Firstname"
                             type="text"
@@ -219,7 +233,7 @@ class UserProfileEdit extends React.Component {
                           <label>Lastname (Surname)</label>
                           <Input
                             defaultValue={lastname}
-                            name={lastname}
+                            name='lastname'
                             onChange={this.onChange}
                             placeholder="Lastname"
                             type="text"
@@ -234,7 +248,7 @@ class UserProfileEdit extends React.Component {
                           </label>
                           <Input
                             defaultValue={middlename}
-                            name={middlename}
+                            name='middlename'
                             onChange={this.onChange}
                             placeholder="Middlename"
                             type="text"
@@ -248,7 +262,7 @@ class UserProfileEdit extends React.Component {
                           <label>Professional</label>
                           <Input
                             defaultValue={professional}
-                            name={professional}
+                            name='professional'
                             onChange={this.onChange}
                             placeholder="MCPN, ICAN, FCP etc."
                             type="text"
@@ -264,7 +278,7 @@ class UserProfileEdit extends React.Component {
                           </label>
                           <Input
                             defaultValue={email}
-                            name={email}
+                            name='email'
                             onChange={this.onChange}
                             placeholder="data@info.com"
                             type="email"
@@ -280,7 +294,7 @@ class UserProfileEdit extends React.Component {
                           </label>
                           <Input
                             defaultValue={phone}
-                            name={phone}
+                            name='phone'
                             onChange={this.onChange}
                             placeholder="phone"
                             type="text"
@@ -291,13 +305,12 @@ class UserProfileEdit extends React.Component {
                     <Row>
                       <Col className="pr-1" md="4">
                         <FormGroup>
-                          <label>Date of Birth</label>
+                          <label style={{marginBottom:20}}>Date of Birth</label>
                           
                           <Input
-                            defaultValue={dob}
-                            name={dob}
+                            value={dob}
+                            name='dob'
                             onChange={this.onChange}
-                            placeholder="dob"
                             type="date"
                             required
                           />
@@ -305,15 +318,14 @@ class UserProfileEdit extends React.Component {
                       </Col>
                       <Col className="px-1" md="4">
                       <FormGroup>
-                          <label>Gender</label>
-                          <Input
-                            defaultValue={phone}
-                            name={phone}
-                            onChange={this.onChange}
-                            placeholder="phone"
-                            type="text"
-                            required
-                          />
+                          <label >Gender</label>
+                          <Select
+                            styles = { customStyles }
+                            value={this.state.gender}
+                            onChange={this.handleChangeGender}
+                            options={genders}
+                            autoFocus={true}
+                            />
                         </FormGroup>
                       </Col>
                       <Col className="pl-1" md="4">
@@ -321,19 +333,12 @@ class UserProfileEdit extends React.Component {
                           <label>Department</label>
                           <Select
                             styles = { customStyles }
-                            defaulValue={department}
+                            value={department}
                             onChange={this.handleChange}
                             options={dep}
                             autoFocus={true}
                             />
-                          <Input
-                            defaultValue={phone}
-                            name={phone}
-                            onChange={this.onChange}
-                            placeholder="phone"
-                            type="text"
-                            required
-                          />
+                          
                         </FormGroup>
                       </Col>
                     </Row>                 
@@ -344,9 +349,10 @@ class UserProfileEdit extends React.Component {
                           <Input
                             cols="80"
                             rows="4"
-                            defaultValue={description}
+                            value={description}
+                            onChange={this.onChange}
                             name='description'
-                            placeholder="Home Address"
+                            placeholder="He is a ....."
                             type="textarea"
                           />
                         </FormGroup>
@@ -359,7 +365,8 @@ class UserProfileEdit extends React.Component {
                           <Input
                             cols="80"
                             rows="4"
-                            defaultValue={address}
+                            value={address}
+                            onChange={this.onChange}
                             name='address'
                             placeholder="Home Address"
                             type="textarea"
@@ -383,18 +390,18 @@ class UserProfileEdit extends React.Component {
                  <Container>
                      <form>
                   <div className="author">
-                  <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                    <div class="fileinput-new thumbnail img-circle img-raised">
+                  <div className="fileinput fileinput-new text-center" data-provides="fileinput">
+                    <div className="fileinput-new thumbnail img-circle img-raised">
                     <img 
                     alt="load passport"
                     src={`${SERVER_URL + photo}`}
                     onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
                     />
                     </div>
-                    <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
+                    <div className="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                     <div >
-                    <span class="btn btn-raised btn-round btn-default btn-file">
-                    <span class="fileinput-exists" style={{width:100}}>Change</span>
+                    <span className="btn btn-raised btn-round btn-default btn-file">
+                    <span className="fileinput-exists" style={{width:100}}>Change</span>
                     <input 
                     style={{width:100}}
                     type="file" 
@@ -402,8 +409,8 @@ class UserProfileEdit extends React.Component {
                     onChange={this.handleInputChange} />
                     </span>
                         <br />
-                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
-                        <button onClick={on} href="#pablo" class="btn btn-danger btn-round fileinput-exists" ><i class="fa fa-ok"></i> Save</button>
+                        <a href="#pablo" className="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i className="fa fa-times"></i> Remove</a>
+                        <button onClick={this.handleSubmitPhoto} type='button' className="btn btn-primary btn-round fileinput-exists" ><i className="fa fa-ok"></i> Save</button>
                     </div>
                 </div>
                     

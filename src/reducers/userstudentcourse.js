@@ -1,25 +1,30 @@
 import {
-    USERSTUDENTCOURSE_GET_MULTIPLE,
+    USERSTUDENTCOURSE_GET,
     USERSTUDENTCOURSE_GET_ONE,
+    USERSTUDENTCOURSEX_GET_ONE,
+    USERSTUDENTCOURSE_GET_MULTIPLE,
+    USERSTUDENTCOURSEX_GET_MULTIPLE,
     USERSTUDENTCOURSE_REGISTER_SUCCESS,
     USERSTUDENTCOURSE_REGISTER_FAIL,
     USERSTUDENTCOURSE_LOADING,
+    USERSTUDENTCOURSEX_LOADING,
     USERSTUDENTCOURSE_LOADING_ERROR,
-    USERSTUDENTCOURSE_ACTIVATE_FAIL,
-    USERSTUDENTCOURSE_ACTIVATE_SUCCESS,
+    USERSTUDENTCOURSEX_LOADING_ERROR,
     USERSTUDENTCOURSE_UPDATE_SUCCESS,
     USERSTUDENTCOURSE_UPDATE_FAIL,
     USERSTUDENTCOURSE_DELETE_SUCCESS,
     USERSTUDENTCOURSE_DELETE_FAIL,
-    USERSTUDENTCOURSE_EDIT
+    USERSTUDENTCOURSE_EDIT,
 } from "../types/userstudentcourse";
 
 let userstudentcourseStore = JSON.parse(localStorage.getItem('userstudentcourse'))
-
+let userstudentcoursexStore = JSON.parse(localStorage.getItem('userstudentcoursex'))
 const initialState = {
     isLoading: false,
     userstudentcourses: userstudentcourseStore,
+    userstudentcoursesx: userstudentcoursexStore,
     userstudentcourse:{},
+    userstudentcoursex:{},
     msg: null,
     isEdit:-1,
     ref:null,
@@ -49,6 +54,11 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case USERSTUDENTCOURSEX_LOADING:
+            return {
+                ...state,
+                isLoadingx : true
+            };
         case USERSTUDENTCOURSE_GET_MULTIPLE:
             localStorage.setItem('userstudentcourse', JSON.stringify(action.payload));
             return {
@@ -56,12 +66,27 @@ export default function(state = initialState, action){
                 userstudentcourses : action.payload,
                 msg:'DONE!!!'
             };
+        case USERSTUDENTCOURSEX_GET_MULTIPLE:
+            localStorage.setItem('userstudentcoursex', JSON.stringify(action.payload));
+            return {
+                ...state,
+                userstudentcoursesx : action.payload,
+                msg:'DONE!!!'
+            };
+        case USERSTUDENTCOURSEX_GET_ONE:
+            let allx = [...state.userstudentcoursesx];
+            let sesx = allx.filter(row=>row.id == action.payload)[0];
+            return {
+                ...state,
+                userstudentcoursex : sesx,
+                MSG:"DONE!!!"
+            };
         case USERSTUDENTCOURSE_GET_ONE:
             let all = [...state.userstudentcourses];
             let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
-                userstudentcourse : ses,
+                userstudentcourseX : ses,
                 MSG:"DONE!!!"
             };
         case USERSTUDENTCOURSE_REGISTER_SUCCESS:
@@ -71,14 +96,7 @@ export default function(state = initialState, action){
                 userstudentcourses: [...state.userstudentcourses, action.payload],
                 msg:action.msg
             }; 
-        case USERSTUDENTCOURSE_ACTIVATE_SUCCESS:
-            let ac = changeState(state.userstudentcourses, action.payload);
-            localStorage.setItem('userstudentcourse', JSON.stringify(ac));
-            return{
-                ...state,
-                msg:'DONE!!!',
-                userstudentcourses: ac
-            }
+       
         case USERSTUDENTCOURSE_DELETE_SUCCESS:
             let rem = state.userstudentcourses.filter(cat => cat.id != action.payload.id);
             localStorage.setItem('userstudentcourse', JSON.stringify(rem));
@@ -98,7 +116,6 @@ export default function(state = initialState, action){
                 userstudentcourses : newState
             }; 
         case USERSTUDENTCOURSE_LOADING_ERROR:
-        case USERSTUDENTCOURSE_ACTIVATE_FAIL:
         case USERSTUDENTCOURSE_REGISTER_FAIL:
         case USERSTUDENTCOURSE_DELETE_FAIL:
         case USERSTUDENTCOURSE_UPDATE_FAIL:

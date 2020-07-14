@@ -1,4 +1,8 @@
 import {
+    USERSTUDENT_LOGIN,
+    USERSTUDENT_LOGIN_ERROR,
+    USERSTUDENT_LOGOUT_SUCCESS,
+    USERSTUDENT_LOGOUT_FAIL,
     USERSTUDENT_GET_MULTIPLE,
     USERSTUDENT_GET_ONE,
     USERSTUDENT_REGISTER_SUCCESS,
@@ -14,10 +18,16 @@ import {
     USERSTUDENT_EDIT
 } from "../types/userstudent";
 
-let userstudentStore = JSON.parse(localStorage.getItem('userstudent'))
+let userstudentStore = localStorage.getItem('userstudent') !== 'undefined' ? JSON.parse(localStorage.getItem('userstudent')):[];
+let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
 
 const initialState = {
+    token: localStorage.getItem('token'),
+    isAuthenticated: localStorage.getItem('auth'),
     isLoading: false,
+    isAdmin: userstudentStore ? userstudentStore.is_admin : null,
+    isRegistered: userstudentStore && userstudentStore.id > 1 ? true: false,
+    user: user ? user : {},
     userstudents: userstudentStore,
     userstudent:{},
     msg: null,
@@ -49,11 +59,25 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case USERSTUDENT_LOGIN:
+            localStorage.setItem('token', action.token)
+            localStorage.setItem('auth', true);
+            localStorage.setItem('user', JSON.stringify(action.payload))
+            console.log(action.payload);
+            return {
+                ...state,
+                ...action.payload,
+                isLoading: false,
+                isAuthenticated: true,
+                user: action.payload,
+                isAdmin: action.payload.is_admin
+            }; 
         case USERSTUDENT_GET_MULTIPLE:
             localStorage.setItem('userstudent', JSON.stringify(action.payload));
             return {
                 ...state,
                 userstudents : action.payload,
+
                 msg:'DONE!!!'
             };
         case USERSTUDENT_GET_ONE:
@@ -108,6 +132,23 @@ export default function(state = initialState, action){
                 isLoading: false,
                 msg: action.msg
             };
+        case USERSTUDENT_LOGIN_ERROR:
+        case USERSTUDENT_LOGOUT_SUCCESS:
+        case USERSTUDENT_LOGOUT_FAIL:
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth')
+            localStorage.removeItem('userstudent')
+            localStorage.removeItem('user')
+            return{
+                ...state,
+                token: null,
+                isRegistered: true,
+                isAuthenticated: false,
+                isLoading: false,
+                userstudent: {},
+                user: {},
+                isAdmin : null
+            } 
         default:
             return state;
     }

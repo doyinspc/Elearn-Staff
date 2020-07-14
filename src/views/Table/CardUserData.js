@@ -17,10 +17,10 @@ class CardUserCourse extends React.Component {
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><div><i class="fa fa-certificate"></i> {professional}</div></li>
-            <li class="list-group-item"><div style={{textTransform:'capitalize'}}><i class="fa fa-user-circle-o"></i> {user.gender}</div></li>
+            <li class="list-group-item"><div style={{textTransform:'capitalize'}}><i class="fa fa-user-circle-o"></i> {parseInt(user.gender) === 0?"Male":"Female"}</div></li>
             <li class="list-group-item"><div><i class="fa fa-envelope-open-o"></i> {user.email}</div></li>
             <li class="list-group-item"><div><i class="fa fa-phone"></i> {user.phone}</div></li>
-            <li class="list-group-item"><div><i class="fa fa-university"></i> {user.department}</div></li>
+            <li class="list-group-item"><div style={{textTransform:'capitalize'}}><i class="fa fa-university"></i> {user.departmentname}</div></li>
             <li class="list-group-item"><div><i class="fa fa-map-marker"></i> {user.address}</div></li>
           </ul>
         </div>

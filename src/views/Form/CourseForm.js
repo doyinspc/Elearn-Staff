@@ -12,10 +12,19 @@ const Modals = (props) => {
   const [code, setCode] = useState(null);
   const [objective, setObjective] = useState(null);
   const [owner, setOwner] = useState(1);
-  const [starts, setStarts] = useState(null);
-  const [ends, setEnds] = useState(null);
+  const [starts, setStarts] = useState(new Date());
+  const [ends, setEnds] = useState(new Date());
   const [description, setDescription] = useState(null);
   const toggle = () => setModal(!modal);
+  const tog = () =>{
+    if(id && id > 0)
+    {
+
+    }else{
+      toggle();
+    }
+    
+  }
   
   useEffect(() => {
     if(parseInt(props.mid) > 0 )
@@ -36,34 +45,36 @@ const Modals = (props) => {
             course_code:code, 
             course_description:description, 
             course_objective:objective, 
-            course_starts:starts, 
-            course_ends:ends, 
-            course_owner:owner
+            course_start:new Date(starts).getTime(), 
+            course_end:new Date(ends).getTime()
           };
           props.updateCourse(data, id);
-
+          toggle();
         }else{
           let data = {
             course_name:name, 
             course_code:code, 
             course_description:description, 
             course_objective:objective, 
-            course_start:starts, 
-            course_end:ends, 
+            course_start:new Date(starts).getTime(), 
+            course_end:new Date(ends).getTime(), 
             course_owner:owner
           };;
           props.registerCourse(data);
+          toggle();
         }
         
   }
 
   const populate = async(data) =>{
+    
         setName(data.course_name);
         setCode(data.course_code);
         setObjective(data.course_objective);
         setDescription(data.course_description);
-        setStarts(data.course_start);
-        setEnds(data.course_end);
+        setStarts(data.course_start  !== null ? new Date(parseInt(data.course_start)).toISOString().substring(0, 19):'-' );
+        setEnds(data.course_end  !== null ? new Date(parseInt(data.course_end)).toISOString().substring(0, 19):'-' );
+        console.log(new Date(parseInt(data.course_start)).toISOString().substring(0, 19));
     }
 
 
@@ -72,12 +83,12 @@ const Modals = (props) => {
   let editName = 'Create';
   let editIcon = 'fa-plus';
   let editColor = 'primary';
+  let editCss = 'btn-sm';
 
   return (
     <div>
       
-      <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i> {editName} Course</Button>
-      
+      <Button className={editCss} color={editColor} onClick={tog}><i className={`fa ${editIcon}`}></i> Add Course </Button>
       <Modal isOpen={modal} toggle={toggle} >
         <ModalHeader toggle={toggle}>{editName} Course</ModalHeader>
         <ModalBody>
@@ -112,10 +123,10 @@ const Modals = (props) => {
                 <Label for="starts" sm={3}>Course Starts </Label>
                 <Col sm={9}>
                 <Input 
-                    type="date" 
+                    type="datetime-local" 
                     name="starts" 
-                    id="starts"  
-                    required
+                    id="starts"
+                    value={starts}
                     defaultValue={starts}
                     onChange={e=>setStarts(e.target.value)} 
                      />
@@ -125,10 +136,10 @@ const Modals = (props) => {
                 <Label for="ends" sm={3}>Course Ends </Label>
                 <Col sm={9}>
                 <Input 
-                    type="date" 
+                    type="datetime-local" 
                     name="ends" 
-                    id="ends"  
-                    required
+                    id="ends"
+                    value={ends}
                     defaultValue={ends}
                     onChange={e=>setEnds(e.target.value)} 
                      />
@@ -136,7 +147,7 @@ const Modals = (props) => {
             </FormGroup>
             <FormGroup row>
               
-                <Label for="code" sm={12}>Course Objective </Label>
+                <Label for="objective" sm={12}>Course Objective </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 
@@ -144,19 +155,21 @@ const Modals = (props) => {
                     id="objective"  
                     required
                     defaultValue={objective}
+                    
                     onChange={e=>setObjective(e.target.value)} 
                      />
                 
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="code" sm={12}>Course Description </Label>
+                <Label for="description" sm={12}>Course Description </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 
                     name="description" 
                     id="description"  
                     required
+                    
                     defaultValue={description}
                     onChange={e=>setDescription(e.target.value)} 
                      />

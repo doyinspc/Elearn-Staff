@@ -3,9 +3,9 @@ import { NavLink } from "react-router-dom";
 import { Nav } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
-import { checkImage } from "./../../actions/common";
 import logo from "logo-white.svg";
-
+import {SERVER_URL} from './../../actions/common';
+const imgx = require("assets/img/place.png");
 var ps;
 
 class Sidebar extends React.Component {
@@ -31,7 +31,7 @@ class Sidebar extends React.Component {
     }
   }
   render() {
-    let {username} = this.props.user || {};
+    let {username, photo} = this.props.user || {};
     return (
       <div className="sidebar" data-color={this.props.backgroundColor}>
         <div className="logo">
@@ -59,7 +59,12 @@ class Sidebar extends React.Component {
             target="_blank"
           >
             <div className="photo">
-              <img className="avatar border-gray" src={checkImage("assets/img/bg5.jpg") ? require("assets/img/bg5.jpg"): require("assets/img/bg5.jpg") } />
+              <img 
+              height={30}
+              className="rounded-circle img-circle avatar border-gray" 
+              src={`${SERVER_URL + photo}`}
+              onError={(e)=>{e.target.onerror = null; e.target.src=imgx}} 
+              />
             </div>
           </a>
           <a

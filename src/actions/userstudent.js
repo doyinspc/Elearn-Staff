@@ -1,6 +1,9 @@
 import axios from 'axios';
 import {
-    USERSTUDENT_GET,
+    USERSTUDENT_LOGIN,
+    USERSTUDENT_LOGIN_ERROR,
+    USERSTUDENT_LOGOUT_SUCCESS,
+    USERSTUDENT_LOGOUT_FAIL,
     USERSTUDENT_GET_ONE,
     USERSTUDENT_GET_MULTIPLE,
     USERSTUDENT_REGISTER_SUCCESS,
@@ -15,7 +18,7 @@ import {
 } from "../types/userstudent";
 import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
-let TABLE_NAME = 'staffs';
+let TABLE_NAME = 'students';
 const path = API_PATHS;
 
 let params = {
@@ -44,6 +47,41 @@ export const getUserstudents = data => (dispatch, getState) => {
                 })
             })
 };
+export const getUserstudentLogin = data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    data.cat = 'login';
+    data.table = 'students';
+    const fd = new FormData();
+    fd.append('username' , data.username);
+    fd.append('password' , data.password);
+    fd.append('cat' , 'login');
+    fd.append('table' , 'students');
+    const body = JSON.stringify(fd);
+    
+    dispatch({type : USERSTUDENT_LOADING});
+        axios.post(path, fd, axiosConfig1)
+            .then(res => {                                                                                                                                                                                                                                      
+                dispatch({
+                    type: USERSTUDENT_LOGIN,
+                    payload: res.data.data,
+                    token: res.data.token
+                })
+            })
+            .catch(err => {
+                
+                dispatch({
+                    type : USERSTUDENT_LOGIN_ERROR,
+                    payload:err
+                })
+            })
+};
+export const getUserstudentLogout = () => (dispatch, getState) => {
+    dispatch({
+        type: USERSTUDENT_LOGOUT_SUCCESS
+    })
+       
+};
+
 //GET SINGLE USERSTUDENT 
 export const getUserstudent = id => (dispatch, getState) => {
     //SET PAGE LOADING
@@ -86,6 +124,24 @@ export const registerUserstudent = data => dispatch => {
         .catch(err => {
             dispatch({
                 type : USERSTUDENT_REGISTER_FAIL,
+                payload: err
+            })
+        })
+};
+
+//USERSTUDENT REGISTER
+export const registerUserstudentPost = data => dispatch => {
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: USERSTUDENT_LOGIN,
+                payload: res.data.data,
+                token: res.data.token
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USERSTUDENT_UPDATE_FAIL,
                 payload: err
             })
         })

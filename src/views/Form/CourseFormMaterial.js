@@ -4,6 +4,19 @@ import CKEditor from 'ckeditor4-react';
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,  FormText } from 'reactstrap';
 
+
+const pics = {
+  1 : 'fa-file-text',
+  2 : 'fa-file-pdf',
+  3 : 'fa-file-image',
+  4 : 'fa-file-video',
+  5 : 'fa-file-audio',
+  6 : 'fa-youtube',
+  7 : 'fa-link',
+  8 : 'fa-comment',
+  9 : 'fa-question',
+  10 : 'fa-file-text'
+}
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
@@ -78,13 +91,14 @@ const Modals = (props) => {
   
   let editId = id ? id : null;
   let editName = 'Add';
-  let editIcon = 'fa-plus';
   let editColor = 'primary';
 
   return (
     <div>
       <div class="btn-group dropup">
-      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> Reload Modules</Button>
+      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-edit"></i> </Button>
+      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-trash"></i></Button>
+         <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
         <button class="btn btn-secondary dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
          <i class="fa fa-plus"></i> Add Learning Resource
         </button>
@@ -102,7 +116,7 @@ const Modals = (props) => {
       </div>
      
       <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={toggle}>{editName} Assessment</ModalHeader>
+        <ModalHeader toggle={toggle}>{editName} Learning Material/Assessment</ModalHeader>
         <ModalBody>
         <Form>
             <FormGroup row>
@@ -133,15 +147,32 @@ const Modals = (props) => {
 
               {type === 2 || type === 3 ||type === 4 || type === 5  ? 
             <FormGroup row>
-            <Label for="files" sm={3}>Link/Code </Label>
-            <Col sm={9}>
-            <Input 
-                type="file" 
-                name="files" 
-                id="files" 
-                defaultValue={files}
-                onChange={handleInputChange} 
-                placeholder="" />
+            <Label for="files" sm={12}>Upload </Label>
+            <Col sm={12}>
+            <div className="fileinput fileinput-new text-center" data-provides="fileinput">
+                    <div className="fileinput-new thumbnail img-circle">
+                      <i className={`fa ${pics[type]}`} style={{fontSize:200}}></i>
+                    
+                    </div>
+                    <div className="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
+                    <div >
+                    <span className="btn btn-raised btn-round btn-default btn-file">
+                    <span class="fileinput-new">Add</span>
+	                  <span class="fileinput-exists">Change</span>
+                    <input 
+                    style={{width:100}}
+                    type="file" 
+                    name="files" 
+                    id="files" 
+                    defaultValue={files}
+                    onChange={handleInputChange} 
+                     />
+                    </span>
+                       
+                       
+                    </div>
+                </div>
+            
             </Col>
         </FormGroup>
               : ''}

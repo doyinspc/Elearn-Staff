@@ -16,23 +16,16 @@ import CourseFormStudent from "./../Form/CourseFormStudent";
 import CourseModule from "./CourseModule";
 import CourseTutor from "./CourseTutor";
 import CourseStudent from "./CourseStudent";
+import Modals from "./../Form/CourseForm";
 // reactstrap components
 import {
   Card,
   CardBody,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Label,
-  Input,
-  FormGroup,
-  UncontrolledTooltip,
   Table,
   Container,
   Row,
   Col,
-  Button,
-  Media
+  Button
 } from "reactstrap";
 
 class Course extends React.Component {
@@ -98,7 +91,19 @@ handleStudent=id=>{
         <div class="card card-nav-tabs ">
           <div class="card-header card-header-danger">
                <h5 className="card-category">Backend Development</h5>
-                  <div class="card-title h4" >{`${this.props.data.course_code+" " +this.props.data.course_name}`}</div>
+                  <div className="row">
+                    <div className="col-sm-9">
+                    <div class="card-title h4" >{`${this.props.data.course_code+" " +this.props.data.course_name}`}
+                    </div>
+                    </div>
+                    <div className="col-sm-3">
+                      <div className="btn-group">
+                      <button class="btn btn-sm" onClick={()=>{this.props.handleClick(this.props.data.id)}}><i className='fa fa-edit'></i></button>
+                      <button class="btn btn-sm" onClick={()=>{this.props.handleDelete(this.props.data.id)}}><i className='fa fa-trash'></i></button>
+                      </div>
+                    </div>
+                    
+                  </div>
               <div class="nav-tabs-navigation">
                   <div class="nav-tabs-wrapper">
                       <ul class="nav nav-tabs" data-tabs="tabs">
@@ -128,7 +133,7 @@ handleStudent=id=>{
                   <div class="card-body">
                     <p class="card-text">
                    
-                      </p>
+                    </p>
                   </div>
                   </div>
                   <div class="tab-pane" id={`stage1${this.props.data.id}`}>

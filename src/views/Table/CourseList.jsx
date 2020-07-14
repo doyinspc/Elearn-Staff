@@ -1,22 +1,17 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { Link }  from 'react-router-dom';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
 import Modals from "./../Form/CourseForm";
-import ModalsModule from "./../Form/CourseFormModule";
 import CourseCard from "./CourseCard";
 // reactstrap components
 import {
   Card,
-  CardBody,
   CardHeader,
   CardTitle,
-  Table,
   Container,
   Row,
-  Col,
-  Button
+  Col
 } from "reactstrap";
 
 // core components
@@ -57,11 +52,11 @@ class Course extends React.Component {
 
   render() {
       let props = {};
-      let tableTitle = "course";
+      let tableTitle = "Course";
       let tableSubTitle = props.subtitle;
       let tbody = this.props.courses.courses;
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
-          <CourseCard key={key} data={prop} />
+          <CourseCard key={key} data={prop} handleDelete={(rid)=>this.loadModal(rid)} handleClick={(rid)=>this.loadModal(rid)} />
       )):null;
       
     return (
@@ -76,9 +71,11 @@ class Course extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col sm="10">{tableTitle}</Col>
-                          <Col sm="2" className="pull-right"> 
-                              <Modals mid={this.state.id} toggle={this.state.st}/>
+                          <Col sm="8"><i className="fa fa-file-text"></i>{" "+tableTitle}
+
+                          </Col>
+                          <Col sm="3" className="pull-right"> 
+                          <Modals mid={this.state.id} toggle={this.state.st}/>
                           </Col>
                         </Row>
                       </Container>

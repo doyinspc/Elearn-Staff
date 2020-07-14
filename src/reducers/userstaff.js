@@ -18,8 +18,8 @@ import {
     USERSTAFF_EDIT
 } from "../types/userstaff";
 
-let userstaffStore = JSON.parse(localStorage.getItem('userstaff'));
-let user = JSON.parse(localStorage.getItem('user'));
+let userstaffStore = localStorage.getItem('userstaff') !== 'undefined' ? JSON.parse(localStorage.getItem('userstaff')):[];
+let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
 
 const initialState = {
     token: localStorage.getItem('token'),
@@ -27,7 +27,7 @@ const initialState = {
     isLoading: false,
     isAdmin: userstaffStore ? userstaffStore.is_admin : null,
     isRegistered: userstaffStore && userstaffStore.id > 1 ? true: false,
-    user: user,
+    user: user ? user : {},
     userstaffs: userstaffStore,
     userstaff:{},
     msg: null,
@@ -62,14 +62,13 @@ export default function(state = initialState, action){
         case USERSTAFF_LOGIN:
             localStorage.setItem('token', action.token)
             localStorage.setItem('auth', true);
-            localStorage.setItem('userstaff', JSON.stringify(action.payload));
             localStorage.setItem('user', JSON.stringify(action.payload))
+            console.log(action.payload);
             return {
                 ...state,
                 ...action.payload,
                 isLoading: false,
                 isAuthenticated: true,
-                userstaff: action.payload,
                 user: action.payload,
                 isAdmin: action.payload.is_admin
             }; 
@@ -139,13 +138,15 @@ export default function(state = initialState, action){
             localStorage.removeItem('token')
             localStorage.removeItem('auth')
             localStorage.removeItem('userstaff')
+            localStorage.removeItem('user')
             return{
                 ...state,
                 token: null,
                 isRegistered: true,
                 isAuthenticated: false,
                 isLoading: false,
-                userstaff: null,
+                userstaff: {},
+                user: {},
                 isAdmin : null
             } 
         default:

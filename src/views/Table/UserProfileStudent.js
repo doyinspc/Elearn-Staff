@@ -7,28 +7,30 @@ import {
 
 // core components
 import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
-import CardUserProfileStudent from "./CardUserProfileStudent";
-import CardUserCourseStudent from "./CardUserCourseStudent";
-import CardUserDataStudent from "./CardUserDataStudent";
+import CardUserStudentProfile from "./CardUserStudentProfile";
+import CardUserStudentData from "./CardUserStudentData";
+import CardUserStudentCourse from "./CardUserStudentCourse";
 import { getUserstudent } from "./../../actions/userstudent";
-import { getUserstudentcourse } from "./../../actions/userstudentcourse";
+import { getUserstudentcourses, getUserstudentcoursesx } from "./../../actions/userstudentcourse";
 
 class UserProfile extends React.Component {
   componentDidMount(){
-        this.props.getUserstudentcourse({'studentId':this.props.userstudents.userstudent.id})
+        this.props.getUserstudentcourses({'studentId': 1});
+        this.props.getUserstudentcoursesx({'studentId': 1});
   }
   
   render() {
-      let user = this.props.userstudents;
+      let user = this.props.userstudents.user;
       let course = this.props.userstudentcourses;
+      let coursex = this.props.userstudentcoursesx;
     return (
       <>
         <PanelHeader size="sm" />
         <div className="content">
           <Row>
-              <CardUserProfileStudent data={user} />
-              <CardUserDataStudent data={user} />
-              <CardUserCourseStudent data={course} />
+              <CardUserStudentProfile user={user} />
+              <CardUserStudentData user={user} />
+              <CardUserStudentCourse user={user} data={course} datax={coursex} />
           </Row>
         </div>
       </>
@@ -37,7 +39,8 @@ class UserProfile extends React.Component {
 }
 const mapStateToProps = (state) => ({ 
     userstudents: state.userstudentReducer,
-    userstudentcourses: state.userstudentcourseReducer,
+    userstudentcourses: state.userstudentcourseReducer.userstudentcourses,
+    userstudentcoursesx: state.userstudentcourseReducer.userstudentcoursesx,
   })
   
-  export default connect(mapStateToProps, { getUserstudent, getUserstudentcourse })(UserProfile)
+  export default connect(mapStateToProps, { getUserstudent, getUserstudentcourses, getUserstudentcoursesx})(UserProfile)

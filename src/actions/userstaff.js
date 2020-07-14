@@ -60,7 +60,7 @@ export const getUserstaffLogin = data => (dispatch, getState) => {
     
     dispatch({type : USERSTAFF_LOADING});
         axios.post(path, fd, axiosConfig1)
-            .then(res => {                                                                                                                                                                                                                                       
+            .then(res => {                                                                                                                                                                                                                                      
                 dispatch({
                     type: USERSTAFF_LOGIN,
                     payload: res.data.data,
@@ -68,6 +68,7 @@ export const getUserstaffLogin = data => (dispatch, getState) => {
                 })
             })
             .catch(err => {
+                
                 dispatch({
                     type : USERSTAFF_LOGIN_ERROR,
                     payload:err
