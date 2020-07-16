@@ -74,7 +74,7 @@ const Modals = (props) => {
         setDescription(data.course_description);
         setStarts(data.course_start  !== null ? new Date(parseInt(data.course_start)).toISOString().substring(0, 19):'-' );
         setEnds(data.course_end  !== null ? new Date(parseInt(data.course_end)).toISOString().substring(0, 19):'-' );
-        console.log(new Date(parseInt(data.course_start)).toISOString().substring(0, 19));
+   
     }
 
 

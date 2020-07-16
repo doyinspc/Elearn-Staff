@@ -18,7 +18,8 @@ var ps;
 
 class Dashboard extends React.Component {
   state = {
-    backgroundColor: "blue"
+    backgroundColor: "blue",
+    user:{}
   };
   mainPanel = React.createRef();
   componentDidMount() {
@@ -26,6 +27,20 @@ class Dashboard extends React.Component {
       ps = new PerfectScrollbar(this.mainPanel.current);
       document.body.classList.toggle("perfect-scrollbar-on");
     }
+
+    let user = {};
+    let backgroundColor ='green'
+    if(this.props.userstaffs.isAuthenticated)
+    {
+        user = this.props.userstaffs.user;
+        backgroundColor = 'orange'
+    }
+    else if(this.props.userstudents.isAuthenticated)
+    {
+        user = this.props.userstudents.userstudent;
+        backgroundColor = 'blue'
+    }
+    this.setState({user, backgroundColor})
   }
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -43,25 +58,17 @@ class Dashboard extends React.Component {
     this.setState({ backgroundColor: color });
   };
   render() {
-    let user = {};
-    if(this.props.userstaffs.isAuthenticated)
-    {
-        user = this.props.userstaffs.user;
-    }
-    else if(this.props.userstudents.isAuthenticated)
-    {
-        user = this.props.userstudents.userstudent;
-    }
+     
     return (
       <div className="wrapper">
         <Sidebar
           {...this.props}
-          user={user}
+          user={this.state.user}
           routes={routes}
           backgroundColor={this.state.backgroundColor}
         />
         <div className="main-panel" ref={this.mainPanel}>
-          <DemoNavbar {...this.props} user={user} />
+          <DemoNavbar {...this.props} user={this.state.user} />
           <Switch>
             {routes.map((prop, key) => {
               return (
@@ -72,6 +79,7 @@ class Dashboard extends React.Component {
                 />
               );
             })}
+             
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <Footer fluid />

@@ -64,7 +64,7 @@ class LoginPage extends React.Component{
 
   render(){ 
     if (this.props.isAuthenticated) {
-      return <Redirect to="/admin/course" />;
+     // return <Redirect to="/admin/course" />;
     }
     
     this.onLoad()

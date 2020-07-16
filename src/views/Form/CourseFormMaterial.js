@@ -28,6 +28,7 @@ const Modals = (props) => {
   const toggle = () => setModal(!modal);
   const toggles = (rid) => {
     toggle();
+    
     setType(rid);
   }
   
@@ -76,7 +77,7 @@ const Modals = (props) => {
 
   const populate = async(data) =>{
         setTitle(data.title);
-        setType(data.types);
+        setType(parseInt(data.types));
     }
 
   const handleInputChange = (evt) => {
@@ -96,14 +97,14 @@ const Modals = (props) => {
   return (
     <div>
       <div class="btn-group dropup">
-      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-edit"></i> </Button>
-      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-trash"></i></Button>
-         <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
+      <Button className="btn-sm" color="default" onClick={()=>props.handleEdit(props.moduleId)} ><i class="fa fa-edit"></i> </Button>
+      <Button className="btn-sm" color="default" onClick={()=>props.handleDelete(props.moduleId)} ><i class="fa fa-trash"></i></Button>
+      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
         <button class="btn btn-secondary dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
          <i class="fa fa-plus"></i> Add Learning Resource
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#" onClick={()=>toggles(1)}><i class='fa fa-file'></i> Input Text</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
+          <a class="dropdown-item" href="#" onClick={()=>toggles(1)}><i class='fa fa-file'></i> Text</a>
           <a class="dropdown-item" href="#" onClick={()=>toggles(2)}><i class="fa fa-file-pdf" ></i> Upload Document</a>
           <a class="dropdown-item" href="#" onClick={()=>toggles(3)}><i class='fa fa-file-image'></i> Upload Image</a>
           <a class="dropdown-item" href="#" onClick={()=>toggles(4)}><i class='fa fa-file-video'></i> Upload Video</a>
@@ -129,7 +130,7 @@ const Modals = (props) => {
                     required
                     defaultValue={title}
                     onChange={e=>setTitle(e.target.value)} 
-                     /><FormText class='muted'>Briefly tile or describe the attachment</FormText>
+                     /><FormText class='muted'>Briefly title or describe the attachment</FormText>
                 </Col>
             </FormGroup>
             {type === 1 ? 
@@ -151,8 +152,7 @@ const Modals = (props) => {
             <Col sm={12}>
             <div className="fileinput fileinput-new text-center" data-provides="fileinput">
                     <div className="fileinput-new thumbnail img-circle">
-                      <i className={`fa ${pics[type]}`} style={{fontSize:200}}></i>
-                    
+                      <i className={`fa ${props.coursematerials.isEditing ? 'fa-spinner' : pics[type]}`} style={{fontSize:200}} aria-hidden="true"></i>
                     </div>
                     <div className="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                     <div >
@@ -165,7 +165,7 @@ const Modals = (props) => {
                     name="files" 
                     id="files" 
                     defaultValue={files}
-                    onChange={handleInputChange} 
+                    onChange={handleInputChange}
                      />
                     </span>
                        

@@ -10,11 +10,11 @@ import "assets/scss/now-ui-dashboard.scss?v1.2.0";
 import "assets/css/demo.css";
 
 import AdminLayout from "layouts/Admin.jsx";
-import AccountLayout from "layouts/Account.jsx";
-import InventoryLayout from "layouts/Inventory.jsx";
 import EmployeeLoginPage from "views/EmployeeLoginPage";
 import StudentLoginPage from "views/StudentLoginPage";
 import UserStaffEditPage from "views/Table/UserProfileEdit";
+import Semester from "views/Table/SemesterList.jsx";
+import Course from "views/Table/CourseList.jsx";
 
 const hist = createBrowserHistory();
 
@@ -24,11 +24,14 @@ ReactDOM.render(
           <Switch>
             <Switch>
               <Route path="/admin" render={props => <AdminLayout {...props} />} />
-              <Route path="/account" render={props => <AccountLayout {...props} />} />
-              <Route path="/inventory" render={props => <InventoryLayout {...props} />} />
+              <Route path="/admin/useredit" render={props => <UserStaffEditPage {...props} />} />
+              <Route path="/admin/semester/:id" render={props => <Semester {...props} />} />
+              <Route path="/admin/semester" render={props => <Semester {...props} />} />
+              <Route path="/admin/course" render={props => <Course {...props} />} />
+
               <Route path="/staff" render={props => <EmployeeLoginPage {...props} />} />
               <Route path="/" render={props => <StudentLoginPage {...props} />} />
-              <Route path="/admin/useredit" render={props => <UserStaffEditPage {...props} />} />
+
               <Redirect to="/" />
             </Switch>
           </Switch>

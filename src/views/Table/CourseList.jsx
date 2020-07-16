@@ -36,6 +36,11 @@ class Course extends React.Component {
     this.setState({st:true, id:id});
   }
 
+  loadDelete = id =>{
+    this.props.getCourse(id);
+    this.setState({st:true, id:id});
+  }
+
   loadActive = (id, active) =>{
     let act = parseInt(active) === 0 ? 1 : 0;
     this.props.updateCourse({'active': act}, id);
@@ -56,7 +61,7 @@ class Course extends React.Component {
       let tableSubTitle = props.subtitle;
       let tbody = this.props.courses.courses;
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
-          <CourseCard key={key} data={prop} handleDelete={(rid)=>this.loadModal(rid)} handleClick={(rid)=>this.loadModal(rid)} />
+          <CourseCard key={key} data={prop} handleDelete={(rid)=>this.loadDelete(rid)} handleClick={(rid)=>this.loadModal(rid)} />
       )):null;
       
     return (
@@ -72,10 +77,9 @@ class Course extends React.Component {
                       <Container>
                         <Row>
                           <Col sm="8"><i className="fa fa-file-text"></i>{" "+tableTitle}
-
                           </Col>
                           <Col sm="3" className="pull-right"> 
-                          <Modals mid={this.state.id} toggle={this.state.st}/>
+                            <Modals mid={this.state.id} toggle={this.state.st}/>
                           </Col>
                         </Row>
                       </Container>

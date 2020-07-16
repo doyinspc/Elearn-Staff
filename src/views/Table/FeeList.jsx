@@ -2,8 +2,8 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { Link }  from 'react-router-dom';
-import { getMaterials, getMaterial, updateMaterial } from './../../actions/material';
-import Modals from "./../Form/MaterialForm"
+import { getFees, getFee, updateFee } from './../../actions/fee';
+import Modals from "./../Form/FeeForm"
 // reactstrap components
 import {
   Card,
@@ -14,70 +14,66 @@ import {
   Container,
   Row,
   Col,
-  Button,
-  Modal,
-  NavLink,
-  NavItem
+  Button
 } from "reactstrap";
 
 // core components
 import PanelHeader from "../../components/PanelHeader/PanelHeader.jsx";
 
-class Material extends React.Component {
+class Fee extends React.Component {
   constructor(props){
     super(props);
     this.state ={
       id:null,
       st:false,
-      pid:1
+      pid:3
     }
   }
   
   componentDidMount(){
-    this.props.getMaterials({pid:1});
+    this.props.getFees({pid:3});
   }
 
   loadModal = id =>{
-    this.props.getMaterial(id);
+    this.props.getFee(id);
     this.setState({st:true, id:id});
   }
 
   loadActive = (id, active) =>{
-    let act = active === 0 ? 1 : 0;
-    this.props.updateMaterial({'active': act}, id);
+    let act = parseInt(active) === 0 ? 1 : 0;
+    this.props.updateFee({'active': act}, id);
   }
 
   loadNext = id =>{
-    this.props.getMaterial(id);
+    this.props.getFee(id);
   }
 
   closer = id =>{
-    this.props.getMaterial(id);
+    this.props.getFee(id);
     this.setState({st:false, id:null});
   }
 
   render() {
       let props = {};
-      let tableTitle = "MATERIAL";
+      let tableTitle = "FEE";
       let tableSubTitle = props.subtitle;
-      let thead = ['Material', 'Start', "End", "Action"];
-      let tbody = this.props.materials.materials;
+      let thead = ['Fee', 'Abbrv.', "Action"];
+      let tbody = this.props.fees.fees;
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
           <tr key={key}>
-            <td className="text-left">{prop.material}</td>
+            <td className="text-left">{prop.name}</td>
             <td className="text-center">{prop.abbrv}</td>
             <td className="text-right">
-            <Link to={`/admin/semester/${prop.id}`}>
+            <Link to={`/admin/department/${prop.id}`}>
                 <Button className="btn-icon" color="info" size="sm" key={`md${key}${prop.id}`}  onClick={()=>this.loadNext(prop.id)}>
                     <i className="fa fa-calendar"></i>
                 </Button></Link>{` `}
-                <Button className="btn-icon" color="success" size="sm" key={`md${key}${prop.id}`}  mid={prop.id}  onClick={()=>this.loadModal(prop.id)} >
+                <Button className="btn-icon" color="success" size="sm" key={`mdx${key}${prop.id}`}  mid={prop.id}  onClick={()=>this.loadModal(prop.id)} >
                     <i className="fa fa-edit"></i>
                 </Button>{` `}
-                
-                  <Button className="btn-icon" color= {prop.active === 0 ? 'default' : 'danger'} size="sm" key={`md${key}${prop.id}`}  onClick={()=>this.loadActive(prop.id, prop.active)}>
+                <Button className="btn-icon" color= {parseInt(prop.active) === 0 ? 'default' : 'danger'} size="sm" key={`mdy${key}${prop.id}`}  onClick={()=>this.loadActive(prop.id, prop.active)}>
                       <i className="fa fa-times" />
-                  </Button>
+                </Button>
                 
              </td>
           </tr>
@@ -135,7 +131,7 @@ class Material extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({ 
-  materials: state.materialReducer
+  fees: state.feeReducer
 })
 
-export default connect(mapStateToProps, { getMaterials, getMaterial, updateMaterial })(Material)
+export default connect(mapStateToProps, { getFees, getFee, updateFee })(Fee)

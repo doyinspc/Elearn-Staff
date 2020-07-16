@@ -1,5 +1,4 @@
 import React from "react";
-import CardStat from "./CardStat";
 
 import {Col} from "reactstrap";
 

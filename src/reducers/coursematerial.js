@@ -22,6 +22,7 @@ const initialState = {
     coursematerial:{},
     msg: null,
     isEdit:-1,
+    isEditing: false,
     ref:null,
 }
 
@@ -42,7 +43,7 @@ export default function(state = initialState, action){
         case COURSEMATERIAL_EDIT:
             return {
                 ...state,
-                isEdit : action.payload
+                isEditing : true
         };
         case COURSEMATERIAL_LOADING:
             return {
@@ -80,10 +81,24 @@ export default function(state = initialState, action){
                 MSG:"DONE!!!"
             };
         case COURSEMATERIAL_REGISTER_SUCCESS:
-            localStorage.setItem('coursematerial', JSON.stringify([...state.coursematerials, action.payload]));
+            const findInds = state.coursematerials.findIndex(cat => parseInt(cat.id) === parseInt(action.payload.id));
+            let sco = [];
+            if(findInds > -1)
+            {
+                let newState = [...state.coursematerials];
+                newState[findInds] = action.payload;
+                sco = newState;
+                localStorage.setItem('coursematerial', JSON.stringify(newState));
+            }else
+            {
+                sco = [...state.coursematerials, action.payload]
+                localStorage.setItem('coursematerial', JSON.stringify([...state.coursematerials, action.payload]));
+            }
+            
             return {
                 ...state,
-                coursematerials: [...state.coursematerials, action.payload],
+                isEditing: false,
+                coursematerials: sco,
                 msg:action.msg
             }; 
         case COURSEMATERIAL_ACTIVATE_SUCCESS:

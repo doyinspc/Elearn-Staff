@@ -73,6 +73,7 @@ export const deleteCoursematerial = data => (dispatch, getState) =>{
 }
 //COURSEMATERIAL REGISTER
 export const registerCoursematerial = data => dispatch => {
+    dispatch({type: COURSEMATERIAL_EDIT})
     const body = JSON.stringify(data)
     params.data = body;
     params.cat = 'insert';

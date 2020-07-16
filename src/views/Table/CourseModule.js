@@ -1,17 +1,15 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { Link }  from 'react-router-dom';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
+import { getCoursemodule } from './../../actions/coursemodule';
+import { getCoursematerial } from './../../actions/coursematerial';
 import CourseMaterial from './CourseMaterial';
 import CourseFormMaterial from './../Form/CourseFormMaterial';
 // reactstrap components
 import {
   Table,
-  Container,
-  Row,
-  Col,
-  Button
+  Container
 } from "reactstrap";
 
 class Course extends React.Component {
@@ -19,14 +17,31 @@ class Course extends React.Component {
     super(props);
     this.state ={
       id:null,
-      st:false,
-      pid:1
+      st:false
     }
   }
   
   componentDidMount(){
 
   }
+
+  handleEdit = id =>{
+    this.props.getCoursemodule(id)
+    this.props.handleEdit(id);
+  }
+  handleEditMaterial = id =>{
+    this.props.getCoursematerial(id)
+    this.setState({st:true, id:id});
+  }
+  handleDeleteMaterial = id =>{
+    this.props.getCoursematerial(id)
+    this.setState({st:true, id:id});
+  }
+  handleDelete = id =>{
+    //delete row
+  }
+
+
 
 
   render() {
@@ -37,7 +52,12 @@ class Course extends React.Component {
     {
       let cts = coursematerials.filter(row =>parseInt(row.moduleId) === parseInt(this.props.data.id))
       loadMaterial = cts && Array.isArray(cts) && cts.length > 0 ? cts.map((prop, index)=>{
-        return <CourseMaterial key={`AB_${index}_${prop.id}`} data={prop} />
+        return <CourseMaterial 
+            key={`AB_${index}_${prop.id}`} 
+            data={prop} 
+            handleEdit={(rid)=>this.handleEditMaterial(rid)}
+            handleDelete={(rid)=>this.handleDeleteMaterial(rid)}
+            />
       }):null;
     };
      
@@ -55,13 +75,16 @@ class Course extends React.Component {
               <div class="card-body">
                 <p>{this.props.data.description}</p>
                 <p>{this.props.data.objective}</p>
-                <CourseFormMaterial moduleId={this.props.data.id} data={this.props.data} />
-                <Container>
-                  <Table responsive id={`tabl${this.props.data.id}`}>
-                  <tbody>
+                <CourseFormMaterial 
+                  moduleId={this.props.data.id} 
+                  mid={this.state.id}
+                  st={this.state.st}
+                  data={this.props.data} 
+                  handleEdit={(rid)=>this.handleEdit(rid)}
+                  handleDelete={(rid)=>this.handleDelete(rid)}
+                />
+                <Container id={`tabl${this.props.data.id}`}>
                     {loadMaterial}
-                   </tbody>
-                  </Table>
                 </Container>
               </div>
             </div>
@@ -78,4 +101,4 @@ const mapStateToProps = (state, ownProps) => ({
   coursematerials: state.coursematerialReducer
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursemodule, getCoursematerial })(Course)
