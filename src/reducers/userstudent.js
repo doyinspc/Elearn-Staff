@@ -23,7 +23,7 @@ let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorag
 
 const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: localStorage.getItem('auth'),
+    isAuthenticated: localStorage.getItem('auth1'),
     isLoading: false,
     isAdmin: userstudentStore ? userstudentStore.is_admin : null,
     isRegistered: userstudentStore && userstudentStore.id > 1 ? true: false,
@@ -61,9 +61,9 @@ export default function(state = initialState, action){
             };
         case USERSTUDENT_LOGIN:
             localStorage.setItem('token', action.token)
-            localStorage.setItem('auth', true);
+            localStorage.setItem('auth1', true);
             localStorage.setItem('user', JSON.stringify(action.payload))
-            console.log(action.payload);
+             
             return {
                 ...state,
                 ...action.payload,
@@ -89,11 +89,12 @@ export default function(state = initialState, action){
                 MSG:"DONE!!!"
             };
         case USERSTUDENT_REGISTER_SUCCESS:
-            localStorage.setItem('userstudent', JSON.stringify([...state.userstudents, action.payload]));
+            //localStorage.setItem('userstudent', JSON.stringify([...state.userstudents, action.payload]));
             return {
                 ...state,
-                userstudents: [...state.userstudents, action.payload],
-                msg:action.msg
+                isLoading : false,
+                msg:'Success',
+                isRegistered: true
             }; 
         case USERSTUDENT_ACTIVATE_SUCCESS:
             let ac = changeState(state.userstudents, action.payload);
@@ -112,14 +113,15 @@ export default function(state = initialState, action){
                 userstudents: rem
             }
         case USERSTUDENT_UPDATE_SUCCESS:
-            const findInd = state.userstudents.findIndex(cat => cat.id == action.payload.id);
-            let newState = [...state.userstudents];
+            const findInd = state.userstaffs.findIndex(cat => cat.id == action.payload.id);
+            let newState = [...state.userstaffs];
             newState[findInd] = action.payload;
             localStorage.setItem('userstudent', JSON.stringify(newState));
             return {
                 ...state,
                 ...action.payload,
-                userstudents : newState
+                userstudents : newState,
+                userstudent : action.payload
             }; 
         case USERSTUDENT_LOADING_ERROR:
         case USERSTUDENT_ACTIVATE_FAIL:
@@ -136,7 +138,7 @@ export default function(state = initialState, action){
         case USERSTUDENT_LOGOUT_SUCCESS:
         case USERSTUDENT_LOGOUT_FAIL:
             localStorage.removeItem('token')
-            localStorage.removeItem('auth')
+            localStorage.removeItem('auth1')
             localStorage.removeItem('userstudent')
             localStorage.removeItem('user')
             return{

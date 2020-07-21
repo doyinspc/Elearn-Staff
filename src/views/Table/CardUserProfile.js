@@ -8,7 +8,7 @@ import {
   CardBody,
   Col
 } from "reactstrap";
-const imgx = require("assets/img/mike.jpg");
+const imgx = require("assets/img/place.png");
 class User extends React.Component {
   render() {
 

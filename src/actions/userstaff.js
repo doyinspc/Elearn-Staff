@@ -109,12 +109,11 @@ export const deleteUserstaff = data => (dispatch, getState) =>{
         })
         
 }
+
 //USERSTAFF REGISTER
 export const registerUserstaff = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insert';
-    axios.get(path, {params}, axiosConfig)
+    dispatch({type : USERSTAFF_LOADING});
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: USERSTAFF_REGISTER_SUCCESS,

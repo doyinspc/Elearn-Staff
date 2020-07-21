@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
-import { PropTypes } from "prop-types";
+import { Redirect } from "react-router-dom";
 import { getUserstaffLogin } from "./../actions/userstaff";
 
 // reactstrap components
@@ -65,7 +64,7 @@ class LoginPage extends React.Component{
 
   render(){ 
     if (this.props.isAuthenticated) {
-      return <Redirect to="/admin/course" />;
+      return <Redirect to="/admin/staff" />;
     }
     
     this.onLoad()
@@ -86,7 +85,7 @@ class LoginPage extends React.Component{
         <div className="content" style={{marginTop:40}} >
           <Container>
             <Col className="ml-auto mr-auto text-center" md="4">
-            <h3>i-Academy</h3>
+        <h3>{process.env.REACT_APP_WEBSITE_NAME}</h3>
               <Card className="card-login card-plain" style={{zIndex:100}}>
                 <Form action="" className="form" method="" onSubmit={this.onSubmit}>
                   <CardHeader className="text-center">

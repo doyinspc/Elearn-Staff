@@ -1,8 +1,11 @@
+import Staff from "views/Table/UserProfile";
+import Student from "views/Table/UserProfileStudent";
+
 import Dashboard from "views/Dashboard.jsx";
 import Course from "views/Table/CourseList.jsx";
+import Courses from "views/Table/CourseLists.js";
 import Edit from "views/Table/UserProfileEdit";
-import UserProfilePage from "views/Table/UserProfile.js";
-
+import EditStudent from "views/Table/UserProfileStudentEdit";
 
 import Calender from "views/Table/SessionList.jsx";
 import Semester from "views/Table/SemesterList.jsx";
@@ -15,15 +18,22 @@ import Level from "views/Table/LevelList.jsx";
 import Programme from "views/Table/ProgrammeList.jsx";
 import Fee from "views/Table/FeeList.jsx";
 
-import Student from "views/Table/StudentList.jsx";
-import Staff from "views/Table/StaffList.jsx";
+import Students from "views/Table/StudentList.jsx";
+import Staffs from "views/Table/StaffList.jsx";
 
 var dashRoutes = [
   {
     path: "/staff",
-    name: "Profile",
-    icon: "users_single-02",
-    component: UserProfilePage,
+    name: "Staff",
+    icon: "design_app",
+    component: Staff,
+    layout: "/admin"
+  },
+  {
+    path: "/student",
+    name: "Student",
+    icon: "design_app",
+    component: Student,
     layout: "/admin"
   },
   {
@@ -41,10 +51,24 @@ var dashRoutes = [
     layout: "/admin"
   },
   {
+    path: "/courses",
+    name: "Course List",
+    icon: "design_app",
+    component: Courses,
+    layout: "/admin"
+  },
+  {
     path: "/useredit",
     name: "Edit",
     icon: "design_app",
     component: Edit,
+    layout: "/admin"
+  },
+  {
+    path: "/usereditstudent",
+    name: "Edit Student",
+    icon: "design_app",
+    component: EditStudent,
     layout: "/admin"
   },
 
@@ -112,17 +136,17 @@ var dashRoutes = [
   },
   
   {
-    path: "/student",
-    name: "Student",
+    path: "/students",
+    name: "Students",
     icon: "design_app",
-    component: Student,
+    component: Students,
     layout: "/admin"
   },
   {
-    path: "/staff",
-    name: "Staff",
+    path: "/staffs",
+    name: "Staffs",
     icon: "design_app",
-    component: Staff,
+    component: Staffs,
     layout: "/admin"
   },
   

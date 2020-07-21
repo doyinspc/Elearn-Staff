@@ -33,7 +33,7 @@ let params = {
 export const getCourses = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = data;
-    params.cat = 'all';
+    params.cat = 'group';
     dispatch({type : COURSE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        

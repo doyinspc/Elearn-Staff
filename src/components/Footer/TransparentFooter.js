@@ -12,26 +12,34 @@ function TransparentFooter() {
           <ul>
             <li>
               <a
-                href=""
+                href="/"
                 target="_blank"
               >
-                Home
+                Student Login
               </a>
             </li>
             <li>
               <a
-                href=""
+                href="/staff"
                 target="_blank"
               >
-                About Us
+                Staff Login
               </a>
             </li>
             <li>
               <a
-                href=""
+                href="/register"
                 target="_blank"
               >
-                Contact Us
+                Student Sign Up
+              </a>
+            </li>
+            <li>
+              <a
+                href="/registerstaff"
+                target="_blank"
+              >
+                Staff Sign Up
               </a>
             </li>
         

@@ -1,37 +1,44 @@
 import React from "react";
 
+import { SERVER_URL } from "./../../actions/common.js"
+
 import {
   Button,
   Card,
   CardBody,
   Col
 } from "reactstrap";
-
+const imgx = require("assets/img/place.png");
 class User extends React.Component {
   render() {
+
+
+    let { professional, firstname, middlename, lastname, title, photo, username, description } = this.props.user ||  {};
+    let fullname = firstname+" "+ middlename+" "+ lastname;
     return (
       <>
         <Col md="4">
             <Card className="card-user">
             <div className="image">
-                <img alt="..." src={require("assets/img/bg5.jpg")} />
+                <img 
+                alt={username} src={require("assets/img/bg5.jpg")} />
             </div>
             <CardBody>
                 <div className="author">
                 <a href="#pablo" onClick={e => e.preventDefault()}>
                     <img
-                    alt="..."
+                    alt={fullname}
                     className="avatar border-gray"
-                    src={require("assets/img/mike.jpg")}
+                    src={`${SERVER_URL + photo}`}
+                    onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
                     />
-                    <h5 className="title">Mike Andrew</h5>
+                    <h5 className="title" style={{textTransform:'capitalize'}}>{fullname}</h5>
+                    
                 </a>
-                <p className="description">michael24</p>
+                <p className="description">{username}</p>
                 </div>
                 <p className="description text-center">
-                "Lamborghini Mercy <br />
-                Your chick she so thirsty <br />
-                I'm in that two seat Lambo"
+                {description}
                 </p>
             </CardBody>
             <hr />
@@ -43,7 +50,16 @@ class User extends React.Component {
                 onClick={e => e.preventDefault()}
                 size="lg"
                 >
-                <i className="fab fa-facebook-f" />
+                <i className="fab fa-edit" />
+                </Button>
+                <Button
+                className="btn-neutral btn-icon btn-round"
+                color="default"
+                href="/usereditstudent"
+                onClick={e => e.preventDefault()}
+                size="lg"
+                >
+                <i className="fab fa-mail" />
                 </Button>
                 <Button
                 className="btn-neutral btn-icon btn-round"
@@ -52,17 +68,9 @@ class User extends React.Component {
                 onClick={e => e.preventDefault()}
                 size="lg"
                 >
-                <i className="fab fa-twitter" />
+                <i className="fab fa-trash" />
                 </Button>
-                <Button
-                className="btn-neutral btn-icon btn-round"
-                color="default"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-                size="lg"
-                >
-                <i className="fab fa-google-plus-g" />
-                </Button>
+               
             </div>
             </Card>
           </Col>

@@ -1,12 +1,15 @@
 
 import React from "react";
-
+import CardMultiForm from "./../Form/CardMultiForm"
 // reactstrap components
 import {
  Container,
  Row,
  Col,
- Button
+ Card,
+ CardHeader,
+ CardBody,
+ CardFooter
 } from "reactstrap";
 
 const arr ={
@@ -17,27 +20,70 @@ const arr ={
 class Course extends React.Component {
 
   setsEdit = indx =>{
-    this.props.setsEditQuestion(indx);
+    this.props.handleEdit(indx);
   }
   setsDelete = indx =>{
-    this.props.setsDeleteQuestion(indx);
+    this.props.handleDelete(indx);
   }
  
   render() {
-     let {question, answer, score, submission } = this.props.data;
+    
+     let { question, type, answer, points, options } = this.props.data;
+     let ans = answer ? answer.split('::::::') : [];
+     options = options && options !=  "" ? options.split("::::::") : [];
+     let option1 = options && Array.isArray(options) && options.length > 0 ? options.map((prop, inds)=>{
+            let finalAnswer = ans && ans.includes(prop) ? true : false;
+            return <CardMultiForm key={`ABCD_${inds}`} type={type} answer={finalAnswer} data={prop} index={inds} />
+        }): null; 
     return (
       <>
+      <Card>
+        <CardHeader>
+          {type === 1 ? 'Choose the correct option':''}
+          {type === 2 ? 'Choose all the correct options':''}
+          {type === 3 ? 'Give the answer that best fit the empty space':''}
+          {type === 4 ? 'Using a short sentence or phrase answer the question below':''}
+          {type === 5 ? 'Essay':''}
+      </CardHeader>
+      <CardBody>
+        <Container>
+          <Row sm={12}>
+              <Col sm={1} >
+                  {this.props.index + 1}
+              </Col>
+              <Col sm={10}>
+                  <div dangerouslySetInnerHTML={{__html: question}} />
+              </Col>
+          </Row>
+          <Row sm={12}>
+              <Col>
+                {type === 1 || type === 2 || type === 3? option1 : null}
+                {type === 4 || type === 5 ? <div dangerouslySetInnerHTML={{__html: answer}} /> : null }
+              </Col>
+          </Row>
+        </Container>
+
+      </CardBody>
+      <CardFooter>
+        <Container>
+        <Row sm={12}>
+                    <Col sm='3'><small><i class="fa fa-check"></i> {points} point(s)</small></Col>
+                    <Col sm='2'>
+                    <button  class="btn btn-primary btn-icon btn-round btn-link" color='info' onClick={()=>this.setsEdit(this.props.index)}><i class="fa fa-edit"></i></button>
+                    </Col>
+                    <Col sm='2'>
+                    <button  class="btn btn-primary btn-icon btn-round btn-link" color='danger' onClick={()=>this.setsDelete(this.props.index)}><i class="fa fa-trash"></i></button> 
+                    </Col>
+          </Row>
+          </Container>
+      </CardFooter>
+      </Card>
          <Container> 
            <Col sm='12'>
-              <Row><div dangerouslySetInnerHTML={{__html: question}} /></Row>
+              <Row></Row>
               <Row><small class="text-success"><div dangerouslySetInnerHTML={{__html:answer}} /></small></Row>
               <Row>
-                    <Col sm='3'><small><i class="fa fa-check"></i> {score}</small></Col>
-                    <Col sm='5'><small><i class="fa fa-paperclip"></i>  {arr[submission]}</small></Col>
-                    <Col sm='4'>
-                        <button  class="btn btn-primary btn-icon btn-round btn-link" color='info' onClick={()=>this.setsEdit(this.props.index)}><i class="fa fa-edit"></i></button>
-                        <button  class="btn btn-primary btn-icon btn-round btn-link" color='danger' onClick={()=>this.setsDelete(this.props.index)}><i class="fa fa-trash"></i></button>
-                    </Col>
+                    
               </Row>
            </Col>
           </Container>

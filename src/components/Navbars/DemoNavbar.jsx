@@ -1,14 +1,14 @@
 import React from "react";
 import {connect} from "react-redux";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { getUserstaffLogout} from "./../../actions/userstaff";
+import { getUserstudentLogout} from "./../../actions/userstudent";
 import {
   Collapse,
   Navbar,
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -26,7 +26,8 @@ class Header extends React.Component {
   state = {
     isOpen: false,
     dropdownOpen: false,
-    color: "transparent"
+    color: "transparent",
+    editroute:''
   };
   sidebarToggle = React.createRef();
   toggle = () => {
@@ -50,6 +51,7 @@ class Header extends React.Component {
   };
   handleLogout = () =>{
     this.props.getUserstaffLogout();
+    this.props.getUserstudentLogout();
   }
   getBrand = () => {
     var name;
@@ -94,6 +96,7 @@ class Header extends React.Component {
   };
   componentDidMount() {
     window.addEventListener("resize", this.updateColor.bind(this));
+   
   }
   componentDidUpdate(e) {
     if (
@@ -106,6 +109,26 @@ class Header extends React.Component {
     }
   }
   render() {
+    if(this.props.userstaffs.isAuthenticated || this.props.userstudents.isAuthenticated)
+    {
+
+    }
+    else{
+      return <Redirect to="/staff" />
+    }
+    let editRoute = '';
+    let editProfile = '';
+    if(this.props.userstaffs.isAuthenticated )
+    {
+      editRoute = '/admin/useredit';
+      editProfile = '/admin/staff';
+      
+    }else if(this.props.userstudents.isAuthenticated )
+    {
+      editRoute = '/admin/usereditstudent';
+      editProfile = '/admin/student';
+    }
+    
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
       <Navbar
@@ -168,13 +191,13 @@ class Header extends React.Component {
                 <DropdownToggle caret nav>
                   <i className="now-ui-icons users_single-02" />
                   <p>
-                    <span className="d-lg-none d-md-block">Some Actions</span>
+                    <span className="d-lg-none d-md-block">Profile Actions</span>
                   </p>
                 </DropdownToggle>
                 <DropdownMenu right>
 
-                  <DropdownItem tag="a" href="/admin/staff">Profile</DropdownItem>
-                  <DropdownItem tag="a" href="/admin/useredit">Edit Profile</DropdownItem>
+                  <DropdownItem tag="a" href={`${editProfile}`}>Profile</DropdownItem>
+                  <DropdownItem tag="a" href={`${editRoute}`}>Edit Profile</DropdownItem>
                   <DropdownItem tag="a" onClick={this.handleLogout}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -189,6 +212,7 @@ class Header extends React.Component {
 
 const mapStateToProps = (state) => ({ 
   userstaffs: state.userstaffReducer,
+  userstudents: state.userstudentReducer
 })
 
-export default connect(mapStateToProps, { getUserstaffLogout})(Header)
+export default connect(mapStateToProps, { getUserstaffLogout, getUserstudentLogout})(Header)

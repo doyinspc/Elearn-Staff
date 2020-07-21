@@ -1,6 +1,6 @@
-export const API_PATHS = 'http://localhost:8086/admission/api/index.php';
-export const SERVER_PATHS = 'http://127.0.0.1:8086/admission/api/';
-export const SERVER_URL = 'http://127.0.0.1:8086/admission/api/';
+export const API_PATHS = process.env.REACT_APP_API_PATHS;
+export const SERVER_PATHS = process.env.REACT_APP_SERVER_PATHS;
+export const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 export const MAIN_TOKEN ='';
 export const axiosConfig = {
     headers: {

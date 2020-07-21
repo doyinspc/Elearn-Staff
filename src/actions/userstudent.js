@@ -56,7 +56,6 @@ export const getUserstudentLogin = data => (dispatch, getState) => {
     fd.append('password' , data.password);
     fd.append('cat' , 'login');
     fd.append('table' , 'students');
-    const body = JSON.stringify(fd);
     
     dispatch({type : USERSTUDENT_LOADING});
         axios.post(path, fd, axiosConfig1)
@@ -111,10 +110,8 @@ export const deleteUserstudent = data => (dispatch, getState) =>{
 }
 //USERSTUDENT REGISTER
 export const registerUserstudent = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insert';
-    axios.get(path, {params}, axiosConfig)
+    dispatch({type : USERSTUDENT_LOADING});
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: USERSTUDENT_REGISTER_SUCCESS,

@@ -63,7 +63,7 @@ export default function(state = initialState, action){
             localStorage.setItem('token', action.token)
             localStorage.setItem('auth', true);
             localStorage.setItem('user', JSON.stringify(action.payload))
-            console.log(action.payload);
+            
             return {
                 ...state,
                 ...action.payload,
@@ -119,7 +119,8 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 ...action.payload,
-                userstaffs : newState
+                userstaffs : newState,
+                userstaff : action.payload
             }; 
         case USERSTAFF_LOADING_ERROR:
         case USERSTAFF_ACTIVATE_FAIL:

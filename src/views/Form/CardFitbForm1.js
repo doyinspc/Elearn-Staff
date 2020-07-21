@@ -46,26 +46,25 @@ class Course extends React.Component {
   render() {
      let que = this.state.que;
      let index = this.state.id;
-     let num = this.state.num;
-     let val = this.state.val;
     return (
       <>
         <FormGroup  check>
             <Row sm={12}>
               <Col sm={9}>
-                <div class="form-check form-check-radio">
+                <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input" id={`rad${index}`} onClick={this.handleAnswer} type="radio" name='ques' value={que}/>
+                        <input class="form-check-input text-primary" id={`rad${index}`} onClick={this.handleAnswer}  type="checkbox" value={que}/>
                         <span class="form-check-sign">
-                        <Input
-                          className="form-control "
-                          style={{height:30, maxWidth:250}}
-                          name='que'
-                          defaultValue={que}
-                          type="text"
-                          onChange={this.handleChange}
-                          placeholder={`Option ${index + 1}`}
-                        />
+                            <Input
+                              className="form-control "
+                              style={{height:30, maxWidth:250}}
+                              name='que'
+                              value={que}
+                              defaultValue={que}
+                              type="text"
+                              onChange={this.handleChange}
+                              placeholder={`Option ${index + 1}`}
+                            />
                             <span class="check"></span>
                         </span>
                     </label>

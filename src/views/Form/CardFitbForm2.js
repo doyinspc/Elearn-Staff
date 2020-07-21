@@ -38,38 +38,25 @@ class Course extends React.Component {
     this.setState({que:e.target.value});
     this.props.handleChange(e.target.value, this.props.index);
   }
-  handleAnswer = (e) =>{
-    let st = e.target.checked;
-    this.setState({val:e.target.value, num:st});
-    this.props.handleChangeAnswer(e.target.value, st, this.props.index);
-  }
+  
   render() {
      let que = this.state.que;
      let index = this.state.id;
-     let num = this.state.num;
-     let val = this.state.val;
     return (
       <>
         <FormGroup  check>
             <Row sm={12}>
               <Col sm={9}>
-                <div class="form-check form-check-radio">
-                    <label class="form-check-label">
-                        <input class="form-check-input" id={`rad${index}`} onClick={this.handleAnswer} type="radio" name='ques' value={que}/>
-                        <span class="form-check-sign">
-                        <Input
-                          className="form-control "
-                          style={{height:30, maxWidth:250}}
-                          name='que'
-                          defaultValue={que}
-                          type="text"
-                          onChange={this.handleChange}
-                          placeholder={`Option ${index + 1}`}
-                        />
-                            <span class="check"></span>
-                        </span>
-                    </label>
-                </div>
+                <Input
+                    className="form-control "
+                    style={{height:30, maxWidth:250}}
+                    name='que'
+                    value={que}
+                    defaultValue={que}
+                    type="text"
+                    onChange={this.handleChange}
+                    placeholder={`Option ${index + 1}`}
+                />
               </Col>
             <Col sm={1} style={{margin:0, padding:0}}>
                 <button class="btn btn-sm btn-icon btn-neutral" style={{margin:0}}>

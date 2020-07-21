@@ -11,10 +11,15 @@ import "assets/css/demo.css";
 
 import AdminLayout from "layouts/Admin.jsx";
 import EmployeeLoginPage from "views/EmployeeLoginPage";
+import EmployeeRegisterPage from "views/EmployeeRegisterPage";
 import StudentLoginPage from "views/StudentLoginPage";
+import StudentRegisterPage from "views/StudentRegisterPage";
 import UserStaffEditPage from "views/Table/UserProfileEdit";
 import Semester from "views/Table/SemesterList.jsx";
 import Course from "views/Table/CourseList.jsx";
+
+import Staff from "views/Table/UserProfile.js";
+import Student from "views/Table/UserProfileStudent.js";
 
 const hist = createBrowserHistory();
 
@@ -28,10 +33,14 @@ ReactDOM.render(
               <Route path="/admin/semester/:id" render={props => <Semester {...props} />} />
               <Route path="/admin/semester" render={props => <Semester {...props} />} />
               <Route path="/admin/course" render={props => <Course {...props} />} />
-
+              <Route path="/admin/staff" render={props => <Staff {...props} />} />
+              <Route path="/admin/student" render={props => <Student {...props} />} />
+              
               <Route path="/staff" render={props => <EmployeeLoginPage {...props} />} />
+              <Route path="/register" render={props => <StudentRegisterPage {...props} />} />
+              <Route path="/registerstaff" render={props => <EmployeeRegisterPage {...props} />} />
               <Route path="/" render={props => <StudentLoginPage {...props} />} />
-
+              
               <Redirect to="/" />
             </Switch>
           </Switch>

@@ -71,16 +71,15 @@ const Modals = (props) => {
         <ModalBody>
           <Container>
           <Row sm={12} >
-          <p className="h6">{title} {path}</p>
+          <p className="h6">{title}</p>
           </Row>
-          <Row sm={12} >
+          <Row sm={12} width={300}>
           {type === 1 ? <div  dangerouslySetInnerHTML={{__html: description}} /> : ''}
           {type === 2 ? 
             <FileViewer
               fileType={ext}
               filePath={path}
               onError={onError}
-              allowFullScreen={true}
             />
             : ''}
           {type === 3 ? 

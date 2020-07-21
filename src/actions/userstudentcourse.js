@@ -32,7 +32,7 @@ let params = {
 export const getUserstudentcourses = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = data;
-    params.cat = 'createdcourse';
+    params.cat = 'createdcoursestudent';
     dispatch({type : USERSTUDENTCOURSE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -51,7 +51,7 @@ export const getUserstudentcourses = data => (dispatch, getState) => {
 export const getUserstudentcoursesx = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = data;
-    params.cat = 'joinedcourse';
+    params.cat = 'joinedcoursestudent';
     dispatch({type : USERSTUDENTCOURSEX_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        

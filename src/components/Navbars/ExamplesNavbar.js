@@ -58,22 +58,40 @@ function ExamplesNavbar() {
               target="_blank"
               id="navbar-brand"
             >
-              i-Academy
-            </NavbarBrand>
-            
-           
+             {process.env.REACT_APP_WEBSITE_AKA}
+            </NavbarBrand>  
           </div>
+          
           <Collapse
             className="justify-content-end"
             isOpen={collapseOpen}
             navbar
           >
             <Nav navbar>
+            
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Student
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="/">SingIn</a>
+                  <a class="dropdown-item" href="/register">SignUp</a>
+                </div>
+              </li>
+                
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Staff
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
+                  <a class="dropdown-item" href="/staff">SingIn</a>
+                  <a class="dropdown-item" href="/staffregister">SignUp</a>
+                </div>
+              </li>
               <NavItem>
                 <NavLink to="#" tag={Link}>
                   Help :+234-806-776-3457
                 </NavLink>
-                
               </NavItem>
 
               
