@@ -96,6 +96,7 @@ class UserProfileEdit extends React.Component {
     e.preventDefault();
     let us = this.state;
     let fd = new FormData();
+    console.log(us);
     fd.append('id', us.id );
     fd.append('username', us.username );
     fd.append('passwd', us.password );
@@ -111,7 +112,7 @@ class UserProfileEdit extends React.Component {
     fd.append('gender', us.gender.value );
     fd.append('professional', us.professional );
     fd.append('department', us.department.value );
-    fd.append('cat', 'updatestaff' );
+    fd.append('cat', 'update' );
     fd.append('table', 'staffs' );
 
     this.props.registerUserstaffPost(fd);
@@ -122,7 +123,7 @@ class UserProfileEdit extends React.Component {
     let fd = new FormData();
     fd.append('id', us.id );
     fd.append('files', us.files );
-    fd.append('cat', 'updatestaffphoto' );
+    fd.append('cat', 'update' );
     fd.append('table', 'staffs' );
 
     this.props.registerUserstaffPost(fd);

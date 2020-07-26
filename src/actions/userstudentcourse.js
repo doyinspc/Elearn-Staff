@@ -19,7 +19,7 @@ import {
 } from "../types/userstudentcourse";
 import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
-let TABLE_NAME = 'course_tutors';
+let TABLE_NAME = 'course_students';
 const path = API_PATHS;
 
 let params = {
@@ -31,8 +31,8 @@ let params = {
 //GET ALL USERSTUDENTCOURSE 
 export const getUserstudentcourses = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'createdcoursestudent';
+    params.data = JSON.stringify(data);
+    params.cat = 'usercreatestudent';
     dispatch({type : USERSTUDENTCOURSE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -50,8 +50,8 @@ export const getUserstudentcourses = data => (dispatch, getState) => {
 };
 export const getUserstudentcoursesx = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'joinedcoursestudent';
+    params.data = JSON.stringify(data);
+    params.cat = 'userjoinedstudent';
     dispatch({type : USERSTUDENTCOURSEX_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -84,4 +84,22 @@ export const getUserstudentcoursex = id => (dispatch, getState) => {
         type : USERSTUDENTCOURSEX_GET_ONE,
         payload: id
     });  
+};
+
+//COURSESTUDENT REGISTER
+export const registerUserstudentcourse = data => dispatch => {
+    
+    axios.post(path, data, axiosConfig1)
+        .then(res => {
+            dispatch({
+                type: USERSTUDENTCOURSE_REGISTER_SUCCESS,
+                payload: res.data.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USERSTUDENTCOURSE_REGISTER_FAIL,
+                payload: err
+            })
+        })
 };

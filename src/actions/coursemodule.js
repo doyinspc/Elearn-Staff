@@ -13,7 +13,7 @@ import {
     COURSEMODULE_DELETE_FAIL,
     COURSEMODULE_EDIT,
 } from "./../types/coursemodule";
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'course_modules';
 const path = API_PATHS;
@@ -27,8 +27,8 @@ let params = {
 //GET ALL COURSEMODULE 
 export const getCoursemodules = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'module';
+    params.data = JSON.stringify(data);
+    params.cat = 'select';
     dispatch({type : COURSEMODULE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -73,14 +73,11 @@ export const deleteCoursemodule = data => (dispatch, getState) =>{
 }
 //COURSEMODULE REGISTER
 export const registerCoursemodule = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insertmodule';
-    axios.get(path, {params}, axiosConfig)
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSEMODULE_REGISTER_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {
@@ -91,13 +88,8 @@ export const registerCoursemodule = data => dispatch => {
         })
 };
  //COURSEMODULE UPDATE
-export const updateCoursemodule = (data, id) => (dispatch, getState) => {
-    //body
-    const body = JSON.stringify(data);  
-    params.data = body;
-    params.id = id;
-    params.cat = 'updatemodule';
-    axios.get(path, {params}, axiosConfig)
+export const updateCoursemodule = (data) => (dispatch, getState) => {
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSEMODULE_UPDATE_SUCCESS,

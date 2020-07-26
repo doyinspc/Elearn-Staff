@@ -13,16 +13,11 @@ import {
     COURSETUTOR_DELETE_FAIL,
     COURSETUTOR_EDIT,
 } from "./../types/coursetutor";
-import { MAIN_TOKEN, API_PATHS } from './common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'course_tutors';
 const path = API_PATHS;
-let axiosConfig = {
-    headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-    }
-  };
+
 let params = {
     data:{},
     cat:'all',
@@ -32,8 +27,8 @@ let params = {
 //GET ALL COURSETUTOR 
 export const getCoursetutors = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'staff';
+    params.data = JSON.stringify(data);
+    params.cat = 'select';
     dispatch({type : COURSETUTOR_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        

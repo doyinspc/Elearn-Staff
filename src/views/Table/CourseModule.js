@@ -9,7 +9,8 @@ import CourseFormMaterial from './../Form/CourseFormMaterial';
 // reactstrap components
 import {
   Table,
-  Container
+  Container,
+  Button
 } from "reactstrap";
 
 class Course extends React.Component {
@@ -73,6 +74,12 @@ class Course extends React.Component {
 
             <div id={`collapseOne_${this.props.data.id}`} class="collapse" role="tabpanel" aria-labelledby="headingOne">
               <div class="card-body">
+                <p>
+                <div class="btn-group dropup">
+      <Button className="btn-sm" color="default" onClick={()=>this.handleEdit(this.props.data.id)} ><i class="fa fa-edit"></i> </Button>
+      <Button className="btn-sm" color="default" onClick={()=>this.handleDelete(this.props.data.id)} ><i class="fa fa-trash"></i></Button>
+                </div>
+                </p>
                 <p>{this.props.data.description}</p>
                 <p>{this.props.data.objective}</p>
                 <CourseFormMaterial 
@@ -80,8 +87,6 @@ class Course extends React.Component {
                   mid={this.state.id}
                   st={this.state.st}
                   data={this.props.data} 
-                  handleEdit={(rid)=>this.handleEdit(rid)}
-                  handleDelete={(rid)=>this.handleDelete(rid)}
                 />
                 <Container id={`tabl${this.props.data.id}`}>
                     {loadMaterial}

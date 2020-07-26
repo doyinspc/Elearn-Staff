@@ -95,7 +95,8 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 ...action.payload,
-                courses : newState
+                courses : newState,
+                course:action.payload
             }; 
         case COURSE_LOADING_ERROR:
         case COURSE_ACTIVATE_FAIL:

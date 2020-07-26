@@ -97,11 +97,9 @@ const Modals = (props) => {
   return (
     <div>
       <div class="btn-group dropup">
-      <Button className="btn-sm" color="default" onClick={()=>props.handleEdit(props.moduleId)} ><i class="fa fa-edit"></i> </Button>
-      <Button className="btn-sm" color="default" onClick={()=>props.handleDelete(props.moduleId)} ><i class="fa fa-trash"></i></Button>
-      <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
+        <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
         <button class="btn btn-secondary dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <i class="fa fa-plus"></i> Add Learning Resource
+         <i class="fa fa-plus"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
           <a class="dropdown-item" href="#" onClick={()=>toggles(1)}><i class='fa fa-file'></i> Text</a>

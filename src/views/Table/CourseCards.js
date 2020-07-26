@@ -1,70 +1,75 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { Link }  from 'react-router-dom';
-import { getCourses, getCourse, updateCourse } from './../../actions/course';
-import { getCoursemodules, getCoursemodule} from './../../actions/coursemodule';
-import { getCoursematerials, getCoursematerial } from './../../actions/coursematerial';
-import { getCoursetutors, getCoursetutor } from './../../actions/coursetutor';
-import { getCoursestudents, getCoursestudent } from './../../actions/coursestudent';
-import { getCourseprogresss, getCourseprogress } from './../../actions/courseprogress';
-import CourseFormModule from "./../Form/CourseFormModule";
-import CourseFormMaterial from "./../Form/CourseFormMaterial";
-import CourseFormTutor from "./../Form/CourseFormTutor";
-import CourseFormStudent from "./../Form/CourseFormStudent";
+import { getCoursemodules} from './../../actions/coursemodule';
+import { getCoursetutors} from './../../actions/coursetutor';
 
-import CourseModule from "./CourseModule";
-import CourseTutor from "./CourseTutor";
-import CourseStudent from "./CourseStudent";
-import Modals from "./../Form/CourseForm";
 // reactstrap components
 import {
-  Card,
-  CardBody,
-  Table,
-  Container,
+  
   Row,
-  Col,
-  Button
+ 
 } from "reactstrap";
+import CardDetails from "./CardDetails";
 
 class Course extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      idt:null,
-      stt:false,
-      idm:null,
-      stm:false,
-      ids:null,
-      sts:false,
+      id:null,
+      st:false,
+      but:false,
     }
   }
   
   componentDidMount(){
-
+        
+       
   }
- 
+
+  loadDetails = (sid) =>{
+    let id = this.props.data.cid;
+    console.log(id);
+    this.props.getCoursemodules({'courseId': id});
+    this.props.getCoursetutors({'courseId': id})
+    this.setState({st:true, id:id});
+  }
+  handleClose = () =>{
+    this.setState({st:false, id:null});
+  }
 
   render() {
-    let {course_title, course_description, course} = this.props.data;
-    
+    let {course_name, course_description, course_code, course_start, course_end, id} = this.props.data;
+    let starts = new Date(parseInt(course_start)).toDateString();
+    let ends = new Date(parseInt(course_end)).toDateString();
     return (
       <>
-      <div class="col-md-4">
-        <div class="card" >
+        <CardDetails 
+          mid={this.state.id}
+          st={this.state.st}
+          data={this.props.data}
+          handleClose={this.handleClose}
+        />
+        <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >
             <img 
                 class="card-img-top" 
-                src={require("assets/img/bg5.jpg")} 
+                src={require("assets/img/bg3.jpg")} 
                 alt="background image"
+                width="100%"
+                height="100px"
+                style={{padding:-30}}
                 />
-            <div class="card-body">
-                <h4 class="card-title">{course_title}</h4>
+            <div class="card-body" >
+                <h4 class="card-title">{course_name}{id}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{course_code}</h6>
                 <p class="card-text">{course_description}</p>
-                <a href="#" class="btn btn-primary">Register</a>
+                <a href="#" class="btn btn-primary" onClick={()=>{this.loadDetails(id)}}>Details/Register</a>
+            </div>
+            <div class="card-footer" >
+              <small class="text-muted">{`${starts} - ${ends}`}</small>
             </div>
         </div>
-        </div>
+        
       </>
     );
   }
@@ -73,18 +78,9 @@ class Course extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({ 
   courses: state.courseReducer,
-  
+  userstudentcourses: state.userstudentcourseReducer,
+  user: state.userstudentReducer.user,
+  isAuthenticated: state.userstudentReducer.userstudent.isAuthenticated
 })
 
-export default connect(mapStateToProps, 
-  { getCourses, 
-    getCourse, 
-    updateCourse,
-    getCoursemodules, 
-    getCoursemodule, 
-    getCoursematerials, 
-    getCoursematerial, 
-    getCoursetutors, 
-    getCoursetutor, 
-    getCoursestudents, 
-    getCoursestudent,  })(Course)
+export default connect(mapStateToProps, {getCoursemodules, getCoursetutors })(Course)

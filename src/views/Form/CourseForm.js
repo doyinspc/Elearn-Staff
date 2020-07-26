@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import CKEditor from 'ckeditor4-react';
 import { getCourse, registerCourse, updateCourse } from './../../actions/course';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, FormText, Label, Input, Col } from 'reactstrap';
+import axios from 'axios';
+import Select  from 'react-select';
+import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
 
+const path = API_PATHS;
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [department, setDepartment] = useState({});
+  const [level, setLevel] = useState({});
   const [name, setName] = useState(null);
   const [code, setCode] = useState(null);
   const [objective, setObjective] = useState(null);
@@ -15,6 +20,23 @@ const Modals = (props) => {
   const [starts, setStarts] = useState(new Date());
   const [ends, setEnds] = useState(new Date());
   const [description, setDescription] = useState(null);
+  const [options0, setOptions0] = useState({});
+  const [options1, setOptions1] = useState({});
+
+  const resetdata= async() =>{
+    toggle();
+    setId(0);
+    setDepartment({});
+    setLevel({});
+    setName('');
+    setCode('');
+    setObjective('');
+    setDescription('');
+    setStarts();
+    setEnds( );
+    props.handleClose();
+}
+
   const toggle = () => setModal(!modal);
   const tog = () =>{
     if(id && id > 0)
@@ -27,46 +49,96 @@ const Modals = (props) => {
   }
   
   useEffect(() => {
-    if(parseInt(props.mid) > 0 )
+   
+    if(parseInt(props.mid) > 0  )
     {
      setId(props.mid);
      setModal(!modal);
      populate(props.courses.course);
     }
+    //departments
+    let params1 = {
+      data:JSON.stringify({'pid':2}),
+      cat:'group',
+      table:'datas',
+      token:MAIN_TOKEN
+    }
+    //level
+    let params2 = {
+      data:JSON.stringify({'pid':4}),
+      cat:'group',
+      table:'datas',
+      token:MAIN_TOKEN
+    }
+    
+    let requestOne = axios.get(path, {params:params1}, axiosConfig);
+    let requestTwo = axios.get(path, {params:params2}, axiosConfig);
+
+    axios.all([requestOne, requestTwo])
+    .then(axios.spread((...responses)=>{
+        const res0 = responses[0]; //all modules
+        const res1 = responses[1]; //used modules
+        let opt0 = res0.data.map(row=>{
+          let obs = {};
+          obs['value'] = row.id;
+          obs['label'] = row.name;
+          return obs; 
+       })
+
+       let opt1 = res1.data.map(row=>{
+        let obs = {};
+        obs['value'] = row.id;
+        obs['label'] = row.name;
+        return obs; 
+     })
+       setOptions0(opt0);
+       setOptions1(opt1);
+    }))
+    .catch(err=>{
+        //console.log(JSON.stringify(err));
+    })
+  
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+        let fd = new FormData();
+        fd.append('course_department', department.value);
+        fd.append('course_level', level.value);
+        fd.append('course_code', code);
+        fd.append('course_name', name);
+        fd.append('course_description', description);
+        fd.append('course_objective', objective);
+        fd.append('course_owner', props.user.id);
+        fd.append('course_start', new Date(starts).getTime());
+        fd.append('course_end', new Date(ends).getTime());
+        fd.append('table', 'courses');
+        
         if(id && id > 0)
         {
-          let data = {
-            course_name:name, 
-            course_code:code, 
-            course_description:description, 
-            course_objective:objective, 
-            course_start:new Date(starts).getTime(), 
-            course_end:new Date(ends).getTime()
-          };
-          props.updateCourse(data, id);
-          toggle();
+          fd.append('id', id);
+          fd.append('cat', 'update');
+          props.updateCourse(fd);
         }else{
-          let data = {
-            course_name:name, 
-            course_code:code, 
-            course_description:description, 
-            course_objective:objective, 
-            course_start:new Date(starts).getTime(), 
-            course_end:new Date(ends).getTime(), 
-            course_owner:owner
-          };;
-          props.registerCourse(data);
-          toggle();
+          fd.append('cat', 'insert');
+          props.registerCourse(fd);
         }
+        
+        resetdata();
         
   }
 
   const populate = async(data) =>{
+        let nm = {};
+        nm['value'] = data.course_department;
+        nm['label'] = data.departmentname;
+        setDepartment(nm);
+
+        let nm1 = {};
+        nm1['value'] = data.course_level;
+        nm1['label'] = data.levelname;
+        setLevel(nm1);
     
         setName(data.course_name);
         setCode(data.course_code);
@@ -77,6 +149,24 @@ const Modals = (props) => {
    
     }
 
+    const handleDepartment = (selected) => {
+      setDepartment( selected );
+    }
+    const handleLevel = (selected) => {
+      setLevel( selected );
+    }
+    const customStyles = {
+      option: (provided, state) => ({
+        ...provided,
+        borderBottom: '1px dotted green',
+        color: state.isSelected ? 'yellow' : 'black',
+        backgroundColor: state.isSelected ? 'green' : 'white'
+      }),
+      control: (provided) => ({
+        ...provided,
+        marginTop: "1%",
+      })
+    }
 
   
   let editId = id ? id : null;
@@ -93,6 +183,30 @@ const Modals = (props) => {
         <ModalHeader toggle={toggle}>{editName} Course</ModalHeader>
         <ModalBody>
         <Form>
+            <FormGroup row>
+                <Label for="name" sm={3}>Department</Label>
+                <Col sm={9}>
+                <Select
+                  styles = { customStyles }
+                  value={department}
+                  onChange={handleDepartment}
+                  options={options0}
+                  autoFocus={true}
+                />
+                </Col> 
+            </FormGroup>
+            <FormGroup row>
+                <Label for="name" sm={3}>Level</Label>
+                <Col sm={9}>
+                <Select
+                  styles = { customStyles }
+                  value={level}
+                  onChange={handleLevel}
+                  options={options1}
+                  autoFocus={true}
+                />
+                </Col> 
+            </FormGroup>
             <FormGroup row>
                 <Label for="name" sm={3}>Name </Label>
                 <Col sm={9}>
@@ -180,14 +294,15 @@ const Modals = (props) => {
         </ModalBody>
         <ModalFooter>
           <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>
   );
 }
 const mapStateToProps = (state, ownProps) => ({ 
-    courses: state.courseReducer
+    courses: state.courseReducer,
+    user:state.userstaffReducer.user
   })
   
 export default connect(mapStateToProps, { getCourse, registerCourse, updateCourse })(Modals)

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import CKEditor from 'ckeditor4-react';
 import Select  from 'react-select';
-import { getCoursemodule, registerCoursemodule, updateCoursemodule } from './../../actions/coursemodule';
+import { getCoursemodules, getCoursemodule, registerCoursemodule, updateCoursemodule } from './../../actions/coursemodule';
 import { getCoursematerials } from './../../actions/coursematerial';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, FormText } from 'reactstrap';
@@ -13,7 +12,7 @@ const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
-  const [name, setName] = useState(null);
+  const [name, setName] = useState({});
   const [title, setTitle] = useState(null);
   const [dailyduration, setDailyduration] = useState(null);
   const [weeklyduration, setWeeklyduration] = useState(null);
@@ -22,7 +21,6 @@ const Modals = (props) => {
   const [starts, setStarts] = useState(new Date('now').getTime());
   const [ends, setEnds] = useState(new Date('now').getTime());
   const [options, setOptions] = useState({});
-  const [selected, setSelected] = useState(null);
   const toggle = () => setModal(!modal);
   
   useEffect(() => {
@@ -32,39 +30,40 @@ const Modals = (props) => {
      setModal(!modal);
      populate(props.coursemodules.coursemodule);
     }
-
+    //GET MODULES
     let params1 = {
-      data:{'pid':7},
+      data:JSON.stringify({'pid':7}),
       cat:'group',
       table:'datas',
       token:MAIN_TOKEN
     }
+    //GET ALL SAVED MODULES FOR THE COURSE
     let params2 = {
-      data:{'courseId' : props.courseId},
+      data:JSON.stringify({'courseId' : props.courseId}),
       cat:'group',
       table:'course_modules',
       token:MAIN_TOKEN
     }
     
-
+    //GET BOTH REQUEST FILTER AND RETURN UNUSED MODELS
     let requestOne = axios.get(path, {params:params1}, axiosConfig);
     let requestTwo = axios.get(path, {params:params2}, axiosConfig);
 
     axios.all([requestOne, requestTwo])
-    .then(axios.spread((...responses)=>{
+    .then(axios.spread(async (...responses)=>{
         const res0 = responses[0]; //all modules
         const res1 = responses[1]; //used modules
-        let opt0 = res0.data.map(row=>{
+        let opt0 = await res0.data.map(row=>{
           let obs = {};
-          obs['value'] = row.id;
+          obs['value'] = row.id.toString();
           obs['label'] = row.name;
           return obs; 
        })
-       let opt1 = res1.data.map(row=>{
-        return row.name; 
+       let opt1 = await res1.data.map(row=>{
+          return row.name; 
         })
 
-        let option = opt0.filter((row)=>{
+        let option = await opt0.filter((row)=>{
           if(opt1.includes(row.value))
           {
 
@@ -74,60 +73,45 @@ const Modals = (props) => {
         })
         return option;
     }))
-    .then(optionx =>{
-        setOptions(optionx);
+    .then(async(optionx) =>{
+        await setOptions(optionx);
     })
     .catch(err=>{
         console.log(JSON.stringify(err));
     })
-
-    return function cleanup(){
-        resetdata();
-    }
-    
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+        let fd = new FormData();
+        fd.append('name', name.value);
+        fd.append('description', description);
+        fd.append('dailyduration', dailyduration);
+        fd.append('weeklyduration', weeklyduration);
+        fd.append('objective', objective);
+        fd.append('starts', new Date(starts).getTime());
+        fd.append('ends', new Date(ends).getTime());
+        fd.append('table', 'course_modules');
         if(id && id > 0)
         {
-          let data = {
-            name:name.value, 
-            title:title,
-            description:description, 
-            dailyduration:dailyduration, 
-            weeklyduration:weeklyduration, 
-            objective:objective, 
-            starts:new Date(starts).getTime(), 
-            ends: new Date(ends).getTime()
-          };
-          props.updateCoursemodule(data, id);
-          resetdata();
-          toggle();
-        }else{
-          let data = {
-            name:name.value, 
-            title:title, 
-            courseId:props.courseId,
-            description:description, 
-            dailyduration:dailyduration, 
-            weeklyduration:weeklyduration,
-            objective:objective, 
-            starts:new Date(starts).getTime(), 
-            ends: new Date(ends).getTime()
-          };;
-          props.registerCoursemodule(data);
-          resetdata();
-          toggle()
+          fd.append('id', id);
+          fd.append('cat', 'update');
+          props.updateCoursemodule(fd);
+        }else
+        {
+          fd.append('courseId', props.courseId);
+          fd.append('cat', 'insert');
+          props.registerCoursemodule(fd);
         }
-        
+          
+          resetdata();
   }
 
   const populate = async(data) =>{
         let nm = {};
-        nm['value'] = data.name;
-        nm['label'] = data.module;
+        nm['value'] = data.name.toString();
+        nm['label'] = data.modulename;
         setName(nm);
         setTitle(data.title);
         setObjective(data.objective);
@@ -138,7 +122,8 @@ const Modals = (props) => {
         setEnds(data.ends  !== null ? new Date(parseInt(data.ends)).toISOString().substring(0, 19) : '-' );
     }
 
-   const resetdata= async(data) =>{
+   const resetdata= async() =>{
+        setModal(false);
         setId(null);
         setName({});
         setTitle('');
@@ -148,13 +133,14 @@ const Modals = (props) => {
         setDescription('');
         setStarts();
         setEnds( );
+        props.handleClose()
     }
 
     const handleChange = (selected) => {
       setName( selected );
     }
-    const handleLoad = sid => {
-      props.getCoursematerials({'moduleId':sid});
+    const handleLoad = () => {
+      props.getCoursemodules({'courseId':props.courseId});
     }
 
     const customStyles = {
@@ -179,7 +165,7 @@ const Modals = (props) => {
     <div>
       <div class="btn-group">
       <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
-      <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i> {editName} Modules</Button>
+      <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
       </div>
       <Modal isOpen={modal} toggle={toggle} >
         <ModalHeader toggle={toggle}>{editName} Modules</ModalHeader>
@@ -190,17 +176,17 @@ const Modals = (props) => {
                 <Col sm={9}>
                 <Select
                   styles = { customStyles }
-                  value={name}
+                  defaultValue={name}
                   onChange={handleChange}
                   options={options}
                   autoFocus={true}
                 />
-                <FormText>Modules determone the order at which content would be presented to learners</FormText>
+                <FormText>Modules determine the order at which content would be presented to learners</FormText>
                 </Col>
                 
             </FormGroup>
             <FormGroup row>
-                <Label for="title" sm={3}>Topic/Theme </Label>
+                <Label for="title" sm={3}>Topic/Theme</Label>
                 <Col sm={9}>
                 <Input 
                     type="text" 
@@ -263,7 +249,19 @@ const Modals = (props) => {
                     <FormText>Ends </FormText>
                 </Col>
             </FormGroup>
-            
+            <FormGroup row>
+                <Label for="code" sm={12}>Course Introduction/Description </Label>
+                <Col sm={12}>
+                <Input 
+                    type="textarea" 
+                    name="description" 
+                    id="description"  
+                    required
+                    defaultValue={description}
+                    onChange={e=>setDescription(e.target.value)} 
+                     />
+                </Col>
+            </FormGroup>
             <FormGroup row>
               
                 <Label for="code" sm={12}>Course Objective </Label>
@@ -279,25 +277,12 @@ const Modals = (props) => {
                 
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Label for="code" sm={12}>Course Introduction/Description </Label>
-                <Col sm={12}>
-                <Input 
-                    type="textarea" 
-                    name="description" 
-                    id="description"  
-                    required
-                    defaultValue={description}
-                    onChange={e=>setDescription(e.target.value)} 
-                     />
-                </Col>
-            </FormGroup>
             
         </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Change' : 'Submit'}</Button>{' '}
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>
@@ -307,4 +292,4 @@ const mapStateToProps = (state, ownProps) => ({
     coursemodules: state.coursemoduleReducer
   })
   
-export default connect(mapStateToProps, { getCoursemodule, registerCoursemodule, updateCoursemodule, getCoursematerials })(Modals)
+export default connect(mapStateToProps, {getCoursemodules, getCoursemodule, registerCoursemodule, updateCoursemodule, getCoursematerials })(Modals)

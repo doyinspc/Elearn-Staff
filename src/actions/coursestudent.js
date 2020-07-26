@@ -13,16 +13,11 @@ import {
     COURSESTUDENT_DELETE_FAIL,
     COURSESTUDENT_EDIT,
 } from "./../types/coursestudent";
-import { MAIN_TOKEN, API_PATHS } from './common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
 let TABLE_NAME = 'course_students';
 const path = API_PATHS;
-let axiosConfig = {
-    headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-    }
-  };
+
 let params = {
     data:{},
     cat:'all',
@@ -78,14 +73,12 @@ export const deleteCoursestudent = data => (dispatch, getState) =>{
 }
 //COURSESTUDENT REGISTER
 export const registerCoursestudent = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insertstudent';
-    axios.get(path, {params}, axiosConfig)
+    
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSESTUDENT_REGISTER_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {

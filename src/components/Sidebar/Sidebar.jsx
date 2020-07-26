@@ -31,6 +31,7 @@ class Sidebar extends React.Component {
     }
   }
   render() {
+    
     let {username, photo} = this.props.user || {};
     return (
       <div className="sidebar" data-color={this.props.backgroundColor}>
@@ -49,7 +50,7 @@ class Sidebar extends React.Component {
             className="simple-text logo-normal"
             target="_blank"
           >
-           i-Academy
+           {process.env.REACT_APP_WEBSITE_AKA}
           </a>
         </div>
         <div className="logo">

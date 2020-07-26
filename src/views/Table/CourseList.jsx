@@ -22,13 +22,12 @@ class Course extends React.Component {
     super(props);
     this.state ={
       id:null,
-      st:false,
-      pid:1
+      st:false
     }
   }
   
   componentDidMount(){
-    this.props.getCourses({});
+    this.props.getCourses({course_owner:this.props.user.id});
   }
 
   loadModal = id =>{
@@ -79,7 +78,11 @@ class Course extends React.Component {
                           <Col sm="8"><i className="fa fa-file-text"></i>{" "+tableTitle}
                           </Col>
                           <Col sm="3" className="pull-right"> 
-                            <Modals mid={this.state.id} toggle={this.state.st}/>
+                            <Modals 
+                            mid={this.state.id} 
+                            toggle={this.state.st}
+                            handleClose={()=>this.setState({id:null, st:false})}
+                            />
                           </Col>
                         </Row>
                       </Container>
@@ -99,7 +102,8 @@ class Course extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({ 
-  courses: state.courseReducer
+  courses: state.courseReducer,
+  user:state.userstaffReducer.user
 })
 
 export default connect(mapStateToProps, { getCourses, getCourse, updateCourse })(Course)

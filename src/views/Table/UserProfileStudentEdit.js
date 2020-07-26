@@ -111,7 +111,7 @@ class UserProfileEdit extends React.Component {
     fd.append('gender', us.gender.value );
     fd.append('professional', us.professional );
     fd.append('department', us.department.value );
-    fd.append('cat', 'updatestaff' );
+    fd.append('cat', 'update' );
     fd.append('table', 'students' );
 
     this.props.registerUserstudentPost(fd);
@@ -122,7 +122,7 @@ class UserProfileEdit extends React.Component {
     let fd = new FormData();
     fd.append('id', us.id );
     fd.append('files', us.files );
-    fd.append('cat', 'updatestaffphoto' );
+    fd.append('cat', 'update' );
     fd.append('table', 'students' );
 
     this.props.registerUserstudentPost(fd);
@@ -160,7 +160,7 @@ class UserProfileEdit extends React.Component {
   render() {
       
       let {username, password, firstname, lastname, middlename, email, phone, photo, gender, department, professional, title, dob, description, address, dep, files } = this.state;
-    console.log(dob);
+    
       return (
       <>
          <PanelHeader size="sm" />

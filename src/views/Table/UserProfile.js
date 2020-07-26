@@ -15,8 +15,8 @@ import { getUserstaffcourses, getUserstaffcoursesx } from "./../../actions/users
 
 class UserProfile extends React.Component {
   componentDidMount(){
-        this.props.getUserstaffcourses({'staffId': 1});
-        this.props.getUserstaffcoursesx({'staffId': 1});
+        this.props.getUserstaffcourses({'staffId': this.props.userstaffs.user.id});
+        this.props.getUserstaffcoursesx({'staffId': this.props.userstaffs.user.id});
   }
   
   render() {

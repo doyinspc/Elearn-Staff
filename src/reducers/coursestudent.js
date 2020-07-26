@@ -14,7 +14,7 @@ import {
     COURSESTUDENT_EDIT
 } from "../types/coursestudent";
 
-let coursestudentStore = JSON.parse(localStorage.getItem('coursestudent'))
+let coursestudentStore = JSON.parse(localStorage.getItem('coursestudent'));
 
 const initialState = {
     isLoading: false,
@@ -56,7 +56,7 @@ export default function(state = initialState, action){
              let store = news.map(row =>{
                 let av = olds.filter(r=>parseInt(r.id) === parseInt(row.id));
                 if(av && Array.isArray(av) && av.length > 0){
-                    console.log('available')
+                    
                  }else{
                     return row;
                 };

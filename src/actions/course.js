@@ -13,16 +13,11 @@ import {
     COURSE_DELETE_FAIL,
     COURSE_EDIT,
 } from "./../types/course";
-import { MAIN_TOKEN, API_PATHS } from './common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig1, axiosConfig } from './common';
 
 let TABLE_NAME = 'courses';
 const path = API_PATHS;
-let axiosConfig = {
-    headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        "Access-Control-Allow-Origin": "*",
-    }
-  };
+
 let params = {
     data:{},
     cat:'all',
@@ -30,10 +25,10 @@ let params = {
     token:MAIN_TOKEN
   }
 //GET ALL COURSE 
-export const getCourses = data => (dispatch, getState) => {
+export const getCourses = dat => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'group';
+    params.data = dat;
+    params.cat = 'select';
     dispatch({type : COURSE_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -78,14 +73,12 @@ export const deleteCourse = data => (dispatch, getState) =>{
 }
 //COURSE REGISTER
 export const registerCourse = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insert';
-    axios.get(path, {params}, axiosConfig)
+   
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSE_REGISTER_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {
@@ -96,17 +89,13 @@ export const registerCourse = data => dispatch => {
         })
 };
  //COURSE UPDATE
-export const updateCourse = (data, id) => (dispatch, getState) => {
+export const updateCourse = (data) => (dispatch, getState) => {
     //body
-    const body = JSON.stringify(data);  
-    params.data = body;
-    params.id = id;
-    params.cat = 'update';
-    axios.get(path, {params}, axiosConfig)
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSE_UPDATE_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {

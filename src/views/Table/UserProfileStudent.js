@@ -15,14 +15,14 @@ import { getUserstudentcourses, getUserstudentcoursesx } from "./../../actions/u
 
 class UserProfile extends React.Component {
   componentDidMount(){
-        this.props.getUserstudentcourses({'studentId': 1});
-        this.props.getUserstudentcoursesx({'studentId': 1});
+        this.props.getUserstudentcourses({'studentId': this.props.userstudents.user.id});
+        this.props.getUserstudentcoursesx({'studentId': this.props.userstudents.user.id});
   }
   
   render() {
       let user = this.props.userstudents.user;
-      let course = this.props.userstudentcourses;
-      let coursex = this.props.userstudentcoursesx;
+      let course = this.props.userstudentcourses.userstudentcourses;
+      let coursex = this.props.userstudentcourses.userstudentcoursesx;
     return (
       <>
         <PanelHeader size="sm" />
@@ -39,8 +39,7 @@ class UserProfile extends React.Component {
 }
 const mapStateToProps = (state) => ({ 
     userstudents: state.userstudentReducer,
-    userstudentcourses: state.userstudentcourseReducer.userstudentcourses,
-    userstudentcoursesx: state.userstudentcourseReducer.userstudentcoursesx,
+    userstudentcourses: state.userstudentcourseReducer
   })
   
   export default connect(mapStateToProps, { getUserstudent, getUserstudentcourses, getUserstudentcoursesx})(UserProfile)

@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
     }
     else if(this.props.userstudents.isAuthenticated)
     {
-        user = this.props.userstudents.userstudent;
+        user = this.props.userstudents.user;
         backgroundColor = 'blue'
     }
     this.setState({user, backgroundColor})

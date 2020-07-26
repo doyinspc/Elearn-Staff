@@ -2,6 +2,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
+import { getCoursetutors } from './../../actions/coursetutor';
 import CourseCards from "./CourseCards";
 // reactstrap components
 import {
@@ -27,16 +28,14 @@ class Course extends React.Component {
   }
   
   componentDidMount(){
-    this.props.getCourses({'is_active':0});
+    this.props.getCourses({'courses.is_active':0});
   }
 
-  loadModal = id =>{
-    this.props.getCourse(id);
-    this.setState({st:true, id:id});
-  }
+  
 
   loadRegister = id =>{
     this.props.getCourse(id);
+    this.props.getCoursetutors({'courseId':id});
     this.setState({st:true, id:id});
   }
 
@@ -60,7 +59,7 @@ class Course extends React.Component {
       let tableSubTitle = props.subtitle;
       let tbody = this.props.courses.courses;
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
-          <CourseCards key={key} data={prop} handleRegister={(rid)=>this.loadRegister(rid)}  />
+          <CourseCards key={key} data={prop} id={prop.id} handleRegister={(rid)=>this.loadRegister(rid)}  />
       )):null;
       
     return (
@@ -88,7 +87,10 @@ class Course extends React.Component {
               </Card>
             </Col>
           </Row>
-          {tablerows}
+          <div class="row justify-content-center">
+            {tablerows}
+          </div>
+          
         </div>
         
       </>
@@ -101,4 +103,4 @@ const mapStateToProps = (state, ownProps) => ({
   courses: state.courseReducer
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursetutors })(Course)

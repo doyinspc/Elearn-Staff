@@ -43,33 +43,31 @@ class User extends React.Component {
             </CardBody>
             <hr />
             <div className="button-container">
-                <Button
-                className="btn-neutral btn-icon btn-round"
-                color="default"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-                size="lg"
-                >
-                <i className="fab fa-edit" />
-                </Button>
-                <Button
+                <a
                 className="btn-neutral btn-icon btn-round"
                 color="default"
                 href="/usereditstudent"
-                onClick={e => e.preventDefault()}
                 size="lg"
                 >
-                <i className="fab fa-mail" />
-                </Button>
-                <Button
+                <i className="fa fa-edit" />
+                </a>
+                <a
+                className="btn-neutral btn-icon btn-round"
+                color="default"
+                href="/usereditstudent"
+                size="lg"
+                >
+                <i className="fa fa-envelope" />
+                </a>
+                <a
                 className="btn-neutral btn-icon btn-round"
                 color="default"
                 href="#pablo"
                 onClick={e => e.preventDefault()}
                 size="lg"
                 >
-                <i className="fab fa-trash" />
-                </Button>
+                <i className="fa fa-trash" />
+                </a>
                
             </div>
             </Card>

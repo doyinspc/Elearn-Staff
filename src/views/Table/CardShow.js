@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import FileViewer from 'react-file-viewer';
 import AudioPlayer from 'react-audio-player';
 import VideoPlayer from 'react-player';
-import ImageViewer from 'react-imageview';
 import Downloader from "react-download-link";
-import CKEditor from 'ckeditor4-react';
-import {SERVER_URL } from './../../actions/common'
+import { SERVER_URL } from './../../actions/common'
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from '../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Container } from 'reactstrap';
 
@@ -37,7 +35,7 @@ const Modals = (props) => {
   
   
   useEffect(() => {
-    console.log(props.mid);
+   
     if(parseInt(props.mid) > 0 )
     {
      setId(props.mid);

@@ -56,7 +56,7 @@ export default function(state = initialState, action){
              let store = news.map(row =>{
                 let av = olds.filter(r=>parseInt(r.id) === parseInt(row.id));
                 if(av && Array.isArray(av) && av.length > 0){
-                    console.log('available')
+                    
                  }else{
                     return row;
                 };
@@ -65,10 +65,10 @@ export default function(state = initialState, action){
             })
             let sto = store.filter(r=>r != null);
             let oldss = [...olds, ...sto];
-            localStorage.setItem('coursemodule', JSON.stringify(oldss));
+            localStorage.setItem('coursemodule', JSON.stringify(action.payload));
             return {
                 ...state,
-                coursemodules : oldss,
+                coursemodules : action.payload,
                 msg:'DONE!!!'
             };
         case COURSEMODULE_GET_ONE:
@@ -110,7 +110,8 @@ export default function(state = initialState, action){
             return {
                 ...state,
                 ...action.payload,
-                coursemodules : newState
+                coursemodules : newState,
+                coursemodule:action.payload
             }; 
         case COURSEMODULE_LOADING_ERROR:
         case COURSEMODULE_ACTIVATE_FAIL:

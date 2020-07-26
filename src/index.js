@@ -8,6 +8,7 @@ import store from "./store";
 import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/now-ui-dashboard.scss?v1.2.0";
 import "assets/css/demo.css";
+import "assets/datatables.css";
 
 import AdminLayout from "layouts/Admin.jsx";
 import EmployeeLoginPage from "views/EmployeeLoginPage";
@@ -20,6 +21,8 @@ import Course from "views/Table/CourseList.jsx";
 
 import Staff from "views/Table/UserProfile.js";
 import Student from "views/Table/UserProfileStudent.js";
+import StaffList from "views/Table/StaffList.jsx";
+import StudentList from "views/Table/StudentList.jsx";
 
 const hist = createBrowserHistory();
 
@@ -35,6 +38,8 @@ ReactDOM.render(
               <Route path="/admin/course" render={props => <Course {...props} />} />
               <Route path="/admin/staff" render={props => <Staff {...props} />} />
               <Route path="/admin/student" render={props => <Student {...props} />} />
+              <Route path="/admin/staffs" render={props => <StaffList {...props} />} />
+              <Route path="/admin/students" render={props => <StudentList {...props} />} />
               
               <Route path="/staff" render={props => <EmployeeLoginPage {...props} />} />
               <Route path="/register" render={props => <StudentRegisterPage {...props} />} />

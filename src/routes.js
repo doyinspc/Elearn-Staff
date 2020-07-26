@@ -1,6 +1,9 @@
 import Staff from "views/Table/UserProfile";
 import Student from "views/Table/UserProfileStudent";
 
+import StaffList from "views/Table/StaffList";
+import StudentList from "views/Table/StudentList";
+
 import Dashboard from "views/Dashboard.jsx";
 import Course from "views/Table/CourseList.jsx";
 import Courses from "views/Table/CourseLists.js";
@@ -139,14 +142,14 @@ var dashRoutes = [
     path: "/students",
     name: "Students",
     icon: "design_app",
-    component: Students,
+    component: StudentList,
     layout: "/admin"
   },
   {
     path: "/staffs",
     name: "Staffs",
     icon: "design_app",
-    component: Staffs,
+    component: StaffList,
     layout: "/admin"
   },
   
