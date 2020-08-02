@@ -8,6 +8,10 @@ import {
   Media
 } from "reactstrap";
 import { SERVER_URL } from "actions/common";
+import FileViewer from 'react-file-viewer';
+import AudioPlayer from 'react-audio-player';
+import VideoPlayer from 'react-player';
+import Downloader from "react-download-link";
 const imgx = require("assets/img/place.png");
 const pics = {
   1 : 'fa-file-text',
@@ -29,9 +33,18 @@ class TimeLine extends React.Component {
       
     }
   }
+  
+  onError = err =>{
+    console.log(err);
+  }
   render() {
-    let { description, title, types } = this.props.data || '';
-    let themeColor = 'danger';
+    let { description, title, types, links } = this.props.data || '';
+    let themeColor = 'info';
+    let type = parseInt(types);
+    let exts = links.split('.');
+    let path = SERVER_URL + links;
+    let ext = exts.splice(-1)[0];
+
     return (
       <>
        <li class="timeline-inverted">
@@ -43,7 +56,51 @@ class TimeLine extends React.Component {
                     <span class={`badge badge-${themeColor}`}>{title}</span>
                 </div>
                 <div class="timeline-body">
-                  <p>{description}</p>
+                  <p style={{minHeight:'200px'}}>
+                    
+                    {type === 1 ? <div  dangerouslySetInnerHTML={{__html: description}} /> : ''}
+                    {type === 2 ? 
+                      <FileViewer
+                        fileType={ext}
+                        filePath={path}
+                        onError={this.onError}
+                      />
+                      : ''}
+                    {type === 3 ? 
+                      <FileViewer
+                        fileType={ext}
+                        filePath={path}
+                        onError={this.onError}
+                      />
+                      : ''}
+                    {type === 4 ? 
+                      <VideoPlayer
+                        url={path}
+                        onError={this.onError}
+                      />
+                      : ''}
+                    {type === 5 ? 
+                      <AudioPlayer
+                        src={path}
+                        autoplay
+                        controls
+                        onError={this.onError}
+                      />
+                      : ''}
+                    {type === 6 ? 
+                      <VideoPlayer
+                        url={path}
+                        onError={this.onError}
+                      />
+                      : ''}
+                    {type === 7 ? 
+                      <FileViewer
+                        fileType={ext}
+                        filePath={path}
+                        onError={this.onError}
+                      />
+                      : ''}
+                  </p>
                 </div>
                 <h6>
                     <i class="ti-time"></i>

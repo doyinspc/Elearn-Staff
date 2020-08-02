@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import { Link, Redirect }  from 'react-router-dom';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
+import { getUserstaffcourses, getUserstaffcourse, updateUserstaffcourse } from './../../actions/userstaffcourse';
 import { getCoursemodules, getCoursemodule} from './../../actions/coursemodule';
 import { getCoursematerials, getCoursematerial } from './../../actions/coursematerial';
 import { getCoursetutors, getCoursetutor } from './../../actions/coursetutor';

@@ -32,7 +32,7 @@ let params = {
 //GET ALL LEVEL 
 export const getLevels = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
+    params.data = JSON.stringify(data);
     params.cat = 'group';
     dispatch({type : LEVEL_LOADING});
         axios.get(path, {params}, axiosConfig)

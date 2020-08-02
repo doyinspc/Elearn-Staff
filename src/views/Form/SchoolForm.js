@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getSchool, registerSchool, updateSchool } from './../../actions/school';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Container, Row, Col } from 'reactstrap';
 
 const Modals = (props) => {
+  
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
@@ -24,19 +25,17 @@ const Modals = (props) => {
 
   const handleSubmit = (e) =>{
         e.preventDefault();
-        if(id && id > 0)
-        {
-          let data = {name, abbrv};
-          props.updateSchool(data, id);
-
-        }else{
-          let data = {name, abbrv, pid:1};
-          props.registerSchool(data);
-        }
-        
+        let data = {name, abbrv, sid:4};
+        props.registerSchool(data);
   }
 
+  const handleEdit = (e) =>{
+    e.preventDefault();
+    let data = {name, abbrv};
+    props.updateSchool(data, id);
+}
   const populate = async(data) =>{
+    console.log(data);
         setName(data.name);
         setAbbrv(data.abbrv);
     }
@@ -66,7 +65,7 @@ const Modals = (props) => {
                     id="name"  
                     defaultValue={name}
                     onChange={e=>setName(e.target.value)} 
-                    placeholder="Education" />
+                    placeholder="100L" />
                 </Col>
             </FormGroup>
             <FormGroup row>
@@ -77,15 +76,14 @@ const Modals = (props) => {
                     name="abbrv" 
                     id="abbrv"  
                     defaultValue={abbrv} 
-                    onChange={e=>setAbbrv(e.target.value)}
-                    placeholder="SOE" 
+                    onChange={e=>setAbbrv(e.target.value)} 
                     />
                 </Col>
             </FormGroup>
         </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
+          <Button color={editColor} onClick={editId ? handleEdit : handleSubmit}>{'Submit'}</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

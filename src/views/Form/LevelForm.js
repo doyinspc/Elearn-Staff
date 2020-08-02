@@ -18,14 +18,14 @@ const Modals = (props) => {
     {
      setId(props.mid);
      setModal(!modal);
-     populate(props.levels.name);
+     populate(props.levels.level);
     }
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
-        let data = {name, abbrv, pid:5};
+        let data = {name, abbrv, sid:6};
         props.registerLevel(data);
   }
 
@@ -35,6 +35,7 @@ const Modals = (props) => {
     props.updateLevel(data, id);
 }
   const populate = async(data) =>{
+    console.log(data);
         setName(data.name);
         setAbbrv(data.abbrv);
     }

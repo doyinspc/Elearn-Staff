@@ -27,7 +27,7 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: auth  && parseInt(auth) === 1? true : false,
     isLoading: false,
-    isAdmin: userstudentStore ? userstudentStore.is_admin : null,
+    isAdmin: null,
     isRegistered: userstudentStore && userstudentStore.id > 1 ? true: false,
     user: user ? user : {},
     userstudents: userstudentStore,

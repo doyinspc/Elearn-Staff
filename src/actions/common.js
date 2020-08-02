@@ -24,3 +24,7 @@ export const axiosConfig1 = {
       }
 
   }
+  export const timeConvert = date =>{
+    return ''
+
+}

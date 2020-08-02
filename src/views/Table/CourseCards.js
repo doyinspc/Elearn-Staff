@@ -2,9 +2,9 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { deleteUserstudentcourse, getUserstudentcourse } from './../../actions/userstudentcourse';
-import { SERVER_URL } from "./../../actions/common.js"
-import { Redirect, Link } from "react-router-dom";
-import CourseListsItem from "./CourseListsItem";
+import { SERVER_URL } from "./../../actions/common.js";
+import Swal from 'sweetalert2';
+import { Link } from "react-router-dom";
 const imgx = require("assets/img/bg3.jpg");
 
 class Course extends React.Component {
@@ -18,17 +18,43 @@ class Course extends React.Component {
     }
   }
  
+loadCourse = (id) =>{
+    this.props.getUserstudentcourse(id);
+}
+
+removeCourse = (id) =>{
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You may lose related information!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+
+    if (result.value) {
+      this.props.deleteUserstudentcourse({'id':id});
+      Swal.fire(
+        'Deleted!',
+        'Your file has been deleted.',
+        'success'
+      )
+    }
+  })
+  
+}
 
   render() {
     
     let {course_name, course_description, course_code, course_start, course_end, id, pics, departmentname, levelname} = this.props.data;
-    let starts = new Date(parseInt(course_start)).toDateString();
-    let ends = new Date(parseInt(course_end)).toDateString();
+    let starts = new Date(parseInt(course_start)).toUTCString();
+    let ends = new Date(parseInt(course_end)).toUTCString();
     return (
       <>
         <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >
         <div class="card-header" >
-              <small class="text-muted">{`${starts} - ${ends}`}</small>
+              <small class="text-muted"><b>Start:</b> {`${starts}`}<br/><b>Close:</b> {`${ends}`}</small>
             </div>
             <img 
                 class="card-img-top" 
@@ -39,7 +65,7 @@ class Course extends React.Component {
                 height="100px"
                 style={{padding:-30}}
                 />
-             <div style={{position:'absolute', top:'8px' , left:'5px'}}>
+             <div style={{position:'absolute', top:'50px' , left:'10px'}}>
                <h4 class="card-title text-light">{course_name}</h4> 
               </div>
              
@@ -49,10 +75,12 @@ class Course extends React.Component {
                 <p class="card-text">{course_description}</p>
             </div>
             <div class="card-footer" >
-            <Link to="/admin/courseitem">
-            <button type="button" class="btn btn-warning btn-sm" >Go to Class</button>
-            </Link>
+           
             <a href="#" class="btn btn-secondary btn-sm" onClick={()=>{this.removeCourse(id)}}>Remove</a>
+
+            <Link to="/admin/courseitem">
+            <button type="button" class="btn btn-info btn-sm" onClick={()=>{this.loadCourse(id)}} >Go to Class</button>
+            </Link>
             </div>
         </div>
         

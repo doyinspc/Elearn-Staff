@@ -58,14 +58,14 @@ const Modals = (props) => {
     }
     //departments
     let params1 = {
-      data:JSON.stringify({'pid':2}),
+      data:JSON.stringify({'sid':4}),
       cat:'group',
       table:'datas',
       token:MAIN_TOKEN
     }
     //level
     let params2 = {
-      data:JSON.stringify({'pid':4}),
+      data:JSON.stringify({'sid':6}),
       cat:'group',
       table:'datas',
       token:MAIN_TOKEN

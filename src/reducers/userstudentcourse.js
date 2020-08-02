@@ -78,7 +78,7 @@ export default function(state = initialState, action){
             let sesx = allx.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
-                userstudentcoursex : sesx,
+                userstudentcourse : sesx,
                 MSG:"DONE!!!"
             };
         case USERSTUDENTCOURSE_GET_ONE:
@@ -86,7 +86,7 @@ export default function(state = initialState, action){
             let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
-                userstudentcourseX : ses,
+                userstudentcourse : ses,
                 MSG:"DONE!!!"
             };
         case USERSTUDENTCOURSE_REGISTER_SUCCESS:

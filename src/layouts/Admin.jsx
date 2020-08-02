@@ -35,8 +35,16 @@ class Dashboard extends React.Component {
     if(this.props.userstaffs.isAuthenticated && !this.props.userstudents.isAuthenticated)
     {
         user = this.props.userstaffs.user;
-        backgroundColor = 'orange';
-        group = 2;
+       
+        if(this.props.userstaffs.isAdmin)
+        {
+          backgroundColor = 'green';
+          group = 3;
+        }else
+        {
+          backgroundColor = 'orange';
+          group = 2;
+        }
     }
     else if(this.props.userstudents.isAuthenticated && !this.props.userstaffs.isAuthenticated)
     {
@@ -79,7 +87,6 @@ class Dashboard extends React.Component {
           <DemoNavbar {...this.props} user={this.state.user} />
           <Switch>
             {routes.map((prop, key) => {
-            
               return (
                 <Route
                   path={prop.layout + prop.path}
@@ -88,7 +95,7 @@ class Dashboard extends React.Component {
                 />
               );
             })}
-            <Redirect from="/admin" to="/admin/dashboard" />
+            <Redirect from="/admin" to="/admin/profile" />
           </Switch>
           <Footer fluid />
         </div>

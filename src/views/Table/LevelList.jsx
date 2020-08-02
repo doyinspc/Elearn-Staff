@@ -31,7 +31,7 @@ class Level extends React.Component {
   }
   
   componentDidMount(){
-    this.props.getLevels({pid:5});
+    this.props.getLevels({sid:6});
   }
 
   loadModal = id =>{
@@ -52,6 +52,10 @@ class Level extends React.Component {
     this.props.getLevel(id);
     this.setState({st:false, id:null});
   }
+  handleClose = () =>{
+    this.setState({st:false, id:null});
+  }
+
 
   render() {
       let props = {};
@@ -64,10 +68,7 @@ class Level extends React.Component {
             <td className="text-left">{prop.name}</td>
             <td className="text-center">{prop.abbrv}</td>
             <td className="text-right">
-            <Link to={`/admin/department/${prop.id}`}>
-                <Button className="btn-icon" color="info" size="sm" key={`md${key}${prop.id}`}  onClick={()=>this.loadNext(prop.id)}>
-                    <i className="fa fa-calendar"></i>
-                </Button></Link>{` `}
+            
                 <Button className="btn-icon" color="success" size="sm" key={`mdx${key}${prop.id}`}  mid={prop.id}  onClick={()=>this.loadModal(prop.id)} >
                     <i className="fa fa-edit"></i>
                 </Button>{` `}
@@ -91,9 +92,9 @@ class Level extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col sm="10">{tableTitle}</Col>
-                          <Col sm="2" className="pull-right"> 
-                              <Modals mid={this.state.id} toggle={this.state.st}/>
+                          <Col xs="8">{tableTitle}</Col>
+                          <Col xs="4" className="pull-right"> 
+                              <Modals mid={this.state.id} toggle={this.state.st} handleClose={this.setStatehandleClose}/>
                           </Col>
                         </Row>
                       </Container>

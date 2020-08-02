@@ -66,10 +66,11 @@ export default function(state = initialState, action){
             })
             let sto = store.filter(r=>r != null);
             let oldss = [...olds, ...sto];
-            localStorage.setItem('coursematerial', JSON.stringify(oldss));
+            localStorage.setItem('coursematerial', JSON.stringify(action.payload));
             return {
                 ...state,
-                coursematerials : oldss,
+                coursematerials : action.payload,
+                isLoading: false,
                 msg:'DONE!!!'
             };
         case COURSEMATERIAL_GET_ONE:

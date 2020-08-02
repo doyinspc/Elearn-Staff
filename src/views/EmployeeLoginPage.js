@@ -77,7 +77,7 @@ class LoginPage extends React.Component{
         <div
           className="page-header-image"
           style={{
-            backgroundImage: "url(" + require("assets/img/bg1.jpg") + ")"
+            backgroundImage: "url(" + require("assets/img/bg1.png") + ")"
           }}
         >
         </div>
@@ -89,7 +89,7 @@ class LoginPage extends React.Component{
               <Card className="card-login card-plain" style={{zIndex:100}}>
                 <Form action="" className="form" method="" onSubmit={this.onSubmit}>
                   <CardHeader className="text-center">
-                    <div className="logo-container" style={{ marginBottom:5 }}>
+                    <div className="logo-containers" style={{ marginBottom:5 }}>
                       <img
                         alt="..."
                         src={require("assets/img/logo.png")}

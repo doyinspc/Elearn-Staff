@@ -2,6 +2,8 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { getCoursemodules } from './../../actions/coursemodule';
+import { getCoursematerials } from './../../actions/coursematerial';
+import { getCourseprogresss } from './../../actions/courseprogress';
 import CourseTimelist from './CourseTimelist';
 import CourseTime from './CourseTime';
 // reactstrap components
@@ -26,21 +28,35 @@ class Course extends React.Component {
       id:null,
       st:false,
       page:null,
-      subtitle:''
+      subtitle:'',
+      data: {}
     }
   }
   
-  componentDidMount(){
-    let ids = this.props.userstudentcourses.userstudentcourse.id;
+  componentDidMount()
+  {
+    let ids = this.props.userstudentcourses.userstudentcourse.cid;
     this.props.getCoursemodules({'courseId':ids,'is_active':0});
+    this.setState({data:this.props.userstudentcourses.userstudentcourse})
   }
+  componentWillReceiveProps(nextProps, nexState)
+   {
+     if(nextProps.userstudentcourses.userstudentcourse.cid !== this.state.data.id)
+     {
+       this.setState({data:nextProps.userstudentcourses.userstudentcourse});
+     }
+
+   }
+
   loadMaterial = (id) =>{
-        this.setState({id})
+        this.setState({id});
+       // this.props.getCoursematerials({'moduleId':id,'is_active': 1});
+       // this.props.getCourseprogresss({'is_active': 0, 'moduleId':id, 'studentId':this.props.user.id});
   }
   
 
   render() {
-    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname} = this.props.userstudentcourses.userstudentcourse || "";
+    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname} = this.state.data;
       let tableTitle = course_name;
       let tableSubTitle = course_code;
       
@@ -67,7 +83,6 @@ class Course extends React.Component {
                         </Row>
                       </Container>
                     </CardTitle>
-                    
                 </CardHeader>
                 <CardBody>
                     <p>{course_description}</p>
@@ -83,8 +98,7 @@ class Course extends React.Component {
                 />
             </Col>
             <Col md={8}>
-            <CourseTime />
-               
+            <CourseTime mid={this.state.id}/>
             </Col>
           </Row>
           
@@ -102,4 +116,4 @@ const mapStateToProps = (state, ownProps) => ({
   user: state.userstudentReducer.user,
 })
 
-export default connect(mapStateToProps, { getCoursemodules})(Course)
+export default connect(mapStateToProps, { getCoursemodules, getCoursematerials, getCourseprogresss})(Course)

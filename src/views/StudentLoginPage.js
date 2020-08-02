@@ -73,27 +73,28 @@ class LoginPage extends React.Component{
     <>
       <ExamplesNavbar />
       
-      <div className="page-header clear-filter" filter-color="blue">
+      <div className="page-header clear-filter" filter-color="">
         <div
           className="page-header-image"
           style={{
-            backgroundImage: "url(" + require("assets/img/bg5.jpg") + ")"
+            backgroundImage: "url(" + require("assets/img/bg5.png") + ")"
           }}
         >
         </div>
         <br/><br/>
         <div className="content" style={{marginTop:40}} >
           <Container>
-            <Col className="ml-auto mr-auto text-center" md="4">
+            <Col className="ml-auto mr-auto text-center" md="6">
         <h3>{process.env.REACT_APP_WEBSITE_NAME}</h3>
               <Card className="card-login card-plain" style={{zIndex:100}}>
                 <Form action="" className="form" method="" onSubmit={this.onSubmit}>
                   <CardHeader className="text-center">
-                    <div className="logo-container" style={{ marginBottom:5 }}>
+                    <div className="logo-containers" style={{ marginBottom:5 }}>
                       <img
                         alt="..."
                         src={require("assets/img/logo.png")}
                         height="120px"
+                        width="120px"
                       ></img>
                     </div>
                   

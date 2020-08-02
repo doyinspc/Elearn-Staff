@@ -26,12 +26,12 @@ class Module extends React.Component {
     this.state ={
       id:null,
       st:false,
-      pid:7
+      pid:5
     }
   }
   
   componentDidMount(){
-    this.props.getModules({pid:7});
+    this.props.getModules({sid:11});
   }
 
   loadModal = id =>{
@@ -52,6 +52,10 @@ class Module extends React.Component {
     this.props.getModule(id);
     this.setState({st:false, id:null});
   }
+  handleClose = () =>{
+    this.setState({st:false, id:null});
+  }
+
 
   render() {
       let props = {};
@@ -88,9 +92,9 @@ class Module extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col sm="10">{tableTitle}</Col>
-                          <Col sm="2" className="pull-right"> 
-                              <Modals mid={this.state.id} toggle={this.state.st}/>
+                          <Col xs="8">{tableTitle}</Col>
+                          <Col xs="4" className="pull-right"> 
+                              <Modals mid={this.state.id} toggle={this.state.st} handleClose={this.setStatehandleClose}/>
                           </Col>
                         </Row>
                       </Container>

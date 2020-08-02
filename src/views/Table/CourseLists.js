@@ -32,7 +32,8 @@ class Course extends React.Component {
   }
   
   componentDidMount(){
-    this.props.getCourses({'courses.is_active':0});
+    this.props.getUserstudentcourses({'studentId':this.props.user.id});
+    this.setState({page:2, subtitle:'My Courses'});
   }
 
   loadAllCourses = () =>{
@@ -40,7 +41,7 @@ class Course extends React.Component {
     this.setState({page:1, subtitle:'All Courses'});
   }
   loadMyCourses = () =>{
-    this.props.getUserstudentcourses({'studentId':this.props.user.id});
+    this.props.getUserstudentcourses({'studentId':this.props.user.id });
     this.setState({page:2, subtitle:'My Courses'});
   } 
 

@@ -77,9 +77,11 @@ class Sidebar extends React.Component {
         </div>
         
           
-        <div className="sidebar-wrapper" id="sidebar-wrapper" ref="sidebar">
+        <div className="sidebar-wrapper sc" id="sidebar-wrapper" ref="sidebar">
         <Nav>
-            {this.props.routes.map((prop, key) => { if(prop.name && prop.num === this.props.group ){
+            {this.props.routes.map((prop, key) => { 
+              if(prop.name && prop.num === this.props.group && this.props.group  === 1 )
+              {
               if (prop.redirect) return null;
               return (
                 <li
@@ -99,7 +101,65 @@ class Sidebar extends React.Component {
                   </NavLink>
                 </li>
               );
-           }})}
+           }
+           
+           
+           
+           })}
+            {this.props.routes.map((prop, key) => { 
+              if(prop.name && this.props.group  === 2 && prop.num === this.props.group)
+              {
+              if (prop.redirect) return null;
+              return (
+                <li
+                  className={
+                    this.activeRoute(prop.layout + prop.path) +
+                    ( "")
+                  }
+                  key={key}
+                >
+                  <NavLink
+                    to={prop.layout + prop.path}
+                    className="nav-link"
+                    activeClassName="active"
+                  >
+                    <i className={"now-ui-icons " + prop.icon} />
+                    <p>{prop.name}</p>
+                  </NavLink>
+                </li>
+              );
+           }
+           
+           
+           
+           })}
+            {this.props.routes.map((prop, key) => { 
+              if(prop.name && this.props.group  === 3 && prop.num !== 1)
+              {
+              if (prop.redirect) return null;
+              return (
+                <li
+                  className={
+                    this.activeRoute(prop.layout + prop.path) +
+                    ( "")
+                  }
+                  key={key}
+                >
+                  <NavLink
+                    to={prop.layout + prop.path}
+                    className="nav-link"
+                    activeClassName="active"
+                  >
+                    <i className={"now-ui-icons " + prop.icon} />
+                    <p>{prop.name}</p>
+                  </NavLink>
+                </li>
+              );
+           }
+           
+           
+           
+           })}
         </Nav>
         </div>
       </div>

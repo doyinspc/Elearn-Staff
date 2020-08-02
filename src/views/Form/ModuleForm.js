@@ -18,14 +18,14 @@ const Modals = (props) => {
     {
      setId(props.mid);
      setModal(!modal);
-     populate(props.modules.module.name);
+     populate(props.modules.module);
     }
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
-        let data = {name, abbrv, pid:7};
+        let data = {name, abbrv, sid:11};
         props.registerModule(data);
   }
 
@@ -64,7 +64,7 @@ const Modals = (props) => {
                     id="name"  
                     defaultValue={name}
                     onChange={e=>setName(e.target.value)} 
-                    placeholder="Module 1" />
+                    placeholder="100L" />
                 </Col>
             </FormGroup>
             <FormGroup row>
@@ -76,7 +76,6 @@ const Modals = (props) => {
                     id="abbrv"  
                     defaultValue={abbrv} 
                     onChange={e=>setAbbrv(e.target.value)} 
-                    placeholder="MD1"
                     />
                 </Col>
             </FormGroup>

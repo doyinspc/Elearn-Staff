@@ -32,7 +32,7 @@ const Modals = (props) => {
     }
     //GET MODULES
     let params1 = {
-      data:JSON.stringify({'pid':7}),
+      data:JSON.stringify({'sid':11}),
       cat:'group',
       table:'datas',
       token:MAIN_TOKEN

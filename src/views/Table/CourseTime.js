@@ -15,31 +15,36 @@ class TimeLine extends React.Component {
   constructor(props){
     super(props);
     this.state ={
-      id:null,
+      id:props.mid,
+      data:[]
       
     }
   }
-  render() {
-     let mate =  this.props.coursematerials.coursematerials;
+  componentWillReceiveProps(nextProps, nexState)
+   {
+     if(nextProps.userstudentcourses.userstudentcourse.cid !== this.state.id)
+     {
+       this.setState({data:nextProps.coursematerials.coursematerials});
+     }
 
+   }
+  render() {
+     let mate =  this.state.data;
      let material = mate && Array.isArray(mate) ? mate.map((prop, index)=>{
             return <CourseTimeLine  key={index} data={prop}/>
      }): null;
 
     return (
       <>
-        <div class="row">
-              <div class="col-md-12">
-                  <div class="card card-timeline card-plain">
-                      <div class="card-body">
-                          <ul class="timeline">
-                            {material}
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-         
+        {!this.props.coursematerials.isLoading ?
+            <div class="card card-timeline card-plain">
+                <div class="card-body">
+                    <ul class="timeline timeline-simple">
+                      {material}
+                    </ul>
+                </div>
+            </div>
+         :<h3><i classname="fa fa-download"></i></h3>   }  
       </>
     );
   }
@@ -47,6 +52,7 @@ class TimeLine extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({ 
   coursematerials: state.coursematerialReducer,
+  userstudentcourses:state.userstudentcourseReducer,
   user: state.userstudentReducer.user,
 })
 

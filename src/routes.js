@@ -92,25 +92,10 @@ var dashRoutes = [
 
 
   //SETTINGS
-  {
-    path: "/calender",
-    name: "Calender",
-    icon: "design_app",
-    component: Calender,
-    layout: "/admin",
-    num: 3
-  },
-  {
-    path: "/semester/:id",
-    name: "Calender",
-    icon: "design_app",
-    component: Semester,
-    layout: "/admin",
-    num: 3
-  },
+  
   {
     path: "/school",
-    name: "school",
+    name: "Subjects",
     icon: "design_app",
     component: School,
     layout: "/admin",
@@ -121,7 +106,7 @@ var dashRoutes = [
     icon: "design_app",
     component: Department,
     layout: "/admin",
-    num: 3
+    num: 4
   },
   {
     path: "/module",
@@ -145,7 +130,7 @@ var dashRoutes = [
     icon: "design_app",
     component: Programme,
     layout: "/admin",
-    num: 3
+    num: 4
   },
   {
     path: "/material",
@@ -153,7 +138,7 @@ var dashRoutes = [
     icon: "design_app",
     component: Material,
     layout: "/admin",
-    num: 3
+    num: 4
   },
   {
     path: "/fee",
@@ -161,7 +146,7 @@ var dashRoutes = [
     icon: "design_app",
     component: Fee,
     layout: "/admin",
-    num: 3
+    num: 4
   },
   
   {
@@ -180,7 +165,22 @@ var dashRoutes = [
     layout: "/admin",
     num: 3
   },
-  
+  {
+    path: "/calender",
+    name: "Calender",
+    icon: "design_app",
+    component: Calender,
+    layout: "/admin",
+    num: 3
+  },
+  {
+    path: "/semester/:id",
+    name: "Calender",
+    icon: "design_app",
+    component: Semester,
+    layout: "/admin",
+    num: 3
+  },
   
 ];
 export default dashRoutes;

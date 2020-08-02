@@ -122,7 +122,7 @@ class LoginPage extends React.Component{
                     <Row sm={12} class="container h-100">
                     <Col sm={6}>
                     <h3>i-Academy</h3>
-                    <div className="logo-container" style={{ marginBottom:51 }}>
+                    <div className="logo-containers" style={{ marginBottom:51 }}>
                       <img
                         alt="img"
                         src={require("assets/img/logo.png")}
