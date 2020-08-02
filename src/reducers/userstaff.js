@@ -20,12 +20,12 @@ import {
 
 let userstaffStore = localStorage.getItem('userstaff') !== 'undefined' ? JSON.parse(localStorage.getItem('userstaff')):[];
 let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
-
+let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
 const initialState = {
     token: localStorage.getItem('token'),
-    isAuthenticated: localStorage.getItem('auth'),
+    isAuthenticated: auth  && parseInt(auth) === 1? true : false,
     isLoading: false,
-    isAdmin: userstaffStore ? userstaffStore.is_admin : null,
+    isAdmin: userstaffStore && userstaffStore.is_admin == 1 ? true : null,
     isRegistered: userstaffStore && userstaffStore.id > 1 ? true: false,
     user: user ? user : {},
     userstaffs: userstaffStore,
@@ -61,7 +61,7 @@ export default function(state = initialState, action){
             };
         case USERSTAFF_LOGIN:
             localStorage.setItem('token', action.token)
-            localStorage.setItem('auth', true);
+            localStorage.setItem('auth', JSON.stringify(1));
             localStorage.setItem('user', JSON.stringify(action.payload))
             
             return {

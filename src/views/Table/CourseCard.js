@@ -1,7 +1,7 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { Link }  from 'react-router-dom';
+import { Link, Redirect }  from 'react-router-dom';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
 import { getCoursemodules, getCoursemodule} from './../../actions/coursemodule';
 import { getCoursematerials, getCoursematerial } from './../../actions/coursematerial';
@@ -16,6 +16,10 @@ import CourseFormStudent from "./../Form/CourseFormStudent";
 import CourseModule from "./CourseModule";
 import CourseTutor from "./CourseTutor";
 import CourseStudent from "./CourseStudent";
+
+import CardStudentMiniData from "./CardStudentMiniData";
+import CardStudentMiniProgress from "./CardStudentMiniProgress";
+import CardStudentMiniQuestion from "./CardStudentMiniQuestion";
 // reactstrap components
 import {
   Card,
@@ -37,6 +41,12 @@ class Course extends React.Component {
       stm:false,
       ids:null,
       sts:false,
+      studentId:null,
+      courseId:null,
+      pou:false,
+      poq:false,
+      poa:false,
+      poe:false,
     }
   }
   
@@ -49,7 +59,6 @@ class Course extends React.Component {
  handleEditModule=id=>{
   this.setState({stm:true, idm:id})
  }
-
  handleMaterial=id=>{
   this.props.getCoursematerials({'courseId':id});
 }
@@ -58,28 +67,48 @@ handleTutor=id=>{
   this.props.getCoursetutors({'courseId':id});
 }
 handleEditTutor=id=>{
-  this.setState({stt:true, idt:id})
+  this.props.getCoursetutor(id);
+  this.setState({stt:true, idt:id});
  }
 
+loadUserStudent=(studentId, courseId, data)=>{
+  this.setState({pou:true, studentId, courseId, data});
+}
+loadWhatsappStudent=(id, phone, fullname)=>{
+  return <Link to={`${phone} ${fullname}`} target="_blank"/>;
+}
+loadQuestionStudent=(studentId, courseId, data)=>{
+ // this.props.getCoursestudent(id);
+  this.setState({poq:true, studentId, courseId, data});
+}
+loadAssignmentStudent=(studentId, courseId, data)=>{
+  this.props.getCourseprogresss({studentId, courseId});
+  this.setState({poa:true, studentId, courseId, data});
+}
+handleEditStudent=(id, studentId, courseId, data)=>{
+  this.props.getCoursestudent(id);
+  this.setState({poe:true, studentId, courseId, data});
+}
+handleDeleteStudent=id=>{
+  this.props.deleteCoursestudent(id);
+}
 handleStudent=id=>{
   this.props.getCoursestudents({'courseId':id});
-}
-handleEditStudent=id=>{
-  this.setState({sts:true, ids:id})
 }
 
 
   render() {
     let coursetutors = this.props.coursetutors.coursetutors;
-    let {course_code, course_objective, course_description, course_name, id, departmentname, levelname} = this.props.data || "";
+    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname} = this.props.data || "";
+    let {courseId, studentId} = this.state;
     let loadTutor = null;
     if(coursetutors && Array.isArray(coursetutors) && coursetutors.length > 0 && id){
       let cts = coursetutors.filter(row =>parseInt(row.courseId) === parseInt(id))
       loadTutor = cts && Array.isArray(cts) && cts.length > 0 ? cts.map((prop, index)=>{
         return <CourseTutor 
-                  key={`A_${index}_${prop.id}`} 
+                  key={`A_${index}_${prop.cid}`} 
                   data={prop} 
-                  handleEdit={(rid)=>this.handleEditTutor(rid)}
+                  handleEdit={(rid)=>this.handleEditTutor(prop.cid)}
                   handleDelete={(rid)=>this.handleDeleteTutor(rid)}
                   />
       }):null;
@@ -107,8 +136,12 @@ handleEditStudent=id=>{
         return <CourseStudent 
                   key={`C_${index}_${prop.id}`} 
                   data={prop} 
-                  handleEdit={(rid)=>this.handleEditStudent(rid)}
-                  handleDelete={(rid)=>this.handleDeleteStudent(rid)}
+                  loadUser={(rid)=>this.loadUserStudent(prop.studentId, prop.courseId, prop)}
+                  loadWhatsapp={(rid)=>this.loadWhatsappStudent(rid)}
+                  loadQuestion={(rid)=>this.loadQuestionStudent(prop.studentId, prop.courseId, prop)}
+                  loadAssignment={(rid)=>this.loadAssignmentStudent(prop.studentId, prop.courseId, prop)}
+                  handleEdit={(rid)=>this.handleEditStudent(prop.cid)}
+                  handleDelete={(rid)=>this.handleDeleteStudent(prop.cid)}
                   />
       }):null;
     };
@@ -117,6 +150,31 @@ handleEditStudent=id=>{
      
     return (
       <>
+      {/*SMALL MINI MODALS FOR FUTHER DATA */}
+        {this.state.pou ? <CardStudentMiniData
+          courseId={courseId}
+          studentId={studentId}
+          data={this.state.data}
+          st={this.state.pou}
+          mid={this.state.id}
+          handleClose={()=>this.setState({pou:false, studentId:null})}
+        />: null}
+        {this.state.poq ? <CardStudentMiniQuestion
+          courseId={courseId}
+          studentId={studentId}
+          data={this.state.data}
+          st={this.state.poq}
+          mid={this.state.id}
+          handleClose={()=>this.setState({poq:false, studentId:null})}
+        />: null}
+        {this.state.poa ? <CardStudentMiniProgress
+          courseId={courseId}
+          studentId={studentId}
+          data={this.state.data}
+          st={this.state.poa}
+          mid={this.state.studentId}
+          handleClose={()=>this.setState({poa:false, studentId:null})}
+        />: null}
         <div className="card card-nav-tabs ">
           <div className="card-header card-header-danger">
                <h5 className="card-category">{`${departmentname  +" " +levelname }`}</h5>
@@ -135,7 +193,7 @@ handleEditStudent=id=>{
                   </div>
               <div className="nav-tabs-navigation">
                   <div className="nav-tabs-wrapper">
-                      <ul className="nav nav-tabs" data-tabs="tabs">
+                      <ul className="nav nav-tabs flex-row" data-tabs="tabs">
                       <li className="nav-item">
                               <a className="nav-link active"  href={`#stage0${id}`} data-toggle="tab"><i className="fa fa-home"></i> <span className="d-none d-md-inline">Home</span></a>
                           </li>
@@ -288,4 +346,4 @@ export default connect(mapStateToProps,
     getCoursetutors, 
     getCoursetutor, 
     getCoursestudents, 
-    getCoursestudent,  })(Course)
+    getCoursestudent, getCourseprogresss  })(Course)

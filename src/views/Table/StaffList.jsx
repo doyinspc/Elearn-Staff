@@ -33,8 +33,6 @@ class Staff extends React.Component {
   componentDidMount(){
     this.props.getStaffs({'is_active':0, 'is_delete':0});
       this.setState({subtitle:'Active Staffs'});
-
-     
   }
 
   handleSelect =(num) =>{

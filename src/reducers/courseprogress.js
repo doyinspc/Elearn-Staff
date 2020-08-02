@@ -1,17 +1,19 @@
 import {
-    COURSEPROGRESS_GET_MULTIPLE,
     COURSEPROGRESS_GET_ONE,
+    COURSEPROGRESS_GET_MULTIPLE,
+    COURSEPROGRESS_GET_MATERIAL,
     COURSEPROGRESS_REGISTER_SUCCESS,
     COURSEPROGRESS_REGISTER_FAIL,
     COURSEPROGRESS_LOADING,
     COURSEPROGRESS_LOADING_ERROR,
-    COURSEPROGRESS_ACTIVATE_FAIL,
-    COURSEPROGRESS_ACTIVATE_SUCCESS,
     COURSEPROGRESS_UPDATE_SUCCESS,
     COURSEPROGRESS_UPDATE_FAIL,
     COURSEPROGRESS_DELETE_SUCCESS,
+    COURSEPROGRESS_LOADING_MATERIAL_FAIL,
     COURSEPROGRESS_DELETE_FAIL,
-    COURSEPROGRESS_EDIT
+    COURSEPROGRESS_EDIT,
+    COURSEPROGRESS_ACTIVATE_FAIL,
+    COURSEPROGRESS_ACTIVATE_SUCCESS
 } from "../types/courseprogress";
 
 let courseprogressStore = JSON.parse(localStorage.getItem('courseprogress'))
@@ -20,6 +22,7 @@ const initialState = {
     isLoading: false,
     courseprogresss: courseprogressStore && Array.isArray(courseprogressStore) && courseprogressStore.lenght ? courseprogressStore : [],
     courseprogress:{},
+    materials:[],
     msg: null,
     isEdit:-1,
     ref:null,
@@ -49,6 +52,11 @@ export default function(state = initialState, action){
                 ...state,
                 isLoading : true
             };
+        case COURSEPROGRESS_GET_MATERIAL:
+            return {
+                ...state,
+                materials : action.payload
+        };
         case COURSEPROGRESS_GET_MULTIPLE:
             let olds = [...state.courseprogresss];
             let news = action.payload;

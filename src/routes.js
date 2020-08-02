@@ -7,6 +7,7 @@ import StudentList from "views/Table/StudentList";
 import Dashboard from "views/Dashboard.jsx";
 import Course from "views/Table/CourseList.jsx";
 import Courses from "views/Table/CourseLists.js";
+import CourseItem from "views/Table/CourseListsItem.js";
 import Edit from "views/Table/UserProfileEdit";
 import EditStudent from "views/Table/UserProfileStudentEdit";
 
@@ -30,14 +31,16 @@ var dashRoutes = [
     name: "Staff",
     icon: "design_app",
     component: Staff,
-    layout: "/admin"
+    layout: "/admin",
+    num: 2
   },
   {
     path: "/student",
     name: "Student",
     icon: "design_app",
     component: Student,
-    layout: "/admin"
+    layout: "/admin",
+    num: 1
   },
   {
     path: "/dashboard",
@@ -51,28 +54,40 @@ var dashRoutes = [
     name: "Courses",
     icon: "design_app",
     component: Course,
-    layout: "/admin"
+    layout: "/admin",
+    num: 2
   },
   {
     path: "/courses",
     name: "Course List",
     icon: "design_app",
     component: Courses,
-    layout: "/admin"
+    layout: "/admin",
+    num: 1
+  },
+  {
+    path: "/courseitem",
+    name: "",
+    icon: "",
+    component: CourseItem,
+    layout: "/admin",
+    num: 1
   },
   {
     path: "/useredit",
     name: "Edit",
     icon: "design_app",
     component: Edit,
-    layout: "/admin"
+    layout: "/admin",
+    num: 2
   },
   {
     path: "/usereditstudent",
     name: "Edit Student",
     icon: "design_app",
     component: EditStudent,
-    layout: "/admin"
+    layout: "/admin",
+    num: 1
   },
 
 
@@ -82,60 +97,71 @@ var dashRoutes = [
     name: "Calender",
     icon: "design_app",
     component: Calender,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/semester/:id",
+    name: "Calender",
+    icon: "design_app",
     component: Semester,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/school",
     name: "school",
     icon: "design_app",
     component: School,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/department/:id",
     icon: "design_app",
     component: Department,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/module",
     name: "Module",
     icon: "design_app",
     component: Module,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/level",
     name: "Level",
     icon: "design_app",
     component: Level,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/programme",
     name: "Programme",
     icon: "design_app",
     component: Programme,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/material",
     name: "Material",
     icon: "design_app",
     component: Material,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/fee",
     name: "Fee",
     icon: "design_app",
     component: Fee,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   
   {
@@ -143,14 +169,16 @@ var dashRoutes = [
     name: "Students",
     icon: "design_app",
     component: StudentList,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   {
     path: "/staffs",
     name: "Staffs",
     icon: "design_app",
     component: StaffList,
-    layout: "/admin"
+    layout: "/admin",
+    num: 3
   },
   
   

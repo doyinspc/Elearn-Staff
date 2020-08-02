@@ -1,10 +1,17 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { deleteUserstudentcourse, getUserstudentcourse } from './../../actions/userstudentcourse';
+import { getCoursemodules} from './../../actions/coursemodule';
+import { getCoursetutors} from './../../actions/coursetutor';
+
+// reactstrap components
+import {
+  
+  Row,
+ 
+} from "reactstrap";
+import CardDetails from "./CardDetails";
 import { SERVER_URL } from "./../../actions/common.js"
-import { Redirect, Link } from "react-router-dom";
-import CourseListsItem from "./CourseListsItem";
 const imgx = require("assets/img/bg3.jpg");
 
 class Course extends React.Component {
@@ -14,10 +21,23 @@ class Course extends React.Component {
       id:null,
       st:false,
       but:false,
-      data:{}
     }
   }
- 
+  
+  componentDidMount(){
+        
+       
+  }
+
+  loadDetails = (sid) =>{
+    let id = this.props.data.cid;
+    this.props.getCoursemodules({'courseId': id});
+    this.props.getCoursetutors({'courseId': id})
+    this.setState({st:true, id:id});
+  }
+  handleClose = () =>{
+    this.setState({st:false, id:null}); 
+  }
 
   render() {
     
@@ -26,6 +46,12 @@ class Course extends React.Component {
     let ends = new Date(parseInt(course_end)).toDateString();
     return (
       <>
+        <CardDetails 
+          mid={this.state.id}
+          st={this.state.st}
+          data={this.props.data}
+          handleClose={this.handleClose}
+        />
         <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >
         <div class="card-header" >
               <small class="text-muted">{`${starts} - ${ends}`}</small>
@@ -40,19 +66,20 @@ class Course extends React.Component {
                 style={{padding:-30}}
                 />
              <div style={{position:'absolute', top:'8px' , left:'5px'}}>
-               <h4 class="card-title text-light">{course_name}</h4> 
-              </div>
+               <h4 class="card-title text-light">{course_name}{id}</h4>
+               
+               
+               </div>
              
             <div class="card-body" >
+                
                 <h6 class="card-subtitle mb-2 text-muted">{course_code}</h6>
                 <h6 class="text-mute small">{departmentname} {levelname}</h6>
                 <p class="card-text">{course_description}</p>
+                
             </div>
             <div class="card-footer" >
-            <Link to="/admin/courseitem">
-            <button type="button" class="btn btn-warning btn-sm" >Go to Class</button>
-            </Link>
-            <a href="#" class="btn btn-secondary btn-sm" onClick={()=>{this.removeCourse(id)}}>Remove</a>
+            <a href="#" class="btn btn-primary" onClick={()=>{this.loadDetails(id)}}>Details/Register</a>
             </div>
         </div>
         
@@ -69,4 +96,4 @@ const mapStateToProps = (state, ownProps) => ({
   isAuthenticated: state.userstudentReducer.userstudent.isAuthenticated
 })
 
-export default connect(mapStateToProps, { deleteUserstudentcourse, getUserstudentcourse })(Course)
+export default connect(mapStateToProps, {getCoursemodules, getCoursetutors })(Course)

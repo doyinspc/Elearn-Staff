@@ -73,14 +73,12 @@ export const deleteCoursetutor = data => (dispatch, getState) =>{
 }
 //COURSETUTOR REGISTER
 export const registerCoursetutor = data => dispatch => {
-    const body = JSON.stringify(data)
-    params.data = body;
-    params.cat = 'insertstaff';
-    axios.get(path, {params}, axiosConfig)
+    
+    axios.post(path,data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSETUTOR_REGISTER_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {
@@ -91,17 +89,13 @@ export const registerCoursetutor = data => dispatch => {
         })
 };
  //COURSETUTOR UPDATE
-export const updateCoursetutor = (data, id) => (dispatch, getState) => {
+export const updateCoursetutor = (data) => (dispatch, getState) => {
     //body
-    const body = JSON.stringify(data);  
-    params.data = body;
-    params.id = id;
-    params.cat = 'updatestaff';
-    axios.get(path, {params}, axiosConfig)
+  axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSETUTOR_UPDATE_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {

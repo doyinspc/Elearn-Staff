@@ -7,9 +7,11 @@ class CardUserCourse extends React.Component {
     let user = this.props.user;
     let { professional, firstname, middlename, lastname, dob } = this.props.user ||  {};
     let fullname = firstname+" "+ middlename+" "+ lastname;
+    let qt = this.props.old ? null : 4;
+    let grp = this.props.old ? true : false;
     return (
       <>
-        <Col md="4">
+        <Col md={qt} style={{margin: grp ? null :'0px'}}>
         <div class="card card-nav-tabs">
           <div class="card-header card-header-danger title" style={{textTransform:'capitalize'}}>
            {`${fullname} Bio-Data`}  

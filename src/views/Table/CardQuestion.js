@@ -29,7 +29,7 @@ class Course extends React.Component {
   render() {
     
      let { question, type, answer, points, options } = this.props.data;
-     let ans = answer ? answer.split('::::::') : [];
+     let ans = answer && answer.length > 0 ? answer.split('::::::') : [];
      options = options && options !=  "" ? options.split("::::::") : [];
      let option1 = options && Array.isArray(options) && options.length > 0 ? options.map((prop, inds)=>{
             let finalAnswer = ans && ans.includes(prop) ? true : false;
@@ -45,7 +45,8 @@ class Course extends React.Component {
           {type === 4 ? 'Using a short sentence or phrase answer the question below':''}
           {type === 5 ? 'Essay':''}
       </CardHeader>
-      <CardBody>
+      <hr />
+      <CardBody >
         <Container>
           <Row sm={12}>
               <Col sm={1} >
@@ -57,23 +58,28 @@ class Course extends React.Component {
           </Row>
           <Row sm={12}>
               <Col>
-                {type === 1 || type === 2 || type === 3? option1 : null}
+                {type === 1 || type === 2 || type === 3 ? option1 : null}
                 {type === 4 || type === 5 ? <div dangerouslySetInnerHTML={{__html: answer}} /> : null }
               </Col>
           </Row>
         </Container>
 
       </CardBody>
+      <hr/>
       <CardFooter>
         <Container>
         <Row sm={12}>
-                    <Col sm='3'><small><i class="fa fa-check"></i> {points} point(s)</small></Col>
-                    <Col sm='2'>
-                    <button  class="btn btn-primary btn-icon btn-round btn-link" color='info' onClick={()=>this.setsEdit(this.props.index)}><i class="fa fa-edit"></i></button>
+                    <Col sm='6'>
+                    <button  class="btn btn-primary  btn-link" color='danger' onClick={()=>this.setsDelete(this.props.index)}><i class="fa fa-trash"></i></button> 
+                    <button  class="btn btn-primary  btn-link" color='info' onClick={()=>this.setsEdit(this.props.index)}><i class="fa fa-edit"></i></button>
+                   
+                        <button  class="btn btn-primary btn-link" color='info' >
+                          <i class="fa fa-check text-mute"></i> {points} point(s)
+                        </button>
                     </Col>
                     <Col sm='2'>
-                    <button  class="btn btn-primary btn-icon btn-round btn-link" color='danger' onClick={()=>this.setsDelete(this.props.index)}><i class="fa fa-trash"></i></button> 
-                    </Col>
+                         </Col>
+                    
           </Row>
           </Container>
       </CardFooter>
@@ -83,7 +89,6 @@ class Course extends React.Component {
               <Row></Row>
               <Row><small class="text-success"><div dangerouslySetInnerHTML={{__html:answer}} /></small></Row>
               <Row>
-                    
               </Row>
            </Col>
           </Container>

@@ -60,7 +60,11 @@ class Course extends React.Component {
       let tableSubTitle = props.subtitle;
       let tbody = this.props.courses.courses;
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
-          <CourseCard key={key} data={prop} handleDelete={(rid)=>this.loadDelete(rid)} handleClick={(rid)=>this.loadModal(rid)} />
+          <CourseCard 
+            key={key} 
+            data={prop} 
+            handleDelete={(rid)=>this.loadDelete(rid)} 
+            handleClick={(rid)=>this.loadModal(rid)} />
       )):null;
       
     return (
@@ -79,9 +83,9 @@ class Course extends React.Component {
                           </Col>
                           <Col sm="3" className="pull-right"> 
                             <Modals 
-                            mid={this.state.id} 
-                            toggle={this.state.st}
-                            handleClose={()=>this.setState({id:null, st:false})}
+                              mid={this.state.id} 
+                              toggle={this.state.st}
+                              handleClose={()=>this.setState({id:null, st:false})}
                             />
                           </Col>
                         </Row>

@@ -5,7 +5,9 @@ import CardDetailsList from './CardDetailsList';
 import CardTutorsList from './CardTutorsList';
 import { registerUserstudentcourse } from './../../actions/userstudentcourse';
 import { SERVER_URL } from "./../../actions/common.js";
+import department from 'reducers/department';
 const imgx = require("assets/img/place.png");
+const imgs = require("assets/img/bg3.jpg");
 const pics = {
   1 : 'fa-file-text',
   2 : 'fa-file-pdf',
@@ -41,7 +43,7 @@ const Modals = (props) => {
      populate(props.coursemodules.coursemodules);
     } 
     let da = props.userstudentcourses.userstudentcourses;
-    let available = da && Array.isArray(da) ? da.filter((prop, ind) =>prop.id==props.mid) : [];
+    let available = da && Array.isArray(da) ? da.filter((prop, ind) =>prop.cid==props.mid) : [];
     if(available && available.length > 0)
     {
       setBut(true);
@@ -70,7 +72,7 @@ const handleRegister = () =>{
   resetdata();
 }
   
-let {course_name, course_description, course_code, course_objective, course_start, course_end} = props.data;
+let {course_name, course_description, course_code, course_objective, course_start, course_end, pics, departmentname, levelname} = props.data;
 let starts = new Date(parseInt(course_start)).toDateString();
 let ends = new Date(parseInt(course_end)).toDateString();
 let modul = props.coursemodules.coursemodules;
@@ -91,13 +93,18 @@ let tut = tuto && Array.isArray(tuto) && tuto.length > 0 ? tuto.map((prop, index
         
             <img 
                 class="card-img-top" 
-                src={require("assets/img/bg3.jpg")} 
+                src={`${SERVER_URL + pics}`}
+                onError={(e)=>{e.target.onerror = null; e.target.src=imgs}}
                 alt="background image"
                 />
-            <div class="card-body">
-                <h4 class="card-title">{course_name}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">{course_code}</h6>
+              <div style={{position:'absolute', top:'8px' , left:'10px'}}>
+                <h4 class="card-title text-light">{course_name}</h4>
+                <h6 class="text-light">{departmentname} {levelname}</h6>
                 <small class="text-muted">{`${starts} - ${ends}`}</small>
+                
+                </div>
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">{course_code}</h6>
                 <p class="card-text">{course_description}</p>
                 <p class="card-text">{course_objective}</p>
             </div>
@@ -106,7 +113,7 @@ let tut = tuto && Array.isArray(tuto) && tuto.length > 0 ? tuto.map((prop, index
                 {mod}
                 <li class="list-group-item py-1">
                     <a class="my-3 py-3" href="#" data-toggle="collapse" data-target={`#CollapseOne${props.data.id}`}
-                      aria-expanded="true" aria-controls={`CollapseOne${props.data.id}`}>
+                      aria-expanded="true h6" aria-controls={`CollapseOne${props.data.id}`}>
                       <span class="title h6">Facilitators</span>
                     </a>
                 </li>
@@ -154,7 +161,7 @@ const mapStateToProps = (state) => ({
     coursetutors: state.coursetutorReducer,
     userstudentcourses: state.userstudentcourseReducer,
     user: state.userstudentReducer.user,
-    isAuthenticated: state.userstudentReducer.userstudent.isAuthenticated
+    isAuthenticated: state.userstudentReducer.isAuthenticated
   })
   
 export default connect(mapStateToProps,{registerUserstudentcourse})(Modals);

@@ -3,13 +3,12 @@ import React from "react";
 
 // reactstrap components
 import {
-  Label,
-  Input,
-  FormGroup,
   UncontrolledTooltip,
   Button,
   Media
 } from "reactstrap";
+import { SERVER_URL } from "actions/common";
+const imgx = require("assets/img/place.png");
 
 class Course extends React.Component {
   constructor(props){
@@ -19,60 +18,53 @@ class Course extends React.Component {
       
     }
   }
-  
-
   render() {
      
     return (
       <>
          <tr>
-            <td>
-            <FormGroup check>
-                <Label check>
-                <Input defaultChecked type="checkbox" />
-                <span className="form-check-sign" />
-                </Label>
-            </FormGroup>
+            <td width="100px">
+              <img 
+                object 
+                src={SERVER_URL + this.props.data.photo}
+                height="100px"
+                width="90px"
+                onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
+                />
             </td>
             <td className="text-left">
-            <Media>
-            <Media left top href="#">
-                <Media object data-src="holder.js/64x64" alt="" />
-            </Media>
-            <Media body>
-                <Media heading>
-                      {`${this.props.data.title}  ${this.props.data.firstname} ${this.props.data.lastname} ${this.props.data.middlename}`}<small>{this.props.data.professional}</small>
-                </Media>
-                {this.props.data.description}
-              </Media>
-            </Media>
+              <h4>{`${this.props.data.title} ${this.props.data.lastname} ${this.props.data.firstname}  ${this.props.data.middlename}`}<small>{this.props.data.professional}</small></h4>
+              <p className="h6">{this.props.data.position}</p>
+              <p className="subtitle">{this.props.data.descriptions}</p>
             </td>
             <td className="td-actions text-right">
             <Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
                 color="info"
-                id="tooltip731609871"
+                id={`tooltipe${this.props.data.cid}`}
                 type="button"
+                onClick={this.props.handleEdit}
             >
                 <i className="now-ui-icons ui-2_settings-90" />
             </Button>
             <UncontrolledTooltip
                 delay={0}
-                target="tooltip731609871"
+                target={`tooltipe${this.props.data.cid}`}
             >
                 Edit
             </UncontrolledTooltip>
             <Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
                 color="danger"
-                id="tooltip923217206"
+                id={`tooltipd${this.props.data.cid}`}
                 type="button"
+                onClick={this.props.handleDelete}
             >
                 <i className="now-ui-icons ui-1_simple-remove" />
             </Button>
             <UncontrolledTooltip
                 delay={0}
-                target="tooltip923217206"
+                target={`tooltipd${this.props.data.cid}`}
             >
                 Remove
             </UncontrolledTooltip>

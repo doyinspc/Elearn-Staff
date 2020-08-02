@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CKEditor from 'ckeditor4-react';
 import Select , { components } from 'react-select';
-import { getCoursetutor, registerCoursetutor, updateCoursetutor } from './../../actions/coursetutor';
+import { getCoursetutors,getCoursetutor, registerCoursetutor, updateCoursetutor } from './../../actions/coursetutor';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import axios from 'axios';
 import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
@@ -11,11 +11,19 @@ const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
-  const [name, setName] = useState(null);
+  const [name, setName] = useState({});
   const [position, setPosition] = useState(null);
   const [description, setDescription] = useState(null);
   const [options, setOptions] = useState({});
   const toggle = () => setModal(!modal);
+
+ const resetdata =()=>{
+    setModal(false);
+    setId(null);
+    setPosition(null);
+    setDescription(null);
+    props.handleClose();
+  }
   
   useEffect(() => {
     if(parseInt(props.mid) > 0 )
@@ -26,8 +34,8 @@ const Modals = (props) => {
     }
 
     let params = {
-      data:{},
-      cat:'all',
+      data:{'is_active':0},
+      cat:'group',
       table:'staffs',
       token:MAIN_TOKEN
     }
@@ -37,7 +45,7 @@ const Modals = (props) => {
       let opt = res.data.map(row=>{
          let obs = {};
          obs['value'] = row.id;
-         obs['label'] = row.firstname+" "+row.lastname;
+         obs['label'] = row.username+" "+row.firstname+" "+row.lastname;
          return obs; 
       })
       return opt;
@@ -46,44 +54,49 @@ const Modals = (props) => {
         setOptions(optionx);
     })
     .catch(err=>{
-        alert(JSON.stringify(err));
-    })
-      ;
+        //alert(JSON.stringify(err));
+    });
     
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+        let fd = new FormData();
+        fd.append('staffId', name.value);
+        fd.append('position', position);
+        fd.append('description', description);
+        fd.append('table', 'course_tutors');
         if(id && id > 0)
         {
-          let data = {
-            staffId:name, 
-            position:position,
-            description:description
-          };
-          props.updateCoursetutor(data, id);
+          fd.append('id', id);
+          fd.append('cat', 'update');
+          props.updateCoursetutor(fd);
 
         }else{
-          let data = {
-            staffId:name, 
-            position:position, 
-            courseId:props.courseId,
-            description:description
-          };;
-          props.registerCoursetutor(data);
+          fd.append('cat', 'insert');
+          fd.append('courseId', props.courseId);
+          props.registerCoursetutor(fd);
         }
+
+        resetdata();
         
   }
 
   const populate = async(data) =>{
-        setName(data.name);
+        let nm = {};
+        nm['value'] = data.staffId;
+        nm['label'] = data.fullname;
+        setName(nm);
         setPosition(data.position);
-        setDescription(data.description);
+        setDescription(data.descriptions);
     }
 
     const handleChange = (selected) => {
-      setName( selected.value );
+      setName( selected );
+    }
+    const handleLoad = () => {
+      props.getCoursetutors({'courseId':props.courseId});
     }
 
     const customStyles = {
@@ -106,11 +119,12 @@ const Modals = (props) => {
 
   return (
     <div>
-      
-      <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i> Add Facilitator</Button>
-      
+       <div class="btn-group">
+          <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
+          <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
+        </div>
       <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={toggle}>{editName} Facilitator</ModalHeader>
+        <ModalHeader toggle={resetdata}>{editName} Facilitator</ModalHeader>
         <ModalBody>
         <Form>
             <FormGroup row>
@@ -158,7 +172,7 @@ const Modals = (props) => {
         </ModalBody>
         <ModalFooter>
           <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>
@@ -168,4 +182,4 @@ const mapStateToProps = (state, ownProps) => ({
     coursetutors: state.coursetutorReducer
   })
   
-export default connect(mapStateToProps, { getCoursetutor, registerCoursetutor, updateCoursetutor })(Modals)
+export default connect(mapStateToProps, { getCoursetutors, getCoursetutor, registerCoursetutor, updateCoursetutor })(Modals)

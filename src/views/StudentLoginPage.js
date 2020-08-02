@@ -93,6 +93,7 @@ class LoginPage extends React.Component{
                       <img
                         alt="..."
                         src={require("assets/img/logo.png")}
+                        height="120px"
                       ></img>
                     </div>
                   

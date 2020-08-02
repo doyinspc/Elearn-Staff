@@ -27,8 +27,8 @@ let params = {
 //GET ALL COURSESTUDENT 
 export const getCoursestudents = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'students';
+    params.data = JSON.stringify(data);
+    params.cat = 'select';
     dispatch({type : COURSESTUDENT_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -89,13 +89,10 @@ export const registerCoursestudent = data => dispatch => {
         })
 };
  //COURSESTUDENT UPDATE
-export const updateCoursestudent = (data, id) => (dispatch, getState) => {
+export const updateCoursestudent = (data) => (dispatch, getState) => {
     //body
-    const body = JSON.stringify(data);  
-    params.data = body;
-    params.id = id;
-    params.cat = 'updatestudent';
-    axios.get(path, {params}, axiosConfig)
+  
+    axios.post(path, data, axiosConfig)
         .then(res => {
             dispatch({
                 type: COURSESTUDENT_UPDATE_SUCCESS,

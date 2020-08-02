@@ -3,6 +3,7 @@ import {
     COURSEPROGRESS_GET,
     COURSEPROGRESS_GET_ONE,
     COURSEPROGRESS_GET_MULTIPLE,
+    COURSEPROGRESS_GET_MATERIAL,
     COURSEPROGRESS_REGISTER_SUCCESS,
     COURSEPROGRESS_REGISTER_FAIL,
     COURSEPROGRESS_LOADING,
@@ -10,6 +11,7 @@ import {
     COURSEPROGRESS_UPDATE_SUCCESS,
     COURSEPROGRESS_UPDATE_FAIL,
     COURSEPROGRESS_DELETE_SUCCESS,
+    COURSEPROGRESS_LOADING_MATERIAL_FAIL,
     COURSEPROGRESS_DELETE_FAIL,
     COURSEPROGRESS_EDIT,
 } from "./../types/courseprogress";
@@ -32,8 +34,8 @@ let params = {
 //GET ALL COURSEPROGRESS 
 export const getCourseprogresss = data => (dispatch, getState) => {
     //SET PAGE LOADING
-    params.data = data;
-    params.cat = 'group';
+    params.data = JSON.stringify(data);
+    params.cat = 'studentmodule';
     dispatch({type : COURSEPROGRESS_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -45,6 +47,26 @@ export const getCourseprogresss = data => (dispatch, getState) => {
             .catch(err => {
                 dispatch({
                     type : COURSEPROGRESS_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+export const getMaterials= data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.data = JSON.stringify(data);
+    console.log(params.data);
+    params.cat = 'studentmaterial';
+    dispatch({type : COURSEPROGRESS_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: COURSEPROGRESS_GET_MATERIAL,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : COURSEPROGRESS_LOADING_MATERIAL_FAIL,
                     payload:err
                 })
             })

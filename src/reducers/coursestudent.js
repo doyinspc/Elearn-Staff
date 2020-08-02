@@ -73,7 +73,7 @@ export default function(state = initialState, action){
             };
         case COURSESTUDENT_GET_ONE:
             let all = [...state.coursestudents];
-            let ses = all.filter(row=>parseInt(row.id) === parseInt(action.payload))[0];
+            let ses = all.filter(row=>parseInt(row.cid) === parseInt(action.payload))[0];
             return {
                 ...state,
                 coursestudent : ses,
@@ -103,14 +103,15 @@ export default function(state = initialState, action){
                 coursestudents: rem
             }
         case COURSESTUDENT_UPDATE_SUCCESS:
-            const findInd = state.coursestudents.findIndex(cat => parseInt(cat.id) === parseInt(action.payload.id));
+            const findInd = state.coursestudents.findIndex(cat => parseInt(cat.cid) === parseInt(action.payload.cid));
             let newState = [...state.coursestudents];
             newState[findInd] = action.payload;
             localStorage.setItem('coursestudent', JSON.stringify(newState));
             return {
                 ...state,
                 ...action.payload,
-                coursestudents : newState
+                coursestudents : newState,
+                coursestudent:action.payload
             }; 
         case COURSESTUDENT_LOADING_ERROR:
         case COURSESTUDENT_ACTIVATE_FAIL:

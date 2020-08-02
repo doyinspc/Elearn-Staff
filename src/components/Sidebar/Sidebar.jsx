@@ -31,7 +31,6 @@ class Sidebar extends React.Component {
     }
   }
   render() {
-    
     let {username, photo} = this.props.user || {};
     return (
       <div className="sidebar" data-color={this.props.backgroundColor}>
@@ -80,7 +79,7 @@ class Sidebar extends React.Component {
           
         <div className="sidebar-wrapper" id="sidebar-wrapper" ref="sidebar">
         <Nav>
-            {this.props.routes.map((prop, key) => { if(prop.name){
+            {this.props.routes.map((prop, key) => { if(prop.name && prop.num === this.props.group ){
               if (prop.redirect) return null;
               return (
                 <li

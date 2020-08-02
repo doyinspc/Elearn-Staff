@@ -19,7 +19,8 @@ var ps;
 class Dashboard extends React.Component {
   state = {
     backgroundColor: "blue",
-    user:{}
+    user:{},
+    group:null
   };
   mainPanel = React.createRef();
   componentDidMount() {
@@ -29,18 +30,24 @@ class Dashboard extends React.Component {
     }
 
     let user = {};
-    let backgroundColor ='green'
-    if(this.props.userstaffs.isAuthenticated)
+    let backgroundColor ='green';
+    let group = null;
+    if(this.props.userstaffs.isAuthenticated && !this.props.userstudents.isAuthenticated)
     {
         user = this.props.userstaffs.user;
-        backgroundColor = 'orange'
+        backgroundColor = 'orange';
+        group = 2;
     }
-    else if(this.props.userstudents.isAuthenticated)
+    else if(this.props.userstudents.isAuthenticated && !this.props.userstaffs.isAuthenticated)
     {
         user = this.props.userstudents.user;
-        backgroundColor = 'blue'
+        backgroundColor = 'blue';
+        group = 1;
+    }else
+    {
+      //logout
     }
-    this.setState({user, backgroundColor})
+    this.setState({user, backgroundColor, group});
   }
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -66,11 +73,13 @@ class Dashboard extends React.Component {
           user={this.state.user}
           routes={routes}
           backgroundColor={this.state.backgroundColor}
+          group={this.state.group}
         />
         <div className="main-panel" ref={this.mainPanel}>
           <DemoNavbar {...this.props} user={this.state.user} />
           <Switch>
             {routes.map((prop, key) => {
+            
               return (
                 <Route
                   path={prop.layout + prop.path}
@@ -79,7 +88,6 @@ class Dashboard extends React.Component {
                 />
               );
             })}
-             
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
           <Footer fluid />

@@ -166,6 +166,10 @@ class Header extends React.Component {
             <span className="navbar-toggler-bar navbar-kebab" />
             <span className="navbar-toggler-bar navbar-kebab" />
           </NavbarToggler>
+          <div>
+      <h5>{process.env.REACT_APP_WEBSITE_NAME}</h5>
+      <h6>{this.props.user.lastname+" "+this.props.user.firstname}</h6>
+      </div>
           <Collapse
             isOpen={this.state.isOpen}
             navbar

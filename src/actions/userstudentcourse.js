@@ -103,3 +103,22 @@ export const registerUserstudentcourse = data => dispatch => {
             })
         })
 };
+
+//USERSTUDENTCOURSE DELETE
+export const deleteUserstudentcourse = data => (dispatch, getState) =>{
+    dispatch({type : USERSTUDENTCOURSE_LOADING});
+    axios.get(path, JSON.stringify({data}), {params})
+        .then(res => {
+            dispatch({
+                type: USERSTUDENTCOURSE_DELETE_SUCCESS,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : USERSTUDENTCOURSE_DELETE_FAIL,
+                payload : err
+            })
+        })
+        
+}

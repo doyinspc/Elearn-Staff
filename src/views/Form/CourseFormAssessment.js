@@ -96,7 +96,7 @@ const Modals = (props) => {
         {
           arr['answer'] = '';
         }
-        console.log(arr);
+        
         let all = qbank && Array.isArray(qbank) ? [...qbank] : [];
         all.push(arr);
         setQbank(all);
@@ -280,7 +280,7 @@ const Modals = (props) => {
       
       <Modal isOpen={modal} toggle={toggle} contentClassName={{width:'800px', height:400}} >
         <ModalHeader toggle={toggle}>Assessments</ModalHeader>
-        <ModalBody style={{backgroundColor:'none'}}>
+        <ModalBody style={{backgroundColor:'#fffccc'}}>
         <Container >
           <Card>
             <CardBody style={{backgroundColor:bgcolor}}>

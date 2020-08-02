@@ -15,9 +15,11 @@ class User extends React.Component {
 
     let { professional, firstname, middlename, lastname, title, photo, username, description } = this.props.user ||  {};
     let fullname = firstname+" "+ middlename+" "+ lastname;
+    let qt = this.props.old ? null : 4;
+    let grp = this.props.old ? true : false;
     return (
       <>
-        <Col md="4">
+        <Col md={qt} style={{margin: grp ? null :'0px'}}>
             <Card className="card-user">
             <div className="image">
                 <img 
@@ -43,14 +45,14 @@ class User extends React.Component {
             </CardBody>
             <hr />
             <div className="button-container">
-                <a
+                { grp ? '' :<a
                 className="btn-neutral btn-icon btn-round"
                 color="default"
                 href="/usereditstudent"
                 size="lg"
                 >
                 <i className="fa fa-edit" />
-                </a>
+                </a>}
                 <a
                 className="btn-neutral btn-icon btn-round"
                 color="default"

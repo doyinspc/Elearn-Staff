@@ -58,7 +58,7 @@ export default function(state = initialState, action){
             };
         case COURSE_GET_ONE:
             let all = [...state.courses];
-            let ses = all.filter(row=>row.id == action.payload)[0];
+            let ses = all.filter(row=>row.cid == action.payload)[0];
             return {
                 ...state,
                 course : ses,
@@ -80,7 +80,7 @@ export default function(state = initialState, action){
                 courses: ac
             }
         case COURSE_DELETE_SUCCESS:
-            let rem = state.courses.filter(cat => cat.id != action.payload.id);
+            let rem = state.courses.filter(cat => cat.cid != action.payload.id);
             localStorage.setItem('course', JSON.stringify(rem));
             return{
                 ...state,

@@ -3,7 +3,9 @@ import React from "react";
 import { connect } from 'react-redux';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
 import { getCoursetutors } from './../../actions/coursetutor';
+import { getUserstudentcourses } from './../../actions/userstudentcourse';
 import CourseCards from "./CourseCards";
+import CourseCardsStudent from "./CourseCardsStudent";
 // reactstrap components
 import {
   Card,
@@ -17,13 +19,15 @@ import {
 // core components
 import PanelHeader from "../../components/PanelHeader/PanelHeader.jsx";
 
+
 class Course extends React.Component {
   constructor(props){
     super(props);
     this.state ={
       id:null,
       st:false,
-      pid:1
+      page:null,
+      subtitle:''
     }
   }
   
@@ -31,7 +35,14 @@ class Course extends React.Component {
     this.props.getCourses({'courses.is_active':0});
   }
 
-  
+  loadAllCourses = () =>{
+    this.props.getCourses({'courses.is_active':0});
+    this.setState({page:1, subtitle:'All Courses'});
+  }
+  loadMyCourses = () =>{
+    this.props.getUserstudentcourses({'studentId':this.props.user.id});
+    this.setState({page:2, subtitle:'My Courses'});
+  } 
 
   loadRegister = id =>{
     this.props.getCourse(id);
@@ -54,18 +65,26 @@ class Course extends React.Component {
   }
 
   render() {
-      let props = {};
-      let tableTitle = "Course";
-      let tableSubTitle = props.subtitle;
-      let tbody = this.props.courses.courses;
-      let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
-          <CourseCards key={key} data={prop} id={prop.id} handleRegister={(rid)=>this.loadRegister(rid)}  />
-      )):null;
       
+      let tableTitle = "Course";
+      let tableSubTitle = this.state.subtitle;
+      let tbody = this.props.courses.courses;
+      let tbody1 = this.props.userstudentcourses.userstudentcourses;
+      
+      let tablerows = [];
+      if(this.state.page === 1){
+       tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
+          <CourseCardsStudent key={key} data={prop} id={prop.cid} handleRegister={(rid)=>this.loadRegister(rid)}  />
+      )):null;
+      }
+      else if(this.state.page === 2){
+        tablerows = tbody1 && Array.isArray(tbody1) && tbody1.length > 0 ? tbody1.map((prop, key) => (
+            <CourseCards key={key} data={prop} id={prop.id} handleRegister={(rid)=>this.loadRegister(rid)}  />
+        )):null;
+        }
     return (
       <>
         <PanelHeader size="sm" />
-        
         <div className="content">
           <Row>
             <Col xs={12}>
@@ -74,15 +93,18 @@ class Course extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col sm="8"><i className="fa fa-file-text"></i>{" "+tableTitle}
+                          <Col xs="6">
+                          <i className="fa fa-file-text "></i>{" "+tableTitle}
+                          <p className="category"> {tableSubTitle}</p>
                           </Col>
-                          <Col sm="3" className="pull-right"> 
-                            
+                          <Col xs="6" className="pull-right"> 
+                            <button className="btn btn-sm btn-default" onClick={this.loadAllCourses} >Show All Classes</button>
+                            <button className="btn btn-sm btn-info" onClick={this.loadMyCourses} >Show My Classes</button>
                           </Col>
                         </Row>
                       </Container>
                     </CardTitle>
-                    <p className="category"> {tableSubTitle}</p>
+                    
                 </CardHeader>
               </Card>
             </Col>
@@ -100,7 +122,9 @@ class Course extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({ 
-  courses: state.courseReducer
+  courses: state.courseReducer,
+  userstudentcourses: state.userstudentcourseReducer,
+  user: state.userstudentReducer.user,
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursetutors })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursetutors, getUserstudentcourses })(Course)
