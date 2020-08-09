@@ -16,11 +16,8 @@ import Semester from "views/Table/SemesterList.jsx";
 
 import School from "views/Table/SchoolList.jsx";
 import Department from "views/Table/DepartmentList.jsx";
-import Material from "views/Table/MaterialList.jsx";
 import Module from "views/Table/ModuleList.jsx";
 import Level from "views/Table/LevelList.jsx";
-import Programme from "views/Table/ProgrammeList.jsx";
-import Fee from "views/Table/FeeList.jsx";
 
 import Students from "views/Table/StudentList.jsx";
 import Staffs from "views/Table/StaffList.jsx";
@@ -123,30 +120,6 @@ var dashRoutes = [
     component: Level,
     layout: "/admin",
     num: 3
-  },
-  {
-    path: "/programme",
-    name: "Programme",
-    icon: "design_app",
-    component: Programme,
-    layout: "/admin",
-    num: 4
-  },
-  {
-    path: "/material",
-    name: "Material",
-    icon: "design_app",
-    component: Material,
-    layout: "/admin",
-    num: 4
-  },
-  {
-    path: "/fee",
-    name: "Fee",
-    icon: "design_app",
-    component: Fee,
-    layout: "/admin",
-    num: 4
   },
   
   {

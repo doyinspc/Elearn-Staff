@@ -5,27 +5,16 @@ import CardDetailsList from './CardDetailsList';
 import CardTutorsList from './CardTutorsList';
 import { registerUserstudentcourse } from './../../actions/userstudentcourse';
 import { SERVER_URL } from "./../../actions/common.js";
-import department from 'reducers/department';
+
 const imgx = require("assets/img/place.png");
 const imgs = require("assets/img/bg3.jpg");
-const pics = {
-  1 : 'fa-file-text',
-  2 : 'fa-file-pdf',
-  3 : 'fa-file-image',
-  4 : 'fa-file-video',
-  5 : 'fa-file-audio',
-  6 : 'fa-youtube',
-  7 : 'fa-link',
-  8 : 'fa-comment',
-  9 : 'fa-question',
-  10 : 'fa-file-text'
-}
+
 const Modals = (props) => {
   
   const [modal, setModal] = useState(props.st);
   const [id, setId] = useState(null);
   const [but, setBut] = useState(false);
-  const [modules, setModules] = useState([]);
+ // const [modules, setModules] = useState([]);
    const toggle = () => {
        setModal(!modal);
     }
@@ -57,7 +46,7 @@ const Modals = (props) => {
 },[props.mid]);
 
 const populate =(data)=>{
-  setModules(data);
+  //setModules(data);
 }
 
 const handleRegister = () =>{
@@ -95,7 +84,7 @@ let tut = tuto && Array.isArray(tuto) && tuto.length > 0 ? tuto.map((prop, index
                 class="card-img-top" 
                 src={`${SERVER_URL + pics}`}
                 onError={(e)=>{e.target.onerror = null; e.target.src=imgs}}
-                alt="background image"
+                alt="background"
                 />
               <div style={{position:'absolute', top:'8px' , left:'10px'}}>
                 <h4 class="card-title text-light">{course_name}</h4>

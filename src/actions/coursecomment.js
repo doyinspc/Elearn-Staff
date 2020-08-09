@@ -1,21 +1,21 @@
 import axios from 'axios';
 import {
-    COURSEMODULE_GET,
-    COURSEMODULE_GET_ONE,
-    COURSEMODULE_GET_MULTIPLE,
-    COURSEMODULE_REGISTER_SUCCESS,
-    COURSEMODULE_REGISTER_FAIL,
-    COURSEMODULE_LOADING,
-    COURSEMODULE_LOADING_ERROR,
-    COURSEMODULE_UPDATE_SUCCESS,
-    COURSEMODULE_UPDATE_FAIL,
-    COURSEMODULE_DELETE_SUCCESS,
-    COURSEMODULE_DELETE_FAIL,
-    COURSEMODULE_EDIT,
-} from "./../types/coursemodule";
+    COURSECOMMENT_GET,
+    COURSECOMMENT_GET_ONE,
+    COURSECOMMENT_GET_MULTIPLE,
+    COURSECOMMENT_REGISTER_SUCCESS,
+    COURSECOMMENT_REGISTER_FAIL,
+    COURSECOMMENT_LOADING,
+    COURSECOMMENT_LOADING_ERROR,
+    COURSECOMMENT_UPDATE_SUCCESS,
+    COURSECOMMENT_UPDATE_FAIL,
+    COURSECOMMENT_DELETE_SUCCESS,
+    COURSECOMMENT_DELETE_FAIL,
+    COURSECOMMENT_EDIT,
+} from "./../types/coursecomment";
 import { MAIN_TOKEN, API_PATHS, axiosConfig, axiosConfig1 } from './common';
 
-let TABLE_NAME = 'course_modules';
+let TABLE_NAME = 'course_comments';
 const path = API_PATHS;
 
 let params = {
@@ -24,81 +24,81 @@ let params = {
     table:TABLE_NAME,
     token:MAIN_TOKEN
   }
-//GET ALL COURSEMODULE 
-export const getCoursemodules = data => (dispatch, getState) => {
+//GET ALL COURSECOMMENT 
+export const getCoursecomments = data => (dispatch, getState) => {
     //SET PAGE LOADING
     params.data = JSON.stringify(data);
     params.cat = 'select';
-    dispatch({type : COURSEMODULE_LOADING});
+    dispatch({type : COURSECOMMENT_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
-                    type: COURSEMODULE_GET_MULTIPLE,
+                    type: COURSECOMMENT_GET_MULTIPLE,
                     payload: res.data
                 })
             })
             .catch(err => {
                 dispatch({
-                    type : COURSEMODULE_LOADING_ERROR,
+                    type : COURSECOMMENT_LOADING_ERROR,
                     payload:err
                 })
             })
 };
-//GET SINGLE COURSEMODULE 
-export const getCoursemodule = id => (dispatch, getState) => {
+//GET SINGLE COURSECOMMENT 
+export const getCoursecomment = id => (dispatch, getState) => {
     //SET PAGE LOADING
     dispatch(
         {
-        type : COURSEMODULE_GET_ONE,
+        type : COURSECOMMENT_GET_ONE,
         payload: id
     });  
 };
-//COURSEMODULE DELETE
-export const deleteCoursemodule = data => (dispatch, getState) =>{
-    dispatch({type : COURSEMODULE_LOADING});
+//COURSECOMMENT DELETE
+export const deleteCoursecomment = data => (dispatch, getState) =>{
+    dispatch({type : COURSECOMMENT_LOADING});
     axios.get(path, JSON.stringify({data}), {params})
         .then(res => {
             dispatch({
-                type: COURSEMODULE_DELETE_SUCCESS,
+                type: COURSECOMMENT_DELETE_SUCCESS,
                 payload: res.data
             })
         })
         .catch(err => {
             dispatch({
-                type : COURSEMODULE_DELETE_FAIL,
+                type : COURSECOMMENT_DELETE_FAIL,
                 payload : err
             })
         })
         
 }
-//COURSEMODULE REGISTER
-export const registerCoursemodule = data => dispatch => {
+//COURSECOMMENT REGISTER
+export const registerCoursecomment = data => dispatch => {
     axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
-                type: COURSEMODULE_REGISTER_SUCCESS,
+                type: COURSECOMMENT_REGISTER_SUCCESS,
                 payload: res.data.data
             })
         })
         .catch(err => {
             dispatch({
-                type : COURSEMODULE_REGISTER_FAIL,
+                type : COURSECOMMENT_REGISTER_FAIL,
                 payload: err
             })
         })
 };
- //COURSEMODULE UPDATE
-export const updateCoursemodule = (data) => (dispatch, getState) => {
+ //COURSECOMMENT UPDATE
+export const updateCoursecomment = (data) => (dispatch, getState) => {
     axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
-                type: COURSEMODULE_UPDATE_SUCCESS,
+                type: COURSECOMMENT_UPDATE_SUCCESS,
                 payload: res.data.data
             })
         })
         .catch(err => {
             dispatch({
-                type : COURSEMODULE_UPDATE_FAIL,
+                type : COURSECOMMENT_UPDATE_FAIL,
                 payload: err
             })
         })

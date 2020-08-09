@@ -29,7 +29,6 @@ const Modals = (props) => {
   const [description, setDescription] = useState('');
   const [ext, setExt] = useState('');
   const [path, setPath] = useState('');
-  const [links, setLinks] = useState('');
  
   const toggle = () => setModal(!modal);
   
@@ -48,12 +47,11 @@ const Modals = (props) => {
         setTitle(data.title);
         setType(parseInt(data.types));
         setDescription(data.description)
-        let exts = data.links ? data.links.split('.'): [];
+        let exts = data.links.split('.');
         let pth = SERVER_URL + data.links;
         let exten = exts.splice(-1)[0];
         setExt(exten);
         setPath(pth);
-        setLinks(data.links);
     }
 
 
@@ -66,32 +64,24 @@ const Modals = (props) => {
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle} >
-  <ModalHeader toggle={toggle}><i className={`fa ${pics[type]}`}></i>Learning Material/Assessment</ModalHeader>
+  <ModalHeader toggle={toggle}><i className={`fa ${pics[type]}`}></i>{ext} Learning Material/Assessment</ModalHeader>
         <ModalBody>
           <Container>
           <Row sm={12} >
           <p className="h6">{title}</p>
           </Row>
           <Row sm={12} width={300}>
-        
-          {description && description.length > 0 && description != 'null' ? <p >
-                    <div  dangerouslySetInnerHTML={{__html: description}} />
-                  </p>:null}
+          {type === 1 ? <div  dangerouslySetInnerHTML={{__html: description}} /> : ''}
           {type === 2 ? 
-           <iframe src={`https://docs.google.com/gview?url=${path}&embedded=true`} style={{width:'400px', height:'170px'}} frameborder="0"></iframe>
+           ''
             : ''}
           {type === 3 ? 
-            <img 
-            src={path}
-            style={{minHeight:'200px', minWidth:'300px'}}
-         />
+            ''
             : ''}
           {type === 4 ? 
             <VideoPlayer
               url={path}
               onError={onError}
-              light
-              controls
             />
             : ''}
           {type === 5 ? 
@@ -104,9 +94,7 @@ const Modals = (props) => {
             : ''}
           {type === 6 ? 
             <VideoPlayer
-              url={links}
-              light
-              controls
+              url={path}
               onError={onError}
             />
             : ''}
@@ -116,10 +104,12 @@ const Modals = (props) => {
             : ''}
           </Row>
           <Row sm={12}>
-            { type === 2 || type === 3 ||type === 4 ||type === 5 ?
-              <a href={path} target='_blank' className='btn btn-info btn-block'>Download File</a>
-            : ""}
-              </Row>
+            <Downloader
+              label="Download File"
+              filename={path}
+              exportFile={()=>{Promise.resolve(title)}}
+              />
+          </Row>
           </Container>
         </ModalBody>
         <ModalFooter>

@@ -31,9 +31,10 @@ class Course extends React.Component {
      let { question, type, answer, points, options } = this.props.data;
      let ans = answer && answer.length > 0 ? answer.split('::::::') : [];
      options = options && options !=  "" ? options.split("::::::") : [];
-     let option1 = options && Array.isArray(options) && options.length > 0 ? options.map((prop, inds)=>{
-            let finalAnswer = ans && ans.includes(prop) ? true : false;
-            return <CardMultiForm key={`ABCD_${inds}`} type={type} answer={finalAnswer} data={prop} index={inds} />
+     let option1 = options && Array.isArray(Object.keys(options)) && Object.keys(options).length > 0 ? Object.keys(options).map((prop)=>{
+            let oop = options[prop].split("::::")
+            let finalAnswer = ans && ans.includes(oop[0]) ? true : false;
+            return <CardMultiForm key={`ABCD_${oop[0]}`} type={type} answer={finalAnswer} data={oop[1]} index={oop[0]} />
         }): null; 
     return (
       <>
@@ -49,10 +50,10 @@ class Course extends React.Component {
       <CardBody >
         <Container>
           <Row sm={12}>
-              <Col sm={1} >
-                  {this.props.index + 1}
+              <Col xs={2} >
+                  {this.props.numbering}
               </Col>
-              <Col sm={10}>
+              <Col xs={10}>
                   <div dangerouslySetInnerHTML={{__html: question}} />
               </Col>
           </Row>

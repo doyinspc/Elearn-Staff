@@ -31,6 +31,7 @@ import {
   Col,
   Button
 } from "reactstrap";
+import { SERVER_URL } from "actions/common";
 
 class Course extends React.Component {
   constructor(props){
@@ -100,7 +101,7 @@ handleStudent=id=>{
 
   render() {
     let coursetutors = this.props.coursetutors.coursetutors;
-    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname} = this.props.data || "";
+    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname, pics} = this.props.data || "";
     let {courseId, studentId} = this.state;
     let loadTutor = null;
     if(coursetutors && Array.isArray(coursetutors) && coursetutors.length > 0 && id){
@@ -178,10 +179,10 @@ handleStudent=id=>{
         />: null}
         <div className="card card-nav-tabs ">
           <div className="card-header card-header-danger">
-               <h5 className="card-category">{`${departmentname  +" " +levelname }`}</h5>
+               <h5 className="card-category">{`${course_code  +" " +course_name }`}</h5>
                   <div className="row">
                     <div className="col-sm-9">
-                    <div className="card-title h4" >{`${course_code  +" " +course_name }`}
+                    <div className="card-title h4" >{`${departmentname  +" " +levelname }`}
                     </div>
                     </div>
                     <div className="col-sm-3">
@@ -199,11 +200,11 @@ handleStudent=id=>{
                               <a className="nav-link active"  href={`#stage0${id}`} data-toggle="tab"><i className="fa fa-home"></i> <span className="d-none d-md-inline">Home</span></a>
                           </li>
                           <li className="nav-item">
-                              <a className="nav-link"  href={`#stage1${id}`} data-toggle="tab"><i className="fa fa-dashboard"></i> <span className="d-none d-md-inline">Dashboard</span></a>
+                              <a className="nav-link"  href={`#stage1${id}`} data-toggle="tab"><i className="fa fa-dashboard"></i> <span className="d-none d-md-inline">About</span></a>
                           </li>
                           
                           <li className="nav-item">
-                              <a className="nav-link"  href={`#stage3${id}`} data-toggle="tab"><i className="fa fa-book"></i> <span className="d-none d-md-inline">Modules</span></a>
+                              <a className="nav-link"  href={`#stage3${id}`} data-toggle="tab"><i className="fa fa-book"></i> <span className="d-none d-md-inline">Content</span></a>
                           </li>
                           <li className="nav-item">
                               <a className="nav-link"  href={`#stage2${id}`} data-toggle="tab"><i className="fa fa-user"></i> <span className="d-none d-md-inline">Facilitators</span></a>
@@ -218,7 +219,7 @@ handleStudent=id=>{
           <div className="card-body ">
               <div className="tab-content ">
               <div className="tab-pane active" id={`stage0${id}`}>
-                  <div className="card-body">
+                  <div className="card-body" style={{backgroundImage:`${SERVER_URL + pics}`, backgroundRepeat:'no-repeat', backgroundAttachment:'fixed', backgroundSize:'cover'}}>
                     <p className="card-text">
                    
                     </p>

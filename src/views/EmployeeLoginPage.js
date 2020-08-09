@@ -153,14 +153,13 @@ class LoginPage extends React.Component{
                     >
                       Login
                     </Button>
-                    <Button
-                      className="btn-round mt-2"
-                      color="default"
+                    <a
+                      className="btn btn-sm btn-secondary btn-round mt-1"
                       type="button"
-                      size="sm"
+                      href="/"
                     >
                       Student Login
-                    </Button>
+                    </a>
                    
                   </CardFooter>
                 </Form>

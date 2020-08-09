@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import CKEditor from 'ckeditor4-react';
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,  FormText } from 'reactstrap';
+import { SERVER_URL } from 'actions/common';
 
 
 const pics = {
@@ -22,6 +23,8 @@ const Modals = (props) => {
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [title, setTitle] = useState(null);
+  
+  const [description, setDescription] = useState(null);
   const [type, setType] = useState(0);
   const [files, setFiles] = useState(null);
  
@@ -41,6 +44,12 @@ const Modals = (props) => {
     } 
 },[props.mid]);
 
+const resetdata = () =>{
+  setModal(false);
+  setType('');
+  setDescription('');
+  props.handleClose();
+}
   
   const handleSubmit = (e) =>{
         e.preventDefault();
@@ -48,6 +57,9 @@ const Modals = (props) => {
         if(type === 1 )
         {
           datax.append('description',  files);
+        }else
+        {
+          datax.append('description',  description);
         }
         if(type === 6 || type === 7)
         {
@@ -72,12 +84,14 @@ const Modals = (props) => {
           datax.append('moduleId', props.moduleId);
           props.registerCoursematerial(datax);
         }
-        
+        resetdata();
   }
 
   const populate = async(data) =>{
         setTitle(data.title);
         setType(parseInt(data.types));
+        setDescription(data.description);
+        setFiles(data.links);
     }
 
   const handleInputChange = (evt) => {
@@ -98,7 +112,7 @@ const Modals = (props) => {
     <div>
       <div class="btn-group dropup">
         <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
-        <button class="btn btn-secondary dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle btn-primary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
          <i class="fa fa-plus"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
@@ -115,7 +129,7 @@ const Modals = (props) => {
       </div>
      
       <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={toggle}>{editName} Learning Material/Assessment</ModalHeader>
+        <ModalHeader toggle={resetdata}>{editName} Learning Material/Task</ModalHeader>
         <ModalBody>
         <Form>
             <FormGroup row>
@@ -133,26 +147,46 @@ const Modals = (props) => {
             </FormGroup>
             {type === 1 ? 
            <FormGroup row>
-           <Label for="link" sm={12}>Type in yur data (format appropriately) </Label>
+           <Label for="link" sm={12}>Type in your data (format appropriately) </Label>
            <Col sm={12}>
              <CKEditor
-             data ={files}
+             data ={description}
              onChange={e=>setFiles(e.editor.getData())}
              />
 
            </Col>
        </FormGroup>
-              : ''}
+              : 
+              <FormGroup row>
+                <Label for="name" sm={3}>Description </Label>
+                <Col sm={9}>
+                <Input 
+                    type="textarea" 
+                    name="description" 
+                    id="description" 
+                    row={5}
+                    col={8} 
+                    required
+                    defaultValue={description}
+                    onChange={e=>setDescription(e.target.value)} 
+                     /><FormText class='muted'>Briefly title or describe the attachment/give instructions</FormText>
+                </Col>
+            </FormGroup>
+              
+              }
 
               {type === 2 || type === 3 ||type === 4 || type === 5  ? 
             <FormGroup row>
             <Label for="files" sm={12}>Upload </Label>
             <Col sm={12}>
-            <div className="fileinput fileinput-new text-center" data-provides="fileinput">
-                    <div className="fileinput-new thumbnail img-circle">
-                      <i className={`fa ${props.coursematerials.isEditing ? 'fa-spinner' : pics[type]}`} style={{fontSize:200}} aria-hidden="true"></i>
-                    </div>
-                    <div className="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
+            <div className="fileinput fileinput-new text-center m-0" data-provides="fileinput">
+                    <div className="fileinput-new thumbnail">
+                      <i className={`fa ${props.coursematerials.isEditing ? 'fa-spinner' : pics[type]}`} style={{fontSize:100}} aria-hidden="true"></i>
+                      { files && files.length > 0 ?
+                      <iframe src={`https://docs.google.com/gview?url=${ SERVER_URL + files }&embedded=true`} style={{width:'400px', height:'300px'}} frameborder="0"></iframe>
+                      :''}
+                      </div>
+                    <div className="fileinput-preview fileinput-exists thumbnail img-raised"></div>
                     <div >
                     <span className="btn btn-raised btn-round btn-default btn-file">
                     <span class="fileinput-new">Add</span>
@@ -162,21 +196,17 @@ const Modals = (props) => {
                     type="file" 
                     name="files" 
                     id="files" 
-                    defaultValue={files}
                     onChange={handleInputChange}
                      />
                     </span>
-                       
-                       
                     </div>
                 </div>
-            
             </Col>
         </FormGroup>
               : ''}
           {type === 6  ? 
             <FormGroup row>
-            <Label for="files" sm={3}>Link/Code </Label>
+            <Label for="files" sm={3}>Youtube Video link</Label>
             <Col sm={9}>
             <Input 
                 type="text" 
@@ -186,7 +216,7 @@ const Modals = (props) => {
                 defaultValue={files}
                 onChange={e=>setFiles(e.target.value)} 
                 placeholder="" />
-                
+
             </Col>
             
         </FormGroup>
@@ -210,13 +240,29 @@ const Modals = (props) => {
         </FormGroup>
               : ''}
 
-
+{type === 8  ? 
+            <FormGroup row>
+            <Label for="files" sm={3}>Chat Link</Label>
+            <Col sm={9}>
+            <Input 
+                type="text" 
+                name="files" 
+                id="files"  
+                required
+                defaultValue={files}
+                onChange={e=>setFiles(e.target.value)} 
+                placeholder="" />
+                <FormText class='muted'>Whatsapp, Telegram</FormText>
+            </Col>
+            
+        </FormGroup>
+              : ''}
             
         </Form>
         </ModalBody>
         <ModalFooter>
           <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>

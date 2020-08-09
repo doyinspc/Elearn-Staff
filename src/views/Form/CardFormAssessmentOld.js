@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import CKEditor from 'ckeditor4-react';
 import { getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, Container,  Row, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 
 import CardFitb from './../Table/CardFitb';
@@ -11,6 +10,8 @@ import CardQuestion from './../Table/CardQuestion';
 import CardFitbForm from './CardFitbForm';
 import CardMultiForm from './CardMultiForm';
 import CardQuestionForm from './CardQuestionForm';
+
+
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);

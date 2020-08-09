@@ -7,13 +7,18 @@ import Select  from 'react-select';
 import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
 
 const path = API_PATHS;
+const ses = [
+  {'value':'First Term', 'label':'First Term'},
+  {'value':'Second Term', 'label':'Second Term'},
+  {'value':'Third Term', 'label':'Third Term'}
+];
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [department, setDepartment] = useState({});
   const [level, setLevel] = useState({});
-  const [name, setName] = useState(null);
+  const [name, setName] = useState({});
   const [code, setCode] = useState(null);
   const [objective, setObjective] = useState(null);
   const [owner, setOwner] = useState(1);
@@ -49,12 +54,26 @@ const Modals = (props) => {
   }
   
   useEffect(() => {
-   
+  
     if(parseInt(props.mid) > 0  )
     {
      setId(props.mid);
      setModal(!modal);
-     populate(props.courses.course);
+         //level
+    let params3 = {
+      data:JSON.stringify({'id':props.mid}),
+      cat:'group',
+      table:'courses',
+      token:MAIN_TOKEN
+    }
+    axios.get(path, {params:params3}, axiosConfig)
+    .then((res)=>{
+      populate(res.data[0]);
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+     
     }
     //departments
     let params1 = {
@@ -73,7 +92,7 @@ const Modals = (props) => {
     
     let requestOne = axios.get(path, {params:params1}, axiosConfig);
     let requestTwo = axios.get(path, {params:params2}, axiosConfig);
-
+   
     axios.all([requestOne, requestTwo])
     .then(axios.spread((...responses)=>{
         const res0 = responses[0]; //all modules
@@ -106,15 +125,16 @@ const Modals = (props) => {
         let fd = new FormData();
         fd.append('course_department', department.value);
         fd.append('course_level', level.value);
-        fd.append('course_code', code);
-        fd.append('course_name', name);
+        fd.append('course_code',  department.value.padEnd(3, '0') + level.value.padEnd(3, '0'));
+        ///fd.append('course_name', name);
+        fd.append('course_name', name.value)
         fd.append('course_description', description);
         fd.append('course_objective', objective);
         fd.append('course_owner', props.user.id);
         fd.append('course_start', new Date(starts).getTime());
         fd.append('course_end', new Date(ends).getTime());
         fd.append('table', 'courses');
-        
+       
         if(id && id > 0)
         {
           fd.append('id', id);
@@ -139,16 +159,26 @@ const Modals = (props) => {
         nm1['value'] = data.course_level;
         nm1['label'] = data.levelname;
         setLevel(nm1);
-    
-        setName(data.course_name);
-        setCode(data.course_code);
+
+        let nm2 = {};
+        nm2['value'] = data.course_name;
+        nm2['label'] = data.course_name;
+        setName(nm2);
+
+        let gt = new Date(parseInt(data.course_start));
+        let gt0 = gt.getFullYear()+"-"+gt.getMonth()+"-"+gt.getDay()
+        //setName(data.course_name);
+        //setCode(data.course_code);
         setObjective(data.course_objective);
         setDescription(data.course_description);
-        setStarts(data.course_start  !== null ? new Date(parseInt(data.course_start)).toISOString().substring(0, 19):'-' );
+        setStarts(data.course_start  !== null ? gt0 : '-' );
         setEnds(data.course_end  !== null ? new Date(parseInt(data.course_end)).toISOString().substring(0, 19):'-' );
    
     }
 
+    const handleTerm = (selected) => {
+      setName( selected );
+    }
     const handleDepartment = (selected) => {
       setDepartment( selected );
     }
@@ -180,11 +210,24 @@ const Modals = (props) => {
       
       <Button className={editCss} color={editColor} onClick={tog}><i className={`fa ${editIcon}`}></i> Add Course </Button>
       <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={toggle}>{editName} Course</ModalHeader>
+        <ModalHeader toggle={resetdata}>{editName} Course</ModalHeader>
         <ModalBody>
         <Form>
+        <FormGroup row>
+                <Label for="name" sm={3}>Term</Label>
+                <Col sm={9}>
+                <Select
+                  styles = { customStyles }
+                  value={name}
+                  onChange={handleTerm}
+                  options={ses}
+                  autoFocus={true}
+                />
+                <FormText></FormText>
+                </Col> 
+            </FormGroup>
             <FormGroup row>
-                <Label for="name" sm={3}>Department</Label>
+                <Label for="name" sm={3}>Subject</Label>
                 <Col sm={9}>
                 <Select
                   styles = { customStyles }
@@ -193,10 +236,11 @@ const Modals = (props) => {
                   options={options0}
                   autoFocus={true}
                 />
+                <FormText></FormText>
                 </Col> 
             </FormGroup>
             <FormGroup row>
-                <Label for="name" sm={3}>Level</Label>
+                <Label for="name" sm={3}>Class</Label>
                 <Col sm={9}>
                 <Select
                   styles = { customStyles }
@@ -207,7 +251,7 @@ const Modals = (props) => {
                 />
                 </Col> 
             </FormGroup>
-            <FormGroup row>
+            {/* <FormGroup row>
                 <Label for="name" sm={3}>Name </Label>
                 <Col sm={9}>
                 <Input 
@@ -219,8 +263,8 @@ const Modals = (props) => {
                     onChange={e=>setName(e.target.value)} 
                     placeholder="Physics" />
                 </Col>
-            </FormGroup>
-            <FormGroup row>
+            </FormGroup> */}
+            {/* <FormGroup row>
                 <Label for="code" sm={3}>Course Code </Label>
                 <Col sm={9}>
                 <Input 
@@ -231,8 +275,8 @@ const Modals = (props) => {
                     defaultValue={code}
                     onChange={e=>setCode(e.target.value)} 
                     placeholder="PHY123" />
-                </Col>
-            </FormGroup>
+                </Col> 
+            </FormGroup>*/}
             <FormGroup row>
                 <Label for="starts" sm={3}>Course Starts </Label>
                 <Col sm={9}>
@@ -240,7 +284,6 @@ const Modals = (props) => {
                     type="datetime-local" 
                     name="starts" 
                     id="starts"
-                    value={starts}
                     defaultValue={starts}
                     onChange={e=>setStarts(e.target.value)} 
                      />
@@ -253,7 +296,6 @@ const Modals = (props) => {
                     type="datetime-local" 
                     name="ends" 
                     id="ends"
-                    value={ends}
                     defaultValue={ends}
                     onChange={e=>setEnds(e.target.value)} 
                      />

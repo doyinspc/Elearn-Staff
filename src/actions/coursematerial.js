@@ -55,8 +55,8 @@ export const getCoursematerial = id => (dispatch, getState) => {
 };
 //COURSEMATERIAL DELETE
 export const deleteCoursematerial = data => (dispatch, getState) =>{
-    dispatch({type : COURSEMATERIAL_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+    
+    axios.delete(path, JSON.stringify({data}), axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSEMATERIAL_DELETE_SUCCESS,

@@ -86,6 +86,7 @@ const Modals = (props) => {
         e.preventDefault();
         let fd = new FormData();
         fd.append('name', name.value);
+        fd.append('title', title);
         fd.append('description', description);
         fd.append('dailyduration', dailyduration);
         fd.append('weeklyduration', weeklyduration);
@@ -199,8 +200,8 @@ const Modals = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="weeklyduration" sm={3}>Duration</Label>
-                <Col sm={4}>
+                
+                <Col sm={6}>
                 <Input 
                     type="number" 
                     name="weeklyduration" 
@@ -209,9 +210,9 @@ const Modals = (props) => {
                     defaultValue={weeklyduration}
                     onChange={e=>setWeeklyduration(e.target.value)} 
                     placeholder="2" />
-                    <FormText>Weeks </FormText>
+                    <FormText> Durtion (Weeks) </FormText>
                 </Col>
-                <Col sm={5}>
+                <Col sm={6}>
                 <Input 
                     type="number" 
                     name="dailyduration" 
@@ -220,13 +221,13 @@ const Modals = (props) => {
                     defaultValue={dailyduration}
                     onChange={e=>setDailyduration(e.target.value)} 
                     placeholder="3" />
-                    <FormText>Daily Hours </FormText>
+                    <FormText>Duration (Daily Hours) </FormText>
                 </Col>
             </FormGroup>
             
             <FormGroup row>
-                <Label for="starts" sm={3}>Shedule</Label>
-                <Col sm={4}>
+                
+                <Col sm={6}>
                 <Input 
                     type="datetime-local" 
                     name="starts" 
@@ -235,9 +236,9 @@ const Modals = (props) => {
                     defaultValue={starts}
                     onChange={e=>setStarts(e.target.value)} 
                      />
-                    <FormText>Start</FormText>
+                    <FormText>Shedule Start</FormText>
                 </Col>
-                <Col sm={5}>
+                <Col sm={6}>
                 <Input 
                     type="datetime-local" 
                     name="ends" 
@@ -246,11 +247,11 @@ const Modals = (props) => {
                     defaultValue={ends}
                     onChange={e=>setEnds(e.target.value)} 
                      />
-                    <FormText>Ends </FormText>
+                    <FormText>Shedule Close </FormText>
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="code" sm={12}>Course Introduction/Description </Label>
+                <Label for="code" sm={12}>Introduction/Description </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 
@@ -264,7 +265,7 @@ const Modals = (props) => {
             </FormGroup>
             <FormGroup row>
               
-                <Label for="code" sm={12}>Course Objective </Label>
+                <Label for="code" sm={12}>Objective </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 

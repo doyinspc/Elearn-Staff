@@ -17,13 +17,14 @@ import {
     USERSTUDENTCOURSE_EDIT,
 } from "../types/userstudentcourse";
 
-let userstudentcourseStore = JSON.parse(localStorage.getItem('userstudentcourse'))
-let userstudentcoursexStore = JSON.parse(localStorage.getItem('userstudentcoursex'))
+let userstudentcourseStore = JSON.parse(localStorage.getItem('userstudentcourse'));
+let userstudentcoursexStore = JSON.parse(localStorage.getItem('userstudentcoursex'));
+let act = JSON.parse(localStorage.getItem('activestudentcourse'));
 const initialState = {
     isLoading: false,
     userstudentcourses: userstudentcourseStore,
     userstudentcoursesx: userstudentcoursexStore,
-    userstudentcourse:{},
+    userstudentcourse: act && Array.isArray(Object.keys(act)) ? act:{},
     userstudentcoursex:{},
     msg: null,
     isEdit:-1,
@@ -84,6 +85,7 @@ export default function(state = initialState, action){
         case USERSTUDENTCOURSE_GET_ONE:
             let all = [...state.userstudentcourses];
             let ses = all.filter(row=>row.id == action.payload)[0];
+            localStorage.setItem('activestudentcourse', JSON.stringify(ses));
             return {
                 ...state,
                 userstudentcourse : ses,

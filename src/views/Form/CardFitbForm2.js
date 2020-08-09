@@ -6,10 +6,8 @@ import {
   Input,
   FormGroup,
   Col,
-  Row,
-  Label
+  Row
 } from "reactstrap";
-import { isJSDocNullableType } from "typescript";
 
 class Course extends React.Component {
   constructor(props){
@@ -55,7 +53,7 @@ class Course extends React.Component {
                     defaultValue={que}
                     type="text"
                     onChange={this.handleChange}
-                    placeholder={`Option ${index + 1}`}
+                    placeholder={`Answer ${index + 1}`}
                 />
               </Col>
             <Col sm={1} style={{margin:0, padding:0}}>

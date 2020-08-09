@@ -6,10 +6,9 @@ import {
   Input,
   FormGroup,
   Col,
-  Row,
-  Label
+  Row
 } from "reactstrap";
-import { isJSDocNullableType } from "typescript";
+
 
 class Course extends React.Component {
   constructor(props){
@@ -51,32 +50,32 @@ class Course extends React.Component {
     return (
       <>
         <FormGroup  check>
-            <Row sm={12}>
-              <Col sm={9}>
+            <Row xs={12}>
+              <Col xs={9}>
                 <div class="form-check form-check-radio">
                     <label class="form-check-label">
                         <input class="form-check-input" id={`rad${index}`} onClick={this.handleAnswer} type="radio" name='ques' value={que}/>
                         <span class="form-check-sign">
                         <Input
-                          className="form-control "
+                          className="form-control"
                           style={{height:30, maxWidth:250}}
                           name='que'
                           defaultValue={que}
                           type="text"
                           onChange={this.handleChange}
-                          placeholder={`Option ${index + 1}`}
+                          placeholder={`Add option`}
                         />
                             <span class="check"></span>
                         </span>
                     </label>
                 </div>
               </Col>
-            <Col sm={1} style={{margin:0, padding:0}}>
+            <Col xs={1} style={{margin:0, padding:0}}>
                 <button class="btn btn-sm btn-icon btn-neutral" style={{margin:0}}>
                     <i class="fa fa-image"></i>
                 </button>
             </Col>
-            <Col sm={1} style={{margin:0, padding:0}}>
+            <Col xs={1} style={{margin:0, padding:0}}>
                 <button class="btn btn-sm btn-icon btn-neutral" type="button" onClick={()=>{this.removeOption(this.props.index)}} style={{margin:0}}>
                     <i class="fa fa-remove"></i>
                 </button>

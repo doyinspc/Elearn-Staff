@@ -4,8 +4,7 @@ import React from "react";
 // reactstrap components
 import {
   UncontrolledTooltip,
-  Button,
-  Media
+  Button
 } from "reactstrap";
 import { SERVER_URL } from "actions/common";
 const imgx = require("assets/img/place.png");

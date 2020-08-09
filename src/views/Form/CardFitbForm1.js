@@ -6,10 +6,9 @@ import {
   Input,
   FormGroup,
   Col,
-  Row,
-  Label
+  Row
 } from "reactstrap";
-import { isJSDocNullableType } from "typescript";
+
 
 class Course extends React.Component {
   constructor(props){

@@ -3,10 +3,7 @@ import React from "react";
 class CardStat extends React.Component {
   render() {
       let user = this.props.data;
-      if(user)
-      {
-            let ico = user
-      }
+      
       
     return (
       <>

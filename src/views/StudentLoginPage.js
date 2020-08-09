@@ -100,7 +100,7 @@ class LoginPage extends React.Component{
                   
                   <h4 ><b>Student Login</b></h4>
                   </CardHeader>
-                  <CardBody style={{ marginTop:5 }}>
+                  <CardBody className='mb-2' style={{ marginTop:5 }}>
                     <InputGroup
                       className={
                         "no-border input-lg" +
@@ -144,7 +144,7 @@ class LoginPage extends React.Component{
                       ></Input>
                     </InputGroup>
                   </CardBody>
-                  <CardFooter className="text-center">
+                  <CardFooter className="text-center mt-2">
                     <Button
                       block
                       className="btn-round"
@@ -154,14 +154,13 @@ class LoginPage extends React.Component{
                     >
                       Login
                     </Button>
-                    <Button
-                      className="btn-round mt-2"
-                      color="default"
+                    <a
+                      className="btn btn-sm btn-secondary btn-round mt-1"
                       type="button"
-                      size="sm"
+                      href="/staff"
                     >
-                      Student Login
-                    </Button>
+                      Staff Login
+                    </a>
                    
                   </CardFooter>
                 </Form>

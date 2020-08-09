@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
 import { getCoursemodule } from './../../actions/coursemodule';
-import { getCoursematerial } from './../../actions/coursematerial';
+import { getCoursematerial, deleteCoursematerial } from './../../actions/coursematerial';
 import CourseMaterial from './CourseMaterial';
 import CourseFormMaterial from './../Form/CourseFormMaterial';
 // reactstrap components
@@ -35,11 +35,14 @@ class Course extends React.Component {
     this.setState({st:true, id:id});
   }
   handleDeleteMaterial = id =>{
-    this.props.getCoursematerial(id)
-    this.setState({st:true, id:id});
+    this.props.deleteCoursematerial(id)
   }
   handleDelete = id =>{
     //delete row
+  }
+
+  handleClose = () =>{
+    this.setState({id:null, st:false});
   }
 
 
@@ -47,7 +50,9 @@ class Course extends React.Component {
 
   render() {
     let coursematerials = this.props.coursematerials.coursematerials;
-    
+    let startx = this.props.data.starts ? new Date(this.props.data.starts).toDateString() : '--';
+    let endx = this.props.data.ends ? Date.parse(parseInt(this.props.data.ends, 10)) : '--';
+   
     let loadMaterial = null;
     if(coursematerials && Array.isArray(coursematerials) && coursematerials.length > 0)
     {
@@ -67,7 +72,7 @@ class Course extends React.Component {
           <div class="card card-plain">
             <div class="card-header" role="tab" id={`headingOne_${this.props.data.id}`}>
                 <a data-toggle="collapse" data-parent="#accordion" href={`#collapseOne_${this.props.data.id}`} aria-expanded="true" aria-controls="collapseOne">
-                  {this.props.data.module} : {this.props.data.title.toUpperCase()}
+                  {this.props.data.modulename} : {this.props.data.title.toUpperCase()} <small>{startx}{" "}{endx}</small>
                 {' '}<i class="now-ui-icons arrows-1_minimal-up"></i>
                 </a>
             </div>
@@ -87,6 +92,7 @@ class Course extends React.Component {
                   mid={this.state.id}
                   st={this.state.st}
                   data={this.props.data} 
+                  handleClose={this.handleClose}
                 />
                 <Container id={`tabl${this.props.data.id}`}>
                     {loadMaterial}
@@ -106,4 +112,4 @@ const mapStateToProps = (state, ownProps) => ({
   coursematerials: state.coursematerialReducer
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursemodule, getCoursematerial })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getCoursemodule, getCoursematerial, deleteCoursematerial })(Course)

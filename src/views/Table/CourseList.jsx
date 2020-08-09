@@ -2,8 +2,10 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { getCourses, getCourse, updateCourse } from './../../actions/course';
+import { getUserstaffcourses } from './../../actions/userstaffcourse';
 import Modals from "./../Form/CourseForm";
 import CourseCard from "./CourseCard";
+
 // reactstrap components
 import {
   Card,
@@ -22,12 +24,15 @@ class Course extends React.Component {
     super(props);
     this.state ={
       id:null,
-      st:false
+      st:false,
+      page:1,
+      subtitle:'My Classes'
     }
   }
   
   componentDidMount(){
-    this.props.getCourses({course_owner:this.props.user.id});
+    this.props.getCourses({"course_owner":this.props.user.id});
+    this.props.getUserstaffcourses({'staffId':this.props.user.id});
   }
 
   loadModal = id =>{
@@ -49,16 +54,30 @@ class Course extends React.Component {
     this.props.getCourse(id);
   }
 
+  loadMyCourse = () =>{
+    this.setState({page:1, subtitle:'My Classes'});
+  }
+
+  loadOtherCourse = () =>{
+    this.setState({page:2, subtitle:'Co-teacher'});
+  }
+
   closer = id =>{
     this.props.getCourse(id);
     this.setState({st:false, id:null});
   }
 
   render() {
-      let props = {};
-      let tableTitle = "Course";
-      let tableSubTitle = props.subtitle;
-      let tbody = this.props.courses.courses;
+      let tableTitle = "Class";
+      let tableSubTitle = this.state.subtitle;
+      let tbody = [];
+      if(this.state.page === 2)
+      {
+        tbody = this.props.userstaffcourses.userstaffcourses;
+      }else if(this.state.page === 1)
+      {
+        tbody = this.props.courses.courses;
+      }
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
           <CourseCard 
             key={key} 
@@ -78,20 +97,25 @@ class Course extends React.Component {
                 <CardHeader>
                     <CardTitle tag="h4">
                       <Container>
-                        <Row>
-                          <Col sm="8"><i className="fa fa-file-text"></i>{" "+tableTitle}
+                        <Row cs='12'>
+                          <Col xs="4"><i className="fa fa-file-text"></i>{" "+tableTitle}
+                          <p className="category"> {tableSubTitle}</p>
                           </Col>
-                          <Col sm="3" className="pull-right"> 
+                          <Col xs="8" className="pull-right"> 
+                          <div className="btn-group">
+                            <button className="btn btn-sm btn-info" onClick={this.loadMyCourse}>My Classes</button>
+                            <button className="btn btn-sm btn-info" onClick={this.loadOtherCourse}>Co-teacher</button>
                             <Modals 
                               mid={this.state.id} 
                               toggle={this.state.st}
                               handleClose={()=>this.setState({id:null, st:false})}
                             />
+                            </div>
                           </Col>
                         </Row>
                       </Container>
                     </CardTitle>
-                    <p className="category"> {tableSubTitle}</p>
+                   
                 </CardHeader>
               </Card>
             </Col>
@@ -107,7 +131,8 @@ class Course extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({ 
   courses: state.courseReducer,
+  userstaffcourses: state.userstaffcourseReducer,
   user:state.userstaffReducer.user
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getUserstaffcourses })(Course)

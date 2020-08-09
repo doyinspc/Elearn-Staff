@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import CKEditor from 'ckeditor4-react';
-import Select , { components } from 'react-select';
+import Select  from 'react-select';
 import { getCoursestudents,getCoursestudent, registerCoursestudent, updateCoursestudent } from './../../actions/coursestudent';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import axios from 'axios';
