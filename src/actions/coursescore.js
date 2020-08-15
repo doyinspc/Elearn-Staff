@@ -44,6 +44,27 @@ export const getCoursescores = data => (dispatch, getState) => {
                 })
             })
 };
+
+//GET ALL COURSESCORE 
+export const getCoursescoresall = data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.data = JSON.stringify(data);
+    params.cat = 'selectscore';
+    dispatch({type : COURSESCORE_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: COURSESCORE_GET_MULTIPLE,
+                    payload: res.data
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : COURSESCORE_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
 //GET SINGLE COURSESCORE 
 export const getCoursescore = id => (dispatch, getState) => {
     //SET PAGE LOADING

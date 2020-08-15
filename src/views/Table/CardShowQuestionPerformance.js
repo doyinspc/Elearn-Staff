@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Container } fr
 import { deleteCoursescore } from 'actions/coursescore';
 import FormStudentscore from 'views/Form/FormStudentscore';
 import FormScoresheet from 'views/Form/FormScoresheet';
-
+import FormChat from 'views/Form/FormChat';
 const pics = {
   1 : 'fa-file-text',
   2 : 'fa-file-pdf',
@@ -24,12 +24,10 @@ const Modals = (props) => {
   const [id, setId] = useState(null);
   const [data, setData] = useState(null);
   const [value, setValue] = useState(null);
- 
   const toggle = () => setModal(!modal);
   
   
   useEffect(() => {
-   
     if(parseInt(props.mid) > 0 )
     {
      setId(props.mid);
@@ -38,13 +36,13 @@ const Modals = (props) => {
     } 
 },[props.mid]);
   
-resetdata = () =>{
+const resetdata = () =>{
     setId(null);
     setData({});
     props.handleCloseQuestion()
 }
 
-let { question, answer, option, points } = data;
+
 let td = props.coursescores.coursescores && Array.isArray(props.coursescores.coursescores) ? props.coursescores.coursescores: [];
 let qd = props.coursecomments.coursecomments && Array.isArray(props.coursecomments.coursecomments) ? props.coursecomments.coursecomments : [];
 let tdstudents = td.map((prop, ind)=>{
@@ -60,7 +58,7 @@ let tdevaluate = td.map((prop, ind)=>{
             />
 });
 let tdquestions = qd.map((prop, ind)=>{
-    return <FormQuestion
+    return <FormChat
                  key={ind}
                  data={prop}
             />
@@ -129,6 +127,8 @@ let tdquestions = qd.map((prop, ind)=>{
 const mapStateToProps = (state, ownProps) => ({ 
     courses: state.courseReducer,
     coursematerials: state.coursematerialReducer,
+    coursescores: state.coursescoreReducer,
+    coursecomments: state.coursecommentReducer,
   })
   
 export default connect(mapStateToProps, { getCoursematerials, getCoursematerial, registerCoursematerial, updateCoursematerial })(Modals)

@@ -10,7 +10,6 @@ import { getCoursetutors, getCoursetutor } from './../../actions/coursetutor';
 import { getCoursestudents, getCoursestudent } from './../../actions/coursestudent';
 import { getCourseprogresss, getCourseprogress } from './../../actions/courseprogress';
 import CourseFormModule from "./../Form/CourseFormModule";
-import CourseFormMaterial from "./../Form/CourseFormMaterial";
 import CourseFormTutor from "./../Form/CourseFormTutor";
 import CourseFormStudent from "./../Form/CourseFormStudent";
 

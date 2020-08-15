@@ -34,7 +34,8 @@ export const getCoursecomments = data => (dispatch, getState) => {
             .then(res => {                                                                                                                                                                                                                                        
                 dispatch({
                     type: COURSECOMMENT_GET_MULTIPLE,
-                    payload: res.data
+                    payload: res.data,
+                    node: 1
                 })
             })
             .catch(err => {
@@ -44,6 +45,28 @@ export const getCoursecomments = data => (dispatch, getState) => {
                 })
             })
 };
+//GET ALL COURSECOMMENT 
+export const getCoursecommentstudent = data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.data = JSON.stringify(data);
+    params.cat = 'selectcomment';
+    dispatch({type : COURSECOMMENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: COURSECOMMENT_GET_MULTIPLE,
+                    payload: res.data,
+                    node: 1
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : COURSECOMMENT_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
 //GET SINGLE COURSECOMMENT 
 export const getCoursecomment = id => (dispatch, getState) => {
     //SET PAGE LOADING

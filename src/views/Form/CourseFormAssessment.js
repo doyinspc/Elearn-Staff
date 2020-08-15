@@ -114,8 +114,8 @@ const Modals = (props) => {
         //ADD THE NEW QUESTION
         //GENERATE RANBOM KEYS
         let rand = Math.floor(Math.random() * 123456789);
-        all[rand] = arr;
-        alls[rand] = {};
+        all['p' + rand] = arr;
+        alls['p' + rand] = {};
         //PLACE IN STATE
         setQbank(all);
         setSettings(alls);
@@ -179,7 +179,7 @@ const Modals = (props) => {
     e.preventDefault();
     let rand = Math.floor(Math.random() * 12345)
     let ops = {...optx};
-    ops[rand] = '';
+    ops['d' + rand] = '';
     setOptx(ops);
   }
   //REMOVE SPACE AND OPTION ITEM
@@ -552,7 +552,6 @@ const populate = async(data) =>{
           { page === 1 ? loadQuestions : ''}
         </ModalBody>
         <ModalFooter>
-         
           <Button color="secondary" onClick={clearState}>Cancel</Button>
         </ModalFooter>
       </Modal>

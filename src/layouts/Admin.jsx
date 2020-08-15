@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
     {
         user = this.props.userstaffs.user;
        
-        if(this.props.userstaffs.isAdmin)
+        if(parseInt(this.props.userstaffs.user.is_admin) === 1)
         {
           backgroundColor = 'green';
           group = 3;

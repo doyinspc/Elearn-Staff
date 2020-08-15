@@ -14,12 +14,13 @@ const Modals = (props) => {
   const [id, setId] = useState(null);
   const [name, setName] = useState({});
   const [title, setTitle] = useState(null);
+  const [weight, setWeight] = useState(5);
   const [dailyduration, setDailyduration] = useState(null);
   const [weeklyduration, setWeeklyduration] = useState(null);
   const [objective, setObjective] = useState(null);
   const [description, setDescription] = useState(null);
-  const [starts, setStarts] = useState(new Date('now').getTime());
-  const [ends, setEnds] = useState(new Date('now').getTime());
+  const [starts, setStarts] = useState(new Date('now'));
+  const [ends, setEnds] = useState(new Date('now'));
   const [options, setOptions] = useState({});
   const toggle = () => setModal(!modal);
   
@@ -77,22 +78,25 @@ const Modals = (props) => {
         await setOptions(optionx);
     })
     .catch(err=>{
-        console.log(JSON.stringify(err));
+        //console.log(JSON.stringify(err));
     })
     
 },[props.mid]);
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+        let sdate = new Date(starts).toISOString().slice(0, 19).replace('T', ' ');
+        let edate = new Date(ends).toISOString().slice(0, 19).replace('T', ' ');
         let fd = new FormData();
         fd.append('name', name.value);
         fd.append('title', title);
+        fd.append('weight', weight);
         fd.append('description', description);
         fd.append('dailyduration', dailyduration);
         fd.append('weeklyduration', weeklyduration);
         fd.append('objective', objective);
-        fd.append('starts', new Date(starts).getTime());
-        fd.append('ends', new Date(ends).getTime());
+        fd.append('starts', sdate);
+        fd.append('ends', edate);
         fd.append('table', 'course_modules');
         if(id && id > 0)
         {
@@ -115,12 +119,13 @@ const Modals = (props) => {
         nm['label'] = data.modulename;
         setName(nm);
         setTitle(data.title);
+        setWeight(data.weight);
         setObjective(data.objective);
         setDailyduration(data.dailyduration);
         setWeeklyduration(data.weeklyduration);
         setDescription(data.description);
-        setStarts(data.starts  !== null ? new Date(parseInt(data.starts)).toISOString().substring(0, 19) : '-' );
-        setEnds(data.ends  !== null ? new Date(parseInt(data.ends)).toISOString().substring(0, 19) : '-' );
+        setStarts(data.starts);
+        setEnds(data.ends);
     }
 
    const resetdata= async() =>{
@@ -128,6 +133,7 @@ const Modals = (props) => {
         setId(null);
         setName({});
         setTitle('');
+        setWeight(5);
         setObjective('');
         setDailyduration(0);
         setWeeklyduration(0);
@@ -191,12 +197,25 @@ const Modals = (props) => {
                 <Col sm={9}>
                 <Input 
                     type="text" 
-                    title="title" 
+                    name="title" 
                     id="title"  
                     required
                     defaultValue={title}
                     onChange={e=>setTitle(e.target.value)} 
                     placeholder=" Introduction to Mechanics" />
+                </Col>
+            </FormGroup>
+            <FormGroup row>
+                <Label for="title" sm={3}>Points</Label>
+                <Col sm={9}>
+                <Input 
+                    type="number" 
+                    name="weight" 
+                    id="weight"  
+                    required
+                    defaultValue={weight}
+                    onChange={e=>setWeight(e.target.value)} 
+                    placeholder="0" />
                 </Col>
             </FormGroup>
             <FormGroup row>

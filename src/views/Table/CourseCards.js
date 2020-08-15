@@ -48,8 +48,8 @@ removeCourse = (id) =>{
   render() {
     
     let {course_name, course_description, course_code, course_start, course_end, id, pics, departmentname, levelname} = this.props.data;
-    let starts = new Date(parseInt(course_start)).toUTCString();
-    let ends = new Date(parseInt(course_end)).toUTCString();
+    let starts = new Date(parseInt(course_start)).toLocaleString();
+    let ends = new Date(parseInt(course_end)).toLocaleString();
     return (
       <>
         <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >
@@ -77,7 +77,6 @@ removeCourse = (id) =>{
             <div class="card-footer" >
            
             <a href="#" class="btn btn-secondary btn-sm" onClick={()=>{this.removeCourse(id)}}>Remove</a>
-
             <Link to="/admin/courseitem">
             <button type="button" class="btn btn-info btn-sm" onClick={()=>{this.loadCourse(id)}} >Go to Class</button>
             </Link>

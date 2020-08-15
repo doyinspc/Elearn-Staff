@@ -51,7 +51,7 @@ class Course extends React.Component {
   render() {
     let coursematerials = this.props.coursematerials.coursematerials;
     let startx = this.props.data.starts ? new Date(this.props.data.starts).toDateString() : '--';
-    let endx = this.props.data.ends ? Date.parse(parseInt(this.props.data.ends, 10)) : '--';
+    let endx = this.props.data.ends ? new Date(this.props.data.ends).toDateString() : '--';
    
     let loadMaterial = null;
     if(coursematerials && Array.isArray(coursematerials) && coursematerials.length > 0)

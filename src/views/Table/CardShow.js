@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import AudioPlayer from 'react-audio-player';
 import VideoPlayer from 'react-player';
-import Downloader from "react-download-link";
 import { SERVER_URL } from './../../actions/common'
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from '../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Row, Container } from 'reactstrap';

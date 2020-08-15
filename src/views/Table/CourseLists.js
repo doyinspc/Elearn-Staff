@@ -94,18 +94,17 @@ class Course extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col xs="6">
+                          <Col xs="12">
                           <i className="fa fa-file-text "></i>{" "+tableTitle}
                           <p className="category"> {tableSubTitle}</p>
                           </Col>
-                          <Col xs="6" className="pull-right"> 
+                          <Col xs="12" className="pull-right"> 
                             <button className="btn btn-sm btn-default" onClick={this.loadAllCourses} >Show All Classes</button>
                             <button className="btn btn-sm btn-info" onClick={this.loadMyCourses} >Show My Classes</button>
                           </Col>
                         </Row>
                       </Container>
                     </CardTitle>
-                    
                 </CardHeader>
               </Card>
             </Col>

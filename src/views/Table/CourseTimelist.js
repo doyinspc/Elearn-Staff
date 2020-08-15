@@ -2,20 +2,21 @@ import React from "react";
 import { connect } from 'react-redux';
 import {Col, Container, Row} from "reactstrap";
 import { getCoursematerials} from './../../actions/coursematerial';
+import { getCoursescoresall} from './../../actions/coursescore';
 import { getCourseprogresss} from './../../actions/courseprogress';
-
+import { getCoursemodule } from './../../actions/coursemodule';
 
 class CardUserCourse extends React.Component {
   loadMaterial =(id) =>{
-    
-    this.props.getCoursematerials({'is_active': 1, 'moduleId':id});
-    this.props.getCourseprogresss({'is_active': 0, 'moduleId':id, 'studentId':this.props.user.id});
-    this.props.loadMaterial(id);
+    this.props.loadMaterials(id);
+  }
+  
+  loadMode =(id) =>{
+   this.props.loadModuls(id);
   }
   
   render() {
     let material = this.props.coursemodules.coursemodules;
-    
     let listitem = material && Array.isArray(material) ? material.map((prop, index)=>{
         var d =  <li class="list-group-item" key={index}>
                     <div>
@@ -26,12 +27,15 @@ class CardUserCourse extends React.Component {
                             <small>{prop.modulename}</small>
                             <br/>
                             <h6>{prop.title}</h6>
-                            
                           </Col>
                           <Col xs='3'>
+                            { new Date(prop.starts).getTime() < new Date('today').getTime() ?
                               <button className='btn-link' onClick={()=>{this.loadMaterial(prop.id)}}>
                               <i class="fa fa-forward"></i> 
-                            </button>
+                            </button>:
+                            <button className='btn-link' onClick={()=>{this.loadMode(prop.id)}}>
+                            <i class="fa fa-lock"></i> 
+                          </button>}
                           </Col>
                         </Row>
                       </Container>
@@ -61,4 +65,4 @@ const mapStateToProps = (state, ownProps) =>({
   userstudentcourses: state.userstudentcourseReducer,
   user: state.userstudentReducer.user
 })
-export default connect(mapStateToProps, {getCoursematerials, getCourseprogresss}) (CardUserCourse);
+export default connect(mapStateToProps, {getCoursematerials, getCourseprogresss, getCoursescoresall, getCoursemodule}) (CardUserCourse);

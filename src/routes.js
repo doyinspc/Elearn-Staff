@@ -48,7 +48,7 @@ var dashRoutes = [
   },
   {
     path: "/course",
-    name: "Courses",
+    name: "Classes",
     icon: "design_app",
     component: Course,
     layout: "/admin",
@@ -56,7 +56,7 @@ var dashRoutes = [
   },
   {
     path: "/courses",
-    name: "Course List",
+    name: "Class List",
     icon: "design_app",
     component: Courses,
     layout: "/admin",

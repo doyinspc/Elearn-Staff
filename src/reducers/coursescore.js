@@ -80,10 +80,22 @@ export default function(state = initialState, action){
                 MSG:"DONE!!!"
             };
         case COURSESCORE_REGISTER_SUCCESS:
-            localStorage.setItem('coursescore', JSON.stringify([...state.coursescores, action.payload]));
+            const findInds = state.coursescores.findIndex(cat => parseInt(cat.id) === parseInt(action.payload.id));
+            let newStates = [];
+            if(findInds == -1)
+            {
+                newStates =  [...state.coursescores, action.payload]
+            }else
+            {
+                newStates = [...state.coursescores];
+                newStates[findInds] = action.payload;
+            }
+            
+            localStorage.setItem('coursescore', JSON.stringify(newStates));
             return {
                 ...state,
-                coursescores: [...state.coursescores, action.payload],
+                coursescores: newStates,
+                coursescore:action.payload,
                 msg:action.msg
             }; 
         case COURSESCORE_ACTIVATE_SUCCESS:

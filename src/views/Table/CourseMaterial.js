@@ -14,6 +14,7 @@ import {
   Col
 } from "reactstrap";
 import CardShow from "./CardShow";
+import CardShowQuestionPerformance from "./CardShowQuestionPerformance";
 
 const pics = {
   1 : 'fa-file-text',
@@ -42,6 +43,7 @@ class Material extends React.Component {
 
   showQuestion = (id, data) =>{
     //SET STATES TO OPEN MODULE
+    console.log(id);
     this.setState({qid:id, qst:true, qdata:data});
     //GET ALL SCORES FOR STUDENTS THAT ATTEMTED THE TEST
     //GET QUESTION UNIQUE ID
@@ -96,11 +98,19 @@ class Material extends React.Component {
     };
 
 
-    let settings = this.props.data.score;
-    let {timer, starts, ends} = JSON.parse(settings) || {};
     
+    let {qid, qst, qdata } = this.state;
+
+    let butts =  tm.map((r, i)=>{
+      return <Button key={i} type='button' size='sm' color='info' class="btn btn-info btn-sm" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</Button>
+      })
     return (
       <>
+      <CardShowQuestionPerformance
+          mid={qid}
+          st={qst}
+          data={qdata}
+       />
          <Row>
          {this.state.st ? <CardShow mid={this.props.data.id} data ={this.props.data} st={this.state.st}/>: ''}
             <Col md='6'><a href="#" onClick={this.showMaterial} className="text-default"><h4><i class={`fa ${pics[this.props.data.types]}`}></i> <small style={{fontSize:14}}>{this.props.data.title}</small></h4></a></Col>
@@ -117,13 +127,11 @@ class Material extends React.Component {
           </Row>
           <Row>
             {am.length > 0 ?
-            <button  class="btn btn-info btn-sm" onClick={()=>this.showQuestion('mult', am)}>Multichoice <span className="badge badge-secondary">{am.length}</span>
-            <span className="sr-only"> questions</span></button>
+            <Button  class="btn btn-info btn-sm" onClick={()=>this.showQuestion('mult', am)}>Multichoice <span className="badge badge-secondary">{am.length}</span>
+            <span className="sr-only"> questions</span></Button>
             : ''}
             {
-              tm.map((r, i)=>{
-              return <button  class="btn btn-info btn-sm" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</button>
-              })
+             butts
             }
           </Row>
       </>

@@ -21,7 +21,7 @@ const Modals = (props) => {
                 width='50px'
                 style={{margin:0, padding:0}}
                 className="avatar border-gray"
-                src={`${SERVER_URL + photo}`}
+                src={`${SERVER_URL + props.data.photo}`}
                 onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
                 />
             {props.data.username}{" "}{props.data.fullname}</td>

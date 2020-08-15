@@ -153,7 +153,6 @@ const resetdata = () =>{
              data ={description}
              onChange={e=>setFiles(e.editor.getData())}
              />
-
            </Col>
        </FormGroup>
               : 

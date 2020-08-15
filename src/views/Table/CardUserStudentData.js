@@ -5,7 +5,7 @@ import {Col} from "reactstrap";
 class CardUserCourse extends React.Component {
   render() {
     let user = this.props.user;
-    let { professional, firstname, middlename, lastname, dob } = this.props.user ||  {};
+    let {  firstname, middlename, lastname, dob } = this.props.user ||  {};
     let fullname = firstname+" "+ middlename+" "+ lastname;
     let qt = this.props.old ? null : 4;
     let grp = this.props.old ? true : false;

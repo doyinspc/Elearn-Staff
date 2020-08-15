@@ -3,7 +3,6 @@ import React from "react";
 import { connect } from 'react-redux';
 import { getStudents, getStudent, updateStudents, getStudentsClass } from './../../actions/student';
 import {  Redirect } from "react-router-dom";
-import $ from 'jquery';
 import StudentRow from "./StudentRow";
 // reactstrap components
 import {
