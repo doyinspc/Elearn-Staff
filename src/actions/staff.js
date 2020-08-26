@@ -94,13 +94,14 @@ export const getStaff = id => (dispatch, getState) => {
     });  
 };
 //STAFF DELETE
-export const deleteStaff = data => (dispatch, getState) =>{
-    dispatch({type : STAFF_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteStaff = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: STAFF_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

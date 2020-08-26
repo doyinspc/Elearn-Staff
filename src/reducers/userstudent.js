@@ -17,7 +17,26 @@ import {
     USERSTUDENT_DELETE_FAIL,
     USERSTUDENT_EDIT
 } from "../types/userstudent";
+import Swal from 'sweetalert2';
 
+ const callError = ($err) =>{
+    Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Check your internet connection or confirm you are using the right loging information',
+        showConfirmButton: false,
+        timer: 1500
+      })
+ }
+ const callLoading = () =>{
+    Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: 'Please wait... processing',
+        showConfirmButton: false,
+        timer: 1500
+      })
+ }
 let userstudentStore = localStorage.getItem('userstudent') !== 'undefined' ? JSON.parse(localStorage.getItem('userstudent')):[];
 let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
 let auth = localStorage.getItem('auth1') !== 'undefined' ? JSON.parse(localStorage.getItem('auth1')) : false;
@@ -57,11 +76,16 @@ export default function(state = initialState, action){
                 isEdit : action.payload
         };
         case USERSTUDENT_LOADING:
+            callLoading()
             return {
                 ...state,
                 isLoading : true
             };
         case USERSTUDENT_LOGIN:
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth1')
+            localStorage.removeItem('userstudent')
+            localStorage.removeItem('user')
             localStorage.setItem('token', action.token)
             localStorage.setItem('auth1', JSON.stringify(1));
             localStorage.setItem('user', JSON.stringify(action.payload))
@@ -136,9 +160,23 @@ export default function(state = initialState, action){
                 isLoading: false,
                 msg: action.msg
             };
-        case USERSTUDENT_LOGIN_ERROR:
         case USERSTUDENT_LOGOUT_SUCCESS:
         case USERSTUDENT_LOGOUT_FAIL:
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth1')
+            localStorage.removeItem('userstudent')
+            localStorage.removeItem('user')
+            return{
+                ...state,
+                token: null,
+                isRegistered: true,
+                isAuthenticated: false,
+                isLoading: false,
+                userstudent: {},
+                user: {},
+                isAdmin : null
+            } ;
+        case USERSTUDENT_LOGIN_ERROR:
             localStorage.removeItem('token')
             localStorage.removeItem('auth1')
             localStorage.removeItem('userstudent')

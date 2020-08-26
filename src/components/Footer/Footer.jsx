@@ -30,15 +30,7 @@ class Footer extends React.Component {
         <Container fluid={this.props.fluid ? true : false}>
           <nav>
             <ul>
-              <li>
-                <a href="https://www.creative-tim.com?ref=nudr-footer" target="_blank">Creative Tim</a>
-              </li>
-              <li>
-                <a href="https://presentation.creative-tim.com?ref=nudr-footer" target="_blank">About Us</a>
-              </li>
-              <li>
-                <a href="https://blog.creative-tim.com?ref=nudr-footer" target="_blank">Blog</a>
-              </li>
+              
             </ul>
           </nav>
           <div className="copyright">
@@ -48,15 +40,15 @@ class Footer extends React.Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Invision
+              Invision & Creative Tim
             </a>
             . Coded by{" "}
             <a
-              href="https://www.creative-tim.com?ref=nudr-footer"
+              href=""
               target="_blank"
               rel="noopener noreferrer"
             >
-              Creative Tim
+              ACA
             </a>
             .
           </div>

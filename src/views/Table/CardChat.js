@@ -1,30 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getDepartment, registerDepartment, updateDepartment } from './../../actions/department';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, Container } from 'reactstrap';
+import { registerCoursecomment } from './../../actions/coursecomment';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import FormChatStudent from 'views/Form/FormChatStudent';
-import StudentLoginPage from 'views/StudentLoginPage';
-
+import "assets/css/chat.css"; 
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [namez, setNamez] = useState('');
   
   const toggle = () => setModal(!modal);
   
   useEffect(() => {
-    if(parseInt(props.mid) > 0 )
+    if(parseInt(props.mmid) > 0 )
     {
-     setId(props.mid);
+     setId(props.mmid);
      setModal(!modal);
     }
     
-},[props.mid]);
- const handleSubmit =(num)=>{
-    //;
+},[props.mmid]);
+ const handleSubmit =()=>{
+  let fd= new FormData();
+  fd.append('chat', namez);
+  fd.append('userId', props.user.id);
+  fd.append('materialId', 0);
+  fd.append('qid', 'cou');
+  fd.append('grp', 1);
+  fd.append('types', 2);
+  fd.append('receiverId', props.studentId);
+  fd.append('cat', 'insert');
+  fd.append('table', 'course_comments');
+  props.registerCoursecomment(fd);
  }
 
-  let editColor = 'primary';
+ 
   let ch = props.coursecomments.coursecomments;
   let chats = ch && Array.isArray(ch) ? ch.map((props, ind)=>{
         return <FormChatStudent
@@ -38,60 +48,29 @@ const Modals = (props) => {
   }
   return (
     <div>
-      <Modal isOpen={modal} id='ihtml' className='m-0 p-0' toggle={toggle} backdrop='static'  keyboard={false}>
-        <section class="msger">
-            <header class="msger-header">
-              <div class="msger-header-title">
-                <i class="fas fa-comment-alt"></i> SimpleChat
-              </div>
-              <div class="msger-header-options">
-                <span><i class="fas fa-cog"></i></span>
-              </div>
-            </header>
-
-            <main class="msger-chat">
-              <div class="msg left-msg">
-                <div
-                class="msg-img"
-                style={{backgroundImage:'https://image.flaticon.com/icons/svg/327/327779.svg'}}
-                ></div>
-
-                <div class="msg-bubble">
-                  <div class="msg-info">
-                    <div class="msg-info-name">BOT</div>
-                    <div class="msg-info-time">12:45</div>
-                  </div>
-
-                  <div class="msg-text">
-                    Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
-                  </div>
-                </div>
-              </div>
-
-              <div class="msg right-msg">
-                <div
-                class="msg-img"
-                style={{backgroundImage:'https://image.flaticon.com/icons/svg/145/145867.svg'}}
-                ></div>
-
-                <div class="msg-bubble">
-                  <div class="msg-info">
-                    <div class="msg-info-name">Sajad</div>
-                    <div class="msg-info-time">12:46</div>
-                  </div>
-
-                  <div class="msg-text">
-                    You can change your name in JS section!
-                  </div>
-                </div>
-              </div>
-            </main>
-
-            <form class="msger-inputarea">
-              <input type="text" class="msger-input" placeholder="Enter your message..."/>
-              <button type="submit" class="msger-send-btn">Send</button>
-            </form>
-          </section>
+      <Modal isOpen={modal}  toggle={toggle} backdrop='static'  keyboard={false}>
+    
+  <ModalHeader toggle={resetdata}><h6><i className={`fa fa-comments-o`}></i> {}</h6></ModalHeader>
+        <ModalBody id='mainchat_body'>
+        <section class="chatbox">
+        <section class="chat-window">
+           {chats}
+        </section>
+        <form class="chat-input"  onsubmit="return false;">
+            <input 
+              type="text" 
+              name='namez'
+              value={namez} 
+              autocomplete="on" 
+              onChange={(e)=>setNamez(e.target.value)}
+              placeholder="Send a pr1vate message" />
+            <button onClick={handleSubmit} type='button'>
+                    <svg style={{width:'24px', height:'24px'}} viewBox="0 0 24 24"><path fill="rgba(0,0,0,.38)" d="M17,12L12,17V14H8V10H12V7L17,12M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,8.09V15.91L12,19.85L19,15.91V8.09L12,4.15Z" /></svg>
+            </button>
+        </form>
+    </section>
+    </ModalBody>
+      
         
         
       </Modal>
@@ -100,7 +79,8 @@ const Modals = (props) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({ 
-    coursecomments: state.coursecommentReducer
+    coursecomments: state.coursecommentReducer,
+    user:state.userstaffReducer.user
   })
   
-export default connect(mapStateToProps, { })(Modals)
+export default connect(mapStateToProps, {registerCoursecomment })(Modals)

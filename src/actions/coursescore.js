@@ -75,13 +75,15 @@ export const getCoursescore = id => (dispatch, getState) => {
     });  
 };
 //COURSESCORE DELETE
-export const deleteCoursescore = data => (dispatch, getState) =>{
-    dispatch({type : COURSESCORE_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteCoursescore = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        dispatch({type : COURSESCORE_LOADING});
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: COURSESCORE_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

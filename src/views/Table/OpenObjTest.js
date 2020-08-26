@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Row, Col} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Row, Col, Input} from 'reactstrap';
 import { updateCoursescore } from './../../actions/coursescore';
-import { SERVER_URL } from "./../../actions/common.js";
+import { SERVER_URL, imgx } from "./../../actions/common.js";
 
-const imgx = require("assets/img/place.png");
-const imgs = require("assets/img/bg3.jpg");
 
 const Modals = (props) => {
   
@@ -40,23 +38,16 @@ const Modals = (props) => {
         {
         let ops = 'options' in d && d.options.length > 0 ? d.options.split('::::::') : [];
         let ops_arr =  {};
-        if(ops.length > 0){
-        for(let i = 0; i < ops.length; i++)
-        {
-            try{
-            let op1 = ops[i].toString();
-            let op2= op1.spilt('::::');
-            ops_arr[op2[0]] = op2[1];
-            }catch(err)
-            {
-                //console.log(err);
-            }
+        let opx ={}; 
+        for(let row of ops){
+            let r = row.split("::::");
+            opx[r[0]] = r[1];
         }
-        }
+        
         setQuestion(d.question);
         setType(d.type);
         setPoints(d.points);
-        setOptionx(ops_arr);
+        setOptionx(opx);
         }
     }
 
@@ -76,6 +67,17 @@ const Modals = (props) => {
       setModal(false);
       props.handleClose();
     }
+  /**
+  * 
+  * @param {*} inds 
+  * @param {*} val 
+  * SAVE ANSWERS FROM OPTION ONE AND THREE
+  */
+ const saveAns = (inds, val) =>{
+    let ans = {...answer};
+    ans[inds] = val;
+    setAnswer(ans);
+}
  /**
   * 
   * @param {*} inds 
@@ -137,9 +139,17 @@ const Modals = (props) => {
      setKeyz(keyzs);
      setAll(vals);
      loaddata(-1);
-     setAnswer(sc.answer); //STUDENT ANSWER
+     setAnswer(JSON.parse(sc.answer)); //STUDENT ANSWER
      setTimer(props.timer); //TIMER
-     setTimeused(sc.timeused); //TIME LET BY STUDENTS
+     if(props.timer && parseInt(props.timer) > 0)
+     {
+      let tt = parseInt(sc.timer) * 1000;
+      setTimeused(tt); //TIME LET BY STUDENTS
+     }else
+     {
+      setTimeused(null); 
+     }
+    
      setSubmitted(sc.is_submitted); //SUBMISSION
      setMarked(sc.is_marked); //TEST MARKED
      /**
@@ -177,7 +187,7 @@ const Modals = (props) => {
 },[props.mid]);
 
 useEffect(()=>{
-   if(timer !== ''){
+   if(timeused !== null){
     const runtimer = setTimeout(() => {
       let newtime = timeused - 1000;
       if(newtime > 0)
@@ -186,9 +196,9 @@ useEffect(()=>{
       }else
       {
         setTimeused('TIME UP');
-        submitMyAnswer()
+        submitMyAnswerauto()
         .then((data)=>{
-
+          resetdata();
         })
         .catch((err)=>{
           
@@ -211,24 +221,25 @@ useEffect(()=>{
  const saveMyAnswer = () =>{
      let ans = {...answer};
      let fd = new FormData();
-     fd.append('answer', ans);
+     fd.append('answer', JSON.stringify(ans));
      fd.append('id', id);
-     fd.append('timer', timeused);
+     fd.append('timer', timeused/1000);
      fd.append('cat', 'update');
      fd.append('table', 'course_scores');
      props.updateCoursescore(fd);
  }
 
- const submitMyAnswer = () =>{
+ const submitMyAnswerauto = () =>{
     //RUN THROUGH INDEX
     return new Promise((resolve, reject)=>{
     let ans = {...answer};
     let fd = new FormData();
     let sc = calculateScore();
-    fd.append('answer', ans);
+    fd.append('answer', JSON.stringify(ans));
     fd.append('id', id);
-    fd.append('timer', timeused);
+    fd.append('timer', timeused/1000);
     fd.append('is_submitted', 1);
+    fd.append('is_marked', 1);
     fd.append('score', sc);
     fd.append('cat', 'update');
     fd.append('table', 'course_scores');
@@ -244,6 +255,23 @@ useEffect(()=>{
    })
    resetdata();
  }
+ const submitMyAnswer = () =>{
+    //RUN THROUGH INDEX
+    let ans = {...answer};
+    let fd = new FormData();
+    let sc = calculateScore();
+    fd.append('answer', JSON.stringify(ans));
+    fd.append('id', id);
+    fd.append('timer', timeused/1000);
+    fd.append('is_submitted', 1);
+    fd.append('is_marked', 1);
+    fd.append('score', sc);
+    fd.append('cat', 'update');
+    fd.append('table', 'course_scores');
+    props.updateCoursescore(fd);
+   
+    resetdata();
+}
  const calculateScore = () =>{
 
        let my_answers = {...answer};
@@ -251,50 +279,119 @@ useEffect(()=>{
        let all_points = [];
        let all_scores = [];
        //LOOP TROUGH MY ANSWERS
-       let my_answer_keys = Object.keys(my_answers);
-       for(let i = 0; i < my_answer_keys.length; i++)
+       for(let qu in all_questions)
        {
          //GET ANSWER
-         let single_answer = my_answers[my_answer_keys[i]];
-         let single_question = all_questions[my_answer_keys[i]];
-         let single_correct_answer = single_question && 'answer' instanceof single_question && single_question.answer.length  > 0 ? single_question.answer.split('::::::') : null;
-         let single_correct_answers = single_question && 'options' instanceof single_question && single_question.options.length  > 0 ? single_question.options.split('::::::') : null ;
+         let que = all_questions[qu][0];
+         let single_answer = my_answers[que];
+         let single_question = all_questions[qu][1];;
+         /**
+          * CONFIRM IF ANSWER WAS CHOOSEN
+          * CONFIRM IF CORRECT
+          */
+        if(single_answer && single_answer !== undefined)
+        {
+          /**
+           * GET CORRECT ANSWER
+           * NEEDED TO CONFIRM
+           * MULTIPLE CHOICE QUESTIONS
+           */
+         let single_correct_answer = single_question && single_question instanceof Object && single_question.answer.length  > 0 ? single_question.answer.split('::::::') : null;
+          /**
+           * GET ALL OPTIONS
+           * NEEDED TO CONFIRM
+           * FILL IN THE BLANKS
+           */
+         let single_correct_answers = single_question && single_question instanceof Object && single_question.options.length  > 0 ? single_question.options.split('::::::') : null ;
+          //GET THE QUESTION TYPE
          let s_type = single_question.type;
+          //GET THE POINTS ALLOCATED TO THE QUESTION
          let s_points = single_question.points;
-         all_points.push(s_points);
-         //COMPARE
+         //STORE THE POINTS
+         all_points.push(parseInt(s_points));
+         //CONFIRM IF IT IS SINGE SELECT QUESTION
          if(s_type === 1)
          {
-          if(single_answer[0] === single_correct_answer)
+           /**
+            * CONPARE STUDENT ANSWER KEY WITH 
+            * THE KEY OF THECORRECT ANSWER
+            * IF THE SAME STORE IN SCORE ARRAY
+            * ELSE DO NOTHING
+            */
+          console.log(single_answer, single_correct_answer)
+          if(single_answer === single_correct_answer[0])
           {
             all_scores.push(s_points);
           }
-         }else if(s_type === 2)
+         }
+         //CONFIRM IF IT IS A MUTIPLE SELECT QUESTION
+         else if(s_type === 2)
          {
+           /**
+            * STUDENT ANSWER IS EXPECTEDTO BE AN ARRAY OF ANSWERS
+            * CONFIRM THAT IT IS AN ARRAY
+            */
            if(single_answer && Array.isArray(single_answer))
            {
+              /**
+               * CREATE AN ARRAY TO STORE CORRECT SCORES
+               * LOOP OVER THE STUDENT ANSWERS
+               * THEN CONFIRM IF THE VALUE KEY CAN BE FOUND IN THE ANSWER ARRAY
+               * IF FOUND USIE THE VALUE 1 TO INDCATE SUCCESS
+               * STORE IN THE ARRAY
+               */
               let g_sc = [];
               for(let v = 0; v < single_answer.length; v++)
               {
-                if(single_answer[v] in single_correct_answer ){ g_sc.push(1)}
+                if( single_correct_answer.includes(single_answer[v]) ){ g_sc.push(1)}
               }
-
+              /**
+               * GET THE NUMBER OF STUDENT CORRECT ANSWER
+               * DIVIDE IT BY THE NUMBER OF CORRECT ANSWER
+               * MULTIPLY IT BY THE TOTALSCORE FOR THE QUETION
+               * STORE THE ANSWER
+               */
               let sc = g_sc.length > 0 && single_correct_answer.length > 0 ? ( g_sc.length / single_correct_answer.length ) * s_points : 0;
-              all_scores.push(sc);
+              all_scores.push(parseFloat(sc));
            }
-         }else if(s_type === 3)
-         {
-            if(single_answer[0] in single_correct_answers ){all_scores.push(s_points);}
          }
+         //CONFIRM IF IT IS A FILL IN THE BLANK QUESTION
+         else if(s_type === 3)
+         {
+            let ops = single_correct_answers
+            let opx = []; 
+            for(let row of ops)
+            {
+                let r = row.split("::::");
+                opx.push(r[1]);
+            }
+            //CONFIRM IF CORRECT ANSER IS IN OPTIONS VALUE 
+            //IF SO SCORE AND STORE
+            if(opx.includes(single_answer) ){all_scores.push(parseInt(s_points));}
+         }
+        }
+        /**
+         * IF NO ANSWER WAS GIVEN
+         * SAVE THE POINTS ONLY
+         */
+        else
+        {
+          let s_points = single_question.points;
+           all_points.push(parseInt(s_points));
+        } 
        }
-
+       
+       //GET THE TOTAL POINTS
+       //SUM THE TOTAL SCORES
+       let all_point = all_points.reduce((a, b)=>a + b, 0); 
        let final_points = all_scores.reduce((a, b)=>a + b, 0);
-       return final_points / all_points;
+       //DIVIDE TO GET SCORE IN FRACTION
+       return final_points / all_point;
  }
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle} backdrop={backdrop} keyboard={keyboard}>
-  <ModalHeader toggle={resetdata}>Question {ind + 1} <br/><h6 class='pull-left d-block'><small>{timer !== '' ? timeText(timeused) : 'No Timer'}</small></h6></ModalHeader>
+  <ModalHeader toggle={resetdata}>Question {ind + 1} <br/><h6 class='pull-left d-block'><small>{timer !== null ? timeText(timeused) : 'No Timer'}</small></h6></ModalHeader>
         <ModalBody>
         <div class="card" >
         <div class="card-header">
@@ -307,10 +404,10 @@ useEffect(()=>{
             <div class="card-body">
             {ind > -1 ? <> <Container>
                     <Row xs='12'>
-                      <Col xs='9'>
+                      <Col sm='9'>
                           <p style={{color:'#000000'}}><div dangerouslySetInnerHTML={{__html:question}}/></p>
                       </Col>
-                      <Col xs='3'>
+                      <Col sm='3'>
                         <small>{`${points} points`}</small>
                       </Col>
                     </Row>
@@ -344,23 +441,19 @@ useEffect(()=>{
                         })
                 : ''}
                  {type === 3 ?
-                        Object.keys(optionx).map((prop, index)=>{
-                        return <Button
-                                    key={index}
-                                    color={answer[keyz[ind]] && answer[keyz[ind]] !== undefined && answer[keyz[ind]].includes(prop) ? 'info' : 'secondary'}
-                                    onClick={()=>saveAnswerMultiple(keyz[ind], prop)}
-                                    size='sm'
-                                    block
-                                    >
-                                    {optionx[prop]}
-                                </Button>
-                    })
+                        <Input
+                          type ='text'
+                          className='form-control'
+                          value={answer[keyz[ind]] && answer[keyz[ind]] !== undefined ? answer[keyz[ind]] : ''}
+                          onChange={(e)=>saveAns(keyz[ind], e.target.value)}
+                        />
+                  
                 : ''}
                 </Container></> : <h3>{timer !== '' ? timeText(timeused) : 'Next to start'}</h3>  } 
             </div> 
             <div class="card-footer">
-                <Button color="secondary" onClick={moveB} className='pull-left' ><i class='fa fa-backward'></i> Previos</Button>
-                <Button color="secondary" onClick={moveF} className='pull-right'>Next <i class='fa fa-forward'></i></Button>
+                <Button color="link" onClick={moveB} className='pull-left' ><i class='fa fa-backward'></i> Previos</Button>
+                <Button color="link" onClick={moveF} className='pull-right'>Next <i class='fa fa-forward'></i></Button>
                   </div>    
         </div>
         </ModalBody>

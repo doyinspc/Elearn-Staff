@@ -57,12 +57,10 @@ class Course extends React.Component {
    }
 
   loadMaterial =(id) =>{
-    //this.setState({id});
     this.props.getCoursemodule(id);
     this.props.getCoursematerials({'is_active': 1, 'moduleId':id});
     this.props.getCoursescoresall({'moduleId':id, 'studentId':this.props.user.id});
     this.props.getCourseprogresss({'is_active': 0, 'moduleId':id, 'studentId':this.props.user.id});
-    //this.props.loadMaterial(id);
   }
 
   loadReport =() =>{
@@ -74,8 +72,9 @@ class Course extends React.Component {
       let tableTitle = course_name;
       let tableSubTitle = levelname +" "+departmentname;
       let listmodules = this.props.coursemodules.coursemodules.map((prop, ind)=>{
-      let diz =  new Date(prop.starts).getTime() > new Date(prop.starts).getTime() ? false : false;
-      if(diz){
+      let diz = new Date(prop.starts) < new Date() && new Date(prop.ends) > new Date() ? false: true;
+      if(diz)
+      {
        return <a class="dropdown-item" href="#" onClick={()=>{this.loadModuls(prop.id)}} >
        <Container class='my-0 py-0'>
          <Row xs='12' class='my-0 py-0'>
@@ -102,7 +101,6 @@ class Course extends React.Component {
           </Row>
           </Container>
           </a>
-
       }
       });
     return (
@@ -111,9 +109,12 @@ class Course extends React.Component {
       <CardReport
         st={this.state.rst}
         data={this.state.data}
-        user={this.state.user}
+        user={this.props.user} 
         mid={this.state.data.id}
-        handleClose={()=>{this.setState({rst:false})}}
+        handleClose={()=>{this.setState({rst:false, studentId:null})}}
+        mid={this.props.user.id}
+        courseId={this.state.data.id}
+        studentId={this.props.user.id}
       />:''}
         <PanelHeader size="sm" />
         <div className="content">

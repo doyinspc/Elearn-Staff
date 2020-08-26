@@ -31,7 +31,7 @@ class Student extends React.Component {
   
   componentDidMount(){
     this.props.getStudents({'is_active':0, 'is_delete':0});
-      this.setState({subtitle:'Active Students'});
+     this.setState({subtitle:'Active Students'});
 
      
   }

@@ -100,7 +100,7 @@ export default function(state = initialState, action){
             }; 
        
         case USERSTUDENTCOURSE_DELETE_SUCCESS:
-            let rem = state.userstudentcourses.filter(cat => cat.id != action.payload.id);
+            let rem = state.userstudentcourses.filter(cat => cat.id != action.payload);
             localStorage.setItem('userstudentcourse', JSON.stringify(rem));
             return{
                 ...state,

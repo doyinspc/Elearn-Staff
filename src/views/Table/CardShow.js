@@ -54,8 +54,9 @@ const Modals = (props) => {
         setPath(pth);
         setLinks(data.links);
     }
-
-
+  const resetdata = () =>{
+    props.handleClose();
+  }
   const onError = err =>{
       console.log(err);
     }
@@ -64,8 +65,8 @@ const Modals = (props) => {
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle} >
-  <ModalHeader toggle={toggle}><i className={`fa ${pics[type]}`}></i>Learning Material/Assessment</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
+  <ModalHeader toggle={resetdata}><i className={`fa ${pics[type]}`}></i>Learning Material/Assessment</ModalHeader>
         <ModalBody>
           <Container>
           <Row sm={12} >
@@ -110,8 +111,7 @@ const Modals = (props) => {
             />
             : ''}
            {type === 7 ? 
-            null
-          
+            <a target='_blank' href={links}> Click the link to redirect or download</a>
             : ''}
           </Row>
           <Row sm={12}>
@@ -122,7 +122,7 @@ const Modals = (props) => {
           </Container>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>

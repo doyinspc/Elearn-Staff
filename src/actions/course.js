@@ -13,6 +13,12 @@ import {
     COURSE_DELETE_FAIL,
     COURSE_EDIT,
 } from "./../types/course";
+import {
+    USERSTAFFCOURSE_REGISTER_SUCCESS,
+    USERSTAFFCOURSE_DELETE_SUCCESS,
+    USERSTAFFCOURSE_GET_ONE,
+    USERSTAFFCOURSE_UPDATE_SUCCESS
+} from "./../types/userstaffcourse";
 import { MAIN_TOKEN, API_PATHS, axiosConfig1, axiosConfig } from './common';
 
 let TABLE_NAME = 'courses';
@@ -52,15 +58,26 @@ export const getCourse = id => (dispatch, getState) => {
         type : COURSE_GET_ONE,
         payload: id
     });  
+    dispatch(
+        {
+        type : USERSTAFFCOURSE_GET_ONE,
+        payload: id
+    }); 
 };
 //COURSE DELETE
-export const deleteCourse = data => (dispatch, getState) =>{
-    dispatch({type : COURSE_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteCourse = dat => (dispatch, getState) =>{
+    
+    params.data = dat;
+    params.cat = 'deleter';
+    axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: COURSE_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
+            })
+            dispatch({
+                type: USERSTAFFCOURSE_DELETE_SUCCESS,
+                payload: dat.id
             })
         })
         .catch(err => {
@@ -80,6 +97,10 @@ export const registerCourse = data => dispatch => {
                 type: COURSE_REGISTER_SUCCESS,
                 payload: res.data.data
             })
+            dispatch({
+                type: USERSTAFFCOURSE_REGISTER_SUCCESS,
+                payload: res.data.data
+            })
         })
         .catch(err => {
             dispatch({
@@ -95,6 +116,10 @@ export const updateCourse = (data) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: COURSE_UPDATE_SUCCESS,
+                payload: res.data.data
+            })
+            dispatch({
+                type: USERSTAFFCOURSE_UPDATE_SUCCESS,
                 payload: res.data.data
             })
         })

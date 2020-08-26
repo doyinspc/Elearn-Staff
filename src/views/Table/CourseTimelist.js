@@ -24,16 +24,16 @@ class CardUserCourse extends React.Component {
                         <Row xs='12'>
                           <Col xs='9'>
                             <i class="fa fa-forward"></i> 
-                            <small>{prop.modulename}</small>
+    <small>{prop.modulename}</small>
                             <br/>
                             <h6>{prop.title}</h6>
                           </Col>
                           <Col xs='3'>
-                            { new Date(prop.starts).getTime() < new Date('today').getTime() ?
+                            { new Date(prop.starts) < new Date() && new Date(prop.ends) > new Date() ?
                               <button className='btn-link' onClick={()=>{this.loadMaterial(prop.id)}}>
                               <i class="fa fa-forward"></i> 
                             </button>:
-                            <button className='btn-link' onClick={()=>{this.loadMode(prop.id)}}>
+                            <button className='btn-link text-danger' onClick={()=>{this.loadMode(prop.id)}}>
                             <i class="fa fa-lock"></i> 
                           </button>}
                           </Col>

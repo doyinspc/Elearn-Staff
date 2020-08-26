@@ -122,7 +122,7 @@ const Modals = (props) => {
           <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
           <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
         </div>
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
         <ModalHeader toggle={resetdata}>{editName} Facilitator</ModalHeader>
         <ModalBody>
         <Form>

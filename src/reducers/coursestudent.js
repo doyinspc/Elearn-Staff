@@ -18,7 +18,7 @@ let coursestudentStore = JSON.parse(localStorage.getItem('coursestudent'));
 
 const initialState = {
     isLoading: false,
-    coursestudents: coursestudentStore && Array.isArray(coursestudentStore) && coursestudentStore.lenght ? coursestudentStore : [],
+    coursestudents: coursestudentStore && Array.isArray(coursestudentStore) && coursestudentStore.length ? coursestudentStore : [],
     coursestudent:{},
     msg: null,
     isEdit:-1,
@@ -95,7 +95,7 @@ export default function(state = initialState, action){
                 coursestudents: ac
             }
         case COURSESTUDENT_DELETE_SUCCESS:
-            let rem = state.coursestudents.filter(cat => cat.id != action.payload.id);
+            let rem = state.coursestudents.filter(cat => cat.cid != action.payload);
             localStorage.setItem('coursestudent', JSON.stringify(rem));
             return{
                 ...state,

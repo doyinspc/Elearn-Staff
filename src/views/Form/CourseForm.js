@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getCourse, registerCourse, updateCourse } from './../../actions/course';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, FormText, Label, Input, Col } from 'reactstrap';
 import axios from 'axios';
+import moment from 'moment';
 import Select  from 'react-select';
 import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
 
@@ -54,26 +55,16 @@ const Modals = (props) => {
   }
   
   useEffect(() => {
-  
     if(parseInt(props.mid) > 0  )
     {
-     setId(props.mid);
-     setModal(!modal);
-         //level
-    let params3 = {
-      data:JSON.stringify({'id':props.mid}),
-      cat:'group',
-      table:'courses',
-      token:MAIN_TOKEN
+     setId(parseInt(props.mid));
+     setModal(props.toggle);
+     populate(props.userstaffcourse);
+         
     }
-    axios.get(path, {params:params3}, axiosConfig)
-    .then((res)=>{
-      populate(res.data[0]);
-    })
-    .catch(err=>{
-      console.log(err);
-    })
-     
+    else
+    {
+      setModal(true);
     }
     //departments
     let params1 = {
@@ -89,7 +80,7 @@ const Modals = (props) => {
       table:'datas',
       token:MAIN_TOKEN
     }
-    
+   
     let requestOne = axios.get(path, {params:params1}, axiosConfig);
     let requestTwo = axios.get(path, {params:params2}, axiosConfig);
    
@@ -122,6 +113,7 @@ const Modals = (props) => {
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+      
         let fd = new FormData();
         fd.append('course_department', department.value);
         fd.append('course_level', level.value);
@@ -131,10 +123,10 @@ const Modals = (props) => {
         fd.append('course_description', description);
         fd.append('course_objective', objective);
         fd.append('course_owner', props.user.id);
-        fd.append('course_start', new Date(starts).getTime());
-        fd.append('course_end', new Date(ends).getTime());
+        fd.append('course_start', starts);
+        fd.append('course_end', ends);
         fd.append('table', 'courses');
-       
+        
         if(id && id > 0)
         {
           fd.append('id', id);
@@ -150,6 +142,7 @@ const Modals = (props) => {
   }
 
   const populate = async(data) =>{
+    
         let nm = {};
         nm['value'] = data.course_department;
         nm['label'] = data.departmentname;
@@ -165,14 +158,15 @@ const Modals = (props) => {
         nm2['label'] = data.course_name;
         setName(nm2);
 
-        let gt = new Date(parseInt(data.course_start));
-        let gt0 = gt.getFullYear()+"-"+gt.getMonth()+"-"+gt.getDay()
+        ///let gt = new Date(parseInt(data.course_start));
+        let gt0 =moment(data.course_start).format('YYYY-MM-DDTHH:mm');
+        let gt1 =moment(data.course_end).format('YYYY-MM-DDTHH:mm');
         //setName(data.course_name);
         //setCode(data.course_code);
         setObjective(data.course_objective);
         setDescription(data.course_description);
-        setStarts(data.course_start  !== null ? gt0 : '-' );
-        setEnds(data.course_end  !== null ? new Date(parseInt(data.course_end)).toISOString().substring(0, 19):'-' );
+        setStarts(gt0);
+        setEnds(gt1);
    
     }
 
@@ -207,10 +201,8 @@ const Modals = (props) => {
 
   return (
     <div>
-      
-      <Button className={editCss} color={editColor} onClick={tog}><i className={`fa ${editIcon}`}></i> Add Course </Button>
-      <Modal isOpen={modal} toggle={toggle} >
-        <ModalHeader toggle={resetdata}>{editName} Course</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle} backdrop='static' keyboard={false}>
+        <ModalHeader toggle={resetdata}>{editName} Class</ModalHeader>
         <ModalBody>
         <Form>
         <FormGroup row>
@@ -278,19 +270,19 @@ const Modals = (props) => {
                 </Col> 
             </FormGroup>*/}
             <FormGroup row>
-                <Label for="starts" sm={3}>Course Starts </Label>
+                <Label for="starts" sm={3}>Starts </Label>
                 <Col sm={9}>
                 <Input 
                     type="datetime-local" 
                     name="starts" 
                     id="starts"
-                    defaultValue={starts}
+                    value={starts}
                     onChange={e=>setStarts(e.target.value)} 
                      />
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="ends" sm={3}>Course Ends </Label>
+                <Label for="ends" sm={3}>Ends </Label>
                 <Col sm={9}>
                 <Input 
                     type="datetime-local" 
@@ -303,7 +295,7 @@ const Modals = (props) => {
             </FormGroup>
             <FormGroup row>
               
-                <Label for="objective" sm={12}>Course Objective </Label>
+                <Label for="objective" sm={12}>Objective </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 
@@ -318,7 +310,7 @@ const Modals = (props) => {
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Label for="description" sm={12}>Course Description </Label>
+                <Label for="description" sm={12}>Introduction </Label>
                 <Col sm={12}>
                 <Input 
                     type="textarea" 
@@ -344,7 +336,8 @@ const Modals = (props) => {
 }
 const mapStateToProps = (state, ownProps) => ({ 
     courses: state.courseReducer,
-    user:state.userstaffReducer.user
+    user:state.userstaffReducer.user,
+    userstaffcourse:state.userstaffcourseReducer.userstaffcourse
   })
   
 export default connect(mapStateToProps, { getCourse, registerCourse, updateCourse })(Modals)

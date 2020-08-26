@@ -54,13 +54,15 @@ export const getCoursestudent = id => (dispatch, getState) => {
     });  
 };
 //COURSESTUDENT DELETE
-export const deleteCoursestudent = data => (dispatch, getState) =>{
-    dispatch({type : COURSESTUDENT_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteCoursestudent = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        dispatch({type : COURSESTUDENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: COURSESTUDENT_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {
@@ -92,11 +94,11 @@ export const registerCoursestudent = data => dispatch => {
 export const updateCoursestudent = (data) => (dispatch, getState) => {
     //body
   
-    axios.post(path, data, axiosConfig)
+    axios.post(path, data, axiosConfig1)
         .then(res => {
             dispatch({
                 type: COURSESTUDENT_UPDATE_SUCCESS,
-                payload: res.data
+                payload: res.data.data
             })
         })
         .catch(err => {

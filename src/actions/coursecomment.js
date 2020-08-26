@@ -47,9 +47,37 @@ export const getCoursecomments = data => (dispatch, getState) => {
 };
 //GET ALL COURSECOMMENT 
 export const getCoursecommentstudent = data => (dispatch, getState) => {
-    //SET PAGE LOADING
+    /** 
+     * SET PAGE LOADING
+     * GET ALL COMMENT STUDENTS MADE ON THE MATERIAL PUBLIC AND PRVATE
+     * GET OTHER STUDENTS COMMENT THAT ARE PUBLIC
+     * GET ALL TEACHERS PRIVATE COMMENT TO STUDENT ON MATERIAL
+     * GET ALL TEACHERS PUBLIC COMMENTS
+     * */
+    
     params.data = JSON.stringify(data);
     params.cat = 'selectcomment';
+    dispatch({type : COURSECOMMENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
+            .then(res => {                                                                                                                                                                                                                                        
+                dispatch({
+                    type: COURSECOMMENT_GET_MULTIPLE,
+                    payload: res.data,
+                    node: 1
+                })
+            })
+            .catch(err => {
+                dispatch({
+                    type : COURSECOMMENT_LOADING_ERROR,
+                    payload:err
+                })
+            })
+};
+
+export const getCoursecommentstudentcourse = data => (dispatch, getState) => {
+    //SET PAGE LOADING
+    params.data = JSON.stringify(data);
+    params.cat = 'selectcommentcourse';
     dispatch({type : COURSECOMMENT_LOADING});
         axios.get(path, {params}, axiosConfig)
             .then(res => {                                                                                                                                                                                                                                        
@@ -77,15 +105,17 @@ export const getCoursecomment = id => (dispatch, getState) => {
     });  
 };
 //COURSECOMMENT DELETE
-export const deleteCoursecomment = data => (dispatch, getState) =>{
+export const deleteCoursecomment = dat => (dispatch, getState) =>{
+    params.data = JSON.stringify(dat);
+    params.cat = 'deleter';
     dispatch({type : COURSECOMMENT_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
-        .then(res => {
-            dispatch({
-                type: COURSECOMMENT_DELETE_SUCCESS,
-                payload: res.data
-            })
+    axios.get(path, {params}, axiosConfig)
+    .then(res => {
+        dispatch({
+            type: COURSECOMMENT_DELETE_SUCCESS,
+            payload: dat.id
         })
+    })
         .catch(err => {
             dispatch({
                 type : COURSECOMMENT_DELETE_FAIL,

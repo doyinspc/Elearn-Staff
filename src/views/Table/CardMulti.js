@@ -1,16 +1,6 @@
 
 import React from "react";
 
-// reactstrap components
-import {
-  Label,
-  Input,
-  FormGroup,
-  UncontrolledTooltip,
-  Button,
-  Media
-} from "reactstrap";
-
 class Course extends React.Component {
   constructor(props){
     super(props);
@@ -22,7 +12,7 @@ class Course extends React.Component {
   
 
   render() {
-     let {firstname, lastname, middlename, gender, department, } = this.props.data;
+     
     return (
       <>
          <tr>

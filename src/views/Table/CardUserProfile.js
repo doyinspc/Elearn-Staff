@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SERVER_URL } from "./../../actions/common.js"
+import { SERVER_URL, imgx } from "./../../actions/common.js"
 
 import {
   Button,
@@ -8,7 +8,6 @@ import {
   CardBody,
   Col
 } from "reactstrap";
-const imgx = require("assets/img/place.png");
 class User extends React.Component {
   render() {
 

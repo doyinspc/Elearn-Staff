@@ -86,7 +86,7 @@ export default function(state = initialState, action){
             let ses = all.filter(row=>row.id == action.payload)[0];
             return {
                 ...state,
-                userstaffcourseX : ses,
+                userstaffcourse : ses,
                 MSG:"DONE!!!"
             };
         case USERSTAFFCOURSE_REGISTER_SUCCESS:

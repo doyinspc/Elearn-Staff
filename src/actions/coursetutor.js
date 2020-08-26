@@ -54,15 +54,17 @@ export const getCoursetutor = id => (dispatch, getState) => {
     });  
 };
 //COURSETUTOR DELETE
-export const deleteCoursetutor = data => (dispatch, getState) =>{
+export const deleteCoursetutor = dat => (dispatch, getState) =>{
+    params.data = JSON.stringify(dat);
+    params.cat = 'deleter';
     dispatch({type : COURSETUTOR_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
-        .then(res => {
-            dispatch({
-                type: COURSETUTOR_DELETE_SUCCESS,
-                payload: res.data
-            })
+    axios.get(path, {params}, axiosConfig)
+    .then(res => {
+        dispatch({
+            type: COURSETUTOR_DELETE_SUCCESS,
+            payload: dat.id
         })
+    })
         .catch(err => {
             dispatch({
                 type : COURSETUTOR_DELETE_FAIL,

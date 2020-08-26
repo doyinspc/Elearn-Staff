@@ -15,13 +15,13 @@ import {
 } from "reactstrap";
 import { registerCoursescore, updateCoursescore, getCoursescore} from './../../actions/coursescore';
 import { registerCoursecomment, updateCoursecomment, getCoursecomment, getCoursecommentstudent} from './../../actions/coursecomment';
-import { SERVER_URL } from "actions/common";
+import { SERVER_URL, imgx } from "actions/common";
 import AudioPlayer from 'react-audio-player';
 import VideoPlayer from 'react-player';
 import CardChat from "./CardChat";
+import CardChatStudent from "./CardChatStudent";
 
 let path = API_PATHS;
-const imgx = require("assets/img/place.png");
 const pics = {
   1 : 'fa-file-text',
   2 : 'fa-file-pdf',
@@ -61,7 +61,7 @@ class TimeLine extends React.Component {
   }
 
   lunchObjTest = (data, act, timer, starts, ends) =>{
-    
+    console.log(timer);
     let timers = timer && timer !== 'x' ? `test duration ${timer}` : '';
     let starter = starts && starts !== 'x' ? ` test starts ${ new  Date(starts).toString()} ` : '';
     let ender = ends && ends !== 'x' ? ` test ends ${ new  Date(ends).toString()}` : '';
@@ -84,7 +84,8 @@ class TimeLine extends React.Component {
           let fd = new FormData();
           fd.append('studentId', this.props.user.id);
           fd.append('materialId',  this.props.data.id);
-          fd.append('timer',  timer);
+          fd.append('timer',  timer * 60);
+          fd.append('answer', JSON.stringify({}));
           fd.append('qid', 'multi');
           fd.append('cat', 'confirm');
           fd.append('table', 'course_scores');
@@ -94,7 +95,7 @@ class TimeLine extends React.Component {
                 qid:res.data.data.id,
                 st:true,
                 data:data,
-                timer:timer,
+                timer:res.data.data.timer,
                 score:res.data.data
               })
           })
@@ -271,18 +272,19 @@ class TimeLine extends React.Component {
 
   lunchComments = () =>{
     this.props.getCoursecommentstudent({
-      'userId':this.props.user.id,
+      'studentId':this.props.user.id,
       'materialId':this.props.data.id,
       'qid':'mat',
       'grp': 0,
       'types':0,
-       'numb': 1
+      'numb': 1
     });
     this.setState({cst:true, cid:this.props.data.id})
   }
   render() {
     let { description, title, types, links, question, settings, weight, sizes, id } = this.props.data || '';
     let allScores = this.props.coursescores.coursescores && Array.isArray(this.props.coursescores.coursescores) ? this.props.coursescores.coursescores : [];
+  
     let filteredScore = allScores.filter((row)=>parseInt(row.materialId) === parseInt(id)); 
     let obj_array = [1, 2, 3];
     let ess_array = [4, 5, 6, 7];
@@ -292,7 +294,7 @@ class TimeLine extends React.Component {
     let que = JSON.parse(question);
     let sets = JSON.parse(settings);
     let weightd = weight ? weight : 0;
-    let sizesd = sizes && parseInt(sizes) > 0 ? Math.round(sizes/1024) : 0;
+    let sizesd = sizes && parseInt(sizes) > 0 ? Math.round(parseInt(sizes)/1024) : 0;
     let sizedd = sizesd + ' mb';
 
     let obj = [];
@@ -301,6 +303,7 @@ class TimeLine extends React.Component {
     let total_ess = [];
     let points_obj = {};
     let points_obj_student = {};
+
     for(let prop in que)
     {
      let rw = que[prop] && que[prop] !== undefined ? que[prop] : {} ;
@@ -342,7 +345,6 @@ class TimeLine extends React.Component {
       let endDate = showEnds & ends && ends !== 0 && Object.prototype.toString.call(ends) === "[object Date]" && !isNaN(ends) ? new Date(ends).getTime() : 'x';
       let canStart = true; //DEFAULT START ANYTIME
       let canEnd = false;  //DEFAULT DO NOT END
-      
 
       /**
        * CONFIRM IF THE STUDENT HAS ASCORE DATAFOR THIS TOPIC
@@ -350,23 +352,26 @@ class TimeLine extends React.Component {
        */
       let checkScoreData = filteredScore.filter((row)=>row.qid === keyed);
       let scoreData = checkScoreData && Array.isArray(checkScoreData) && checkScoreData.length > 0 ? checkScoreData[0] : null;
+     
       let score = null;
+      
       if(scoreData && scoreData !== null)
       {
-        if(scoreData.is_marked === 1)
-        {
-          if(keyed in points_obj)
+       
+        if(parseInt(scoreData.is_marked) === 1)
+        { 
+          if(Object.keys(points_obj).includes(keyed))
           {
             let scoree = scoreData.score * points_obj[keyed];
             points_obj_student[keyed] = scoree;
-            score = Math.round(scoree);
+            score = Number(scoree).toFixed(1);
           }else
           {
             score = 0;
           }
         }else if(scoreData.is_marked === 0 && (scoreData.is_submitted === 1))
         {
-          score = scoreData.is_submitted === 1 ? 'pending' : '--.--';
+          score = parseInt(scoreData.is_submitted) === 1 ? 'pending' : '--.--';
         }
       }
       
@@ -380,7 +385,7 @@ class TimeLine extends React.Component {
         obj_buttons = <button 
         className={`btn btn-success btn-sm`} 
         >
-          Multichoice <span class="badge">{ score } </span> 
+          Multichoice <span class="badge">{`${score}/${points_obj[keyed]}`}</span> 
         </button>
       }else
       {
@@ -425,13 +430,13 @@ class TimeLine extends React.Component {
       let score = null;
       if(scoreData !== null)
       {
-        if(scoreData.is_marked === 1)
+        if(parseInt(scoreData.is_marked) === 1)
         {
-          if(keyed in points_obj)
+          if(Object.keys(points_obj).includes(keyed))
           {
             let scoree = scoreData.score * points_obj[keyed];
             points_obj_student[keyed] = scoree;
-            score = Math.round(scoree);
+            score = Number(scoree).toFixed(1);
           }else
           {
             score = 0;
@@ -456,7 +461,7 @@ class TimeLine extends React.Component {
          ess_button = <button 
                   className={`btn btn-success btn-sm`} 
                   >
-                    Essay {index + 1} <span className='badge badge-light'>{score}</span>
+                    Essay {index + 1} <span className='badge badge-light'>{`${score}/${points_obj[keyed]}`}</span>
                 </button>
       }else
       {
@@ -471,10 +476,10 @@ class TimeLine extends React.Component {
       })
     }
 
-    let sum_student_scores = Object.values(points_obj_student).filter((a, b)=> a + b, 0);
+    let sum_student_scores = Object.values(points_obj_student).reduce((a, b)=> a + b, 0);
     let sum_total_max_points = total_obj_points + total_ess_points;
-    let final_score = (sum_student_scores / sum_total_max_points) * parseInt(weightd);
-     
+    let final_scoress = (sum_student_scores / sum_total_max_points) * parseInt(weightd);
+    let final_score = Number(final_scoress).toFixed(1);
     return (
       <>
         {this.state.st ? 
@@ -500,12 +505,15 @@ class TimeLine extends React.Component {
               /> : ''
         }
         {this.state.cst ? 
-          <CardChat
-              st={this.state.cst}
-              mid={this.state.cid}
-              handleClose={()=>this.setState({cst:false, cid:null})}
-              /> : ''
-        }
+        <CardChatStudent
+          materialId={this.state.data.id}
+          studentId={this.props.user.id}
+          data={this.state.data}
+          st={this.state.cst}
+          mmid={this.props.user.id}
+          pid='2'
+          handleClose={()=>this.setState({cst:false, studentId:null})}
+        />: null}
        <li class="timeline-inverted">
             <div class={`timeline-badge ${themeColor}`}>
                 <i class={`fa ${pics[types]}`}></i>
@@ -561,7 +569,7 @@ class TimeLine extends React.Component {
                         onError={this.onError}
                         style={{width:'100%'}}
                       />
-                      </>
+                      </> 
                       : ''}
                     {type === 6 ? 
                     <>
@@ -615,7 +623,8 @@ class TimeLine extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({ 
   courses: state.courseReducer,
-  coursescores: state.courseReducer,
+  userstudent: state.userstudentReducer.userstudent,
+  coursescores: state.coursescoreReducer,
   user: state.userstudentReducer.user,
 })
 

@@ -11,7 +11,8 @@ import CourseMaterialForm from './../Form/CourseFormMaterial';
 import {
   Button,
   Row,
-  Col
+  Col,
+  UncontrolledTooltip
 } from "reactstrap";
 import CardShow from "./CardShow";
 import CardShowQuestionPerformance from "./CardShowQuestionPerformance";
@@ -36,14 +37,15 @@ class Material extends React.Component {
       st:false,
       qid:null,
       qst:false,
-      qdata:{}
+      qdata:{},
+      ast:null,
+      poq:false
     }
   }
 
 
   showQuestion = (id, data) =>{
     //SET STATES TO OPEN MODULE
-    console.log(id);
     this.setState({qid:id, qst:true, qdata:data});
     //GET ALL SCORES FOR STUDENTS THAT ATTEMTED THE TEST
     //GET QUESTION UNIQUE ID
@@ -68,25 +70,28 @@ class Material extends React.Component {
   showMaterial = () =>{
     this.setState({st:true})
   }
-  showQuestion = () =>{
-    //great
-  }
+  
 
   render() {
     let multichoice_array = [1, 2, 3];
-    let essay_array = [4, 5, 6];
+    let essay_array = [4, 5, 6, 7];
     let question = this.props.data.question;
     let que = JSON.parse(question);
-    let am = que && Array.isArray(Object.keys(que)) ? Object.keys(que).map((row)=>{
-        let obj = que[row];
-        if(obj.type === 1 || obj.type === 2  ||  obj.type === 3 )
-        {
-          return [row, obj];
-        }
-    }):[];
-  
-    let tm= [];
-    for(let prop in que){
+    let am  = [];
+    for(let prop in que)
+    {
+      let rw = que[prop] && que[prop] !== undefined ? que[prop] : {} ;
+      if(multichoice_array.includes(parseInt(rw.type)))
+      {
+        let ar = [];
+        ar.push(prop);
+        ar.push(rw);
+        am.push(ar);
+      }
+    }
+    let tm = [];
+    for(let prop in que)
+    {
       let rw = que[prop] && que[prop] !== undefined ? que[prop] : {} ;
       if(essay_array.includes(parseInt(rw.type)))
       {
@@ -95,45 +100,73 @@ class Material extends React.Component {
         ar.push(rw);
         tm.push(ar);
       }
-    };
+    }
 
-
-    
     let {qid, qst, qdata } = this.state;
-
     let butts =  tm.map((r, i)=>{
-      return <Button key={i} type='button' size='sm' color='info' class="btn btn-info btn-sm" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</Button>
+      return <Button key={i} type='button'  color='info' class="btn btn-info mx-1 mb-1" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</Button>
       })
+
+      
     return (
       <>
+      
+      {qst ? 
       <CardShowQuestionPerformance
           mid={qid}
           st={qst}
           data={qdata}
-       />
-         <Row>
-         {this.state.st ? <CardShow mid={this.props.data.id} data ={this.props.data} st={this.state.st}/>: ''}
-            <Col md='6'><a href="#" onClick={this.showMaterial} className="text-default"><h4><i class={`fa ${pics[this.props.data.types]}`}></i> <small style={{fontSize:14}}>{this.props.data.title}</small></h4></a></Col>
-            <Col md='6' className="text-right"> 
-              <div class='btn-group btn-sm'>
-                <CourseFormAssessment id={this.props.data.id} data={this.props.data}/>
+          handleClose={()=>this.setState({qid:null, qst:false, qdata:{}})}
+       />:''}
+       {this.state.st ? 
+         <CardShow 
+          mid={this.props.data.id} 
+          data ={this.props.data} 
+          st={this.state.st}
+          handleClose={()=>this.setState({st:false, id:null, data:{}})}
+          />: ''}
+        {this.state.ast ? 
+          <CourseFormAssessment 
+            mid={this.props.data.id} 
+            id={this.props.data.id} 
+            st={this.state.ast}
+            data={this.props.data}
+            handleClose={()=>this.setState({ast:false})}
+          /> : ''}
+         <Row xs='12'>
+         <div class="card">
+            <div class="card-body">
+              <blockquote class={`blockquote ${parseInt(this.props.data.is_active) === 1 ? 'blockquote-primary': 'blockquote-info' } mb-0`}>
+                <p>{this.props.data.title}</p>
+                <footer class="blockquote-footer">{this.props.title}{' '}<cite title="Source Title">{this.props.title1}</cite></footer>
+              </blockquote>
+            </div>
+            <div class="card-footer">
+                <button id={`too1${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon"  onClick={()=>this.setState({ast:true})} handleClose={()=>this.setState({ast:false})} type="button"  ><i class="now-ui-icons education_paper"></i></button> 
                 {parseInt(this.props.data.is_active) === 1 ? 
-                <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(0)}><i class="fa fa-eye"></i></Button>:
-                <Button class="btn-primary btn-sm" onClick={()=>this.handleActive(1)}><i class="fa fa-eye-slash text-danger"></i></Button>}
-                <Button class="btn-primary btn-sm" onClick={()=>this.props.handleEdit(this.props.data.id)}><i class="fa fa-edit"></i></Button>
-                <Button class="btn-danger btn-sm" onClick={()=>this.props.handleDelete(this.props.data.id)}><i class="fa fa-trash"></i></Button>
-              </div>
-            </Col>
+                <button id={`too2${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-primary " onClick={()=>this.handleActive(0)}><i class="now-ui-icons ui-1_lock-circle-open"></i></button>:
+                <button id={`too2${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-primary" onClick={()=>this.handleActive(1)}><i class="now-ui-icons business_bulb-63"></i></button>}
+                <button id={`too4${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-info " onClick={()=>this.props.handleEdit(this.props.data.id)}><i class="now-ui-icons ui-1_lock-circle-open"></i></button>
+                <button id={`too5${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-danger" onClick={()=>this.props.handleDelete(this.props.data.id)}><i class="now-ui-icons ui-1_simple-remove"></i></button>
+                <button id={`too6${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={this.showMaterial}><i class={`fa ${pics[this.props.data.types]}`}></i></button>
+                
+                <UncontrolledTooltip target={`too1${this.props.data.id}`}>Questions</UncontrolledTooltip>
+                {parseInt(this.props.data.is_active) === 1 ? 
+                <UncontrolledTooltip target={`too2${this.props.data.id}`}>Show</UncontrolledTooltip>:
+                <UncontrolledTooltip target={`too2${this.props.data.id}`}>Hide</UncontrolledTooltip>}
+                <UncontrolledTooltip target={`too4${this.props.data.id}`}>Edit</UncontrolledTooltip>
+                <UncontrolledTooltip target={`too5${this.props.data.id}`}>Remove</UncontrolledTooltip>
+                <UncontrolledTooltip target={`too6${this.props.data.id}`}>Preveiw</UncontrolledTooltip>
+                {am.length > 0 ?
+                <Button  className="btn btn-info mx-1 mb-1" onClick={()=>{this.showQuestion('mult', am)}}>Multichoice <span className="badge badge-secondary">{am.length}</span>
+                <span className="sr-only"> questions</span></Button>
+                : ''}{' '}
+                {butts}
+            </div>
+          </div>
+            
           </Row>
-          <Row>
-            {am.length > 0 ?
-            <Button  class="btn btn-info btn-sm" onClick={()=>this.showQuestion('mult', am)}>Multichoice <span className="badge badge-secondary">{am.length}</span>
-            <span className="sr-only"> questions</span></Button>
-            : ''}
-            {
-             butts
-            }
-          </Row>
+         
       </>
     );
   }
@@ -141,7 +174,8 @@ class Material extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({ 
-  courses: state.courseReducer
+  courses: state.courseReducer,
+  user:state.userstudentReducer.user,
 })
 
 export default connect(mapStateToProps, { getCoursematerials, getCoursematerial, updateCoursematerial , deleteCoursematerial, getCoursescores, getCoursecomments})(Material)

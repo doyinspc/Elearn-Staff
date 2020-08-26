@@ -17,7 +17,7 @@ class Course extends React.Component {
       id:null,
       que:'',
       num:null,
-      val:[]
+      val:false
       
     }
   }
@@ -52,13 +52,13 @@ class Course extends React.Component {
               <Col sm={9}>
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input class="form-check-input text-primary" id={`rad${index}`} onClick={this.handleAnswer}  type="checkbox" value={que}/>
+                       {this.state.val ? <input class="form-check-input text-primary" id={`rad${index}`} onClick={this.handleAnswer} defaultChecked type="checkbox" value={que}/>:
+                        <input class="form-check-input text-primary" id={`rad${index}`} onClick={this.handleAnswer}  type="checkbox" value={que}/>}
                         <span class="form-check-sign">
                             <Input
                               className="form-control "
                               style={{height:30, maxWidth:250}}
                               name='que'
-                              value={que}
                               defaultValue={que}
                               type="text"
                               onChange={this.handleChange}

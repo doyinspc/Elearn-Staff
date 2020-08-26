@@ -8,6 +8,10 @@ import CardQuestionWeight from './CardQuestionWeight';
 import CardFitbForm from './CardFitbForm';
 import CardFitbForm1 from './CardFitbForm1';
 import CardFitbForm2 from './CardFitbForm2';
+import FormImage from './FormImage';
+import FormTextx from './FormTextx';
+import ShowImage from './../Table/ShowImage';
+import { SERVER_URL } from 'actions/common';
 
 
 
@@ -16,6 +20,7 @@ const Modals = (props) => {
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [type, setType] = useState(0);
+  const [instruction, setInstruction] = useState('');
   const [question, setQuestion] = useState('');
   const [optx, setOptx] = useState({});
   const [answer, setAnswer] = useState('');
@@ -25,30 +30,45 @@ const Modals = (props) => {
   const [page, setPage] = useState(1);
   const [settings, setSettings] = useState({});
   const [weight, setWeight] = useState(10);
-  const clearState = () =>{
-    setModal(false);
+  const [img, setImg] = useState(false);
+  const [imgnum, setImgnum] = useState(null);
+  const [imgtype, setImgtype] = useState(null);
+  const [txt, setTxt] = useState(false);
+  const [txtnum, setTxtnum] = useState(null);
+  const [txttype, setTxttype] = useState(null);
+
+  const [imgpic, setImgpic] = useState('');
+  const [vidpic, setVidpic] = useState('');
+  const [audpic, setAudpic] = useState('');
+
+  const resetdata = () =>{
     setId(null);
     setType(0);
     setQuestion([]);
+    setInstruction('');
+    setImgpic('');
+    setAudpic('');
+    setVidpic('');
     setOptx(['']);
     setAnswer([]);
     setPoints(1);
-    setQbank([]);
+    props.handleClose();
   }
 
   const clearForm = () =>{
     setId(null);
     setType(0);
     setQuestion([]);
+    setInstruction('');
+    setImgpic('');
+    setAudpic('');
+    setVidpic('');
     setOptx(['']);
     setAnswer([]);
     setPoints(1);
   }
-  const toggle = () => setModal(!modal);
-  const toggles = (rid) => {
-    toggle();
-    setType(rid);
-  }
+  const toggle = () => setModal(false);
+  
   const opts = (rid) => {
     setType(rid);
   }
@@ -56,20 +76,86 @@ const Modals = (props) => {
   useEffect(() => {
     if(parseInt(props.mid) > 0 )
     {
-     setId(props.mid);
-     setModal(!modal);     
+    //setId(props.mid);
+     setModal(true);     
     } 
     populate(props.data);
 },[props.mid]);
 
-  
+ const handleImage = (imgnum, imgtype) =>{
+   switch (imgtype) 
+   {
+     case 1:
+     case 2:
+      setTxtnum(imgnum);
+      setTxttype(imgtype);
+      setTxt(true);
+      break;
+     case 3:
+     case 4:
+     case 5:
+      setImgnum(imgnum);
+      setImgtype(imgtype);
+      setImg(true);
+      break;
+     default:
+       break;
+   }
+ }
+ const textLoader = (data, num, id) =>{
+   if(id === 1)
+   {
+      setQuestion(data);
+   }else
+   {
+    setInstruction(data);
+   }
+
+ }
+ const imgLoader = (url, num, grp) =>{
+   setImg(false);
+    
+     if(grp === 'quest')
+     {
+       if(num === 3)
+       {
+        setImgpic(url);
+        setImgnum(null)
+       }
+       else if(num === 4)
+       {
+        console.log(num)
+        console.log(grp);
+        console.log(url);
+        setAudpic(url);
+        setImgnum(null)
+       }
+       else if(num === 5)
+       {
+        setVidpic(url);
+        setImgnum(null)
+       }
+      
+     }else
+     {
+       //set options
+       let ops = {...optx};
+       ops[num] = url;
+       setOptx(ops);
+     }
+
+ }
   const handleSubmit = (e) =>{
         //GET TYPE
         let arr = {}
         //SET CONSTANTS
+        arr['instruction'] = instruction;
         arr['question'] = question;
         arr['type'] = type;
         arr['points'] = points;
+        arr['imgs'] = imgpic;
+        arr['vids'] = vidpic;
+        arr['auds'] = audpic;
         //IF SINGLE SELECTIOM 1
         //MULTIPLE SELECTION 2
         //ANSWERS
@@ -107,7 +193,7 @@ const Modals = (props) => {
         {
           arr['options'] = '';
         }
-       
+        console.log(arr);
         //GET ALL QUESTIONS FROM BANK
         let all = qbank && Array.isArray(Object.keys(qbank)) ? {...qbank} : {};
         let alls = settings && Array.isArray(Object.keys(settings)) ? {...settings} : {};
@@ -127,9 +213,13 @@ const Modals = (props) => {
   const handleUpdate = (e) =>{
     //GET TYPE
     let arr = {}
+    arr['instruction'] = instruction;
     arr['question'] = question;
     arr['type'] = type;
     arr['points'] = points;
+    arr['imgs'] = imgpic;
+    arr['vids'] = vidpic;
+    arr['auds'] = audpic;
 
     //ANSWERS
     if(type === 1 || type === 2)
@@ -182,6 +272,12 @@ const Modals = (props) => {
     ops['d' + rand] = '';
     setOptx(ops);
   }
+  //ADD SPACE FOR NEW OPTION
+  const addOptionImg = (num) =>{
+    let rand = Math.floor(Math.random() * 12345)
+    handleImage('d' + rand);
+    
+  }
   //REMOVE SPACE AND OPTION ITEM
   const removeOption = indx =>{
     let ed = {...optx};
@@ -193,9 +289,9 @@ const Modals = (props) => {
     let ed = {...optx}
     ed[ind] = data;
     setOptx(ed);  
- }
+  }
 //SET ANSWER
- const handleChangeAnswer = (data, st, ind) =>{
+  const handleChangeAnswer = (data, st, ind) =>{
   if(data !== "" || data !== null || data !== 'undefined')
   {
       let ed = type === 1 ? {} : {...answers};
@@ -208,15 +304,6 @@ const Modals = (props) => {
       setAnswers(ed);  
   }
   
-}
-  const setSubmitQuestion = data =>{
-    let q = [...question, data]
-    setQuestion(q);
-  }
-  const setUpdateQuestion = (data, id) =>{
-    let q = [...qbank];
-    q[id] = data;
-    setQuestion(q);
   }
   const setEditQuestion = indx =>{
      let ed = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? {...qbank} : {};
@@ -226,18 +313,21 @@ const Modals = (props) => {
        let ops = eds.options ? eds.options.split('::::::') :[];
        let ans = "";
        let opx = {};
-       if(eds.type === 1 && eds.type === 2 && eds.type === 3)
+       
+       if(parseInt(eds.type) === 1 || parseInt(eds.type) === 2 || parseInt(eds.type) === 3)
        {
-          opx = ops.map(row=>{
+          opx ={}; 
+          for(let row of ops){
               let r = row.split("::::");
-              let ar = {};
-              return ar[r[0]] = r[1]
-          })
-          if(eds.type === 1 && eds.type === 2)
+              opx[r[0]] = r[1];
+          }
+          setOptx(opx);
+          
+          if(eds.type === 1 ||  eds.type === 2)
           {
             ans = eds.answer ? eds.answer.split('::::::') :[];
           }else{
-            ans = [];
+            ans = opx;
           }
           
         }else
@@ -245,12 +335,16 @@ const Modals = (props) => {
           ans = eds.answer;
         }
        setId(indx);
+       setInstruction(eds.instruction);
        setQuestion(eds.question);
        setType(parseInt(eds.type));
        setPoints(eds.points);
        setAnswer(ans);
        setAnswers(ans);
-       setOptx(ops);
+       setImgpic(eds.imgs);
+       setAudpic(eds.auds);
+       setVidpic(eds.vids);
+       
       }
   }
   const setDeleteQuestion = indx =>{
@@ -279,7 +373,6 @@ const Modals = (props) => {
     props.updateCoursematerial({weight:weight}, props.id);
       
 }
-
 const populate = async(data) =>{
   try {
     let ques = JSON.parse(data.question);
@@ -298,15 +391,17 @@ const populate = async(data) =>{
   let loadOptx = null;
   // IF THE TYPE IS 1 SINGLE SELECTION
   if(type === 1)
-  {
-  loadOptx =  optx && Array.isArray(Object.keys(optx)) && Object.keys(optx).length > 0 ? Object.keys(optx).map((index)=>{
-      
+  { 
+  loadOptx =  optx && Array.isArray(Object.keys(optx)) && Object.keys(optx).length > 0 ? Object.keys(optx).map((rw, index)=>{
+    let res = answer && Array.isArray(answers) && answers.includes(rw) ? true : false;
+    
     return <CardFitbForm 
-                  key={`ab_${index}`} 
-                  index={index} 
+                  key={`ab_${rw}`} 
+                  index={rw} 
                   num={type}
-                  val={answer}
-                  data={optx[index]}
+                  val={res}
+                  data={optx[rw]}
+                  handleImg={addOptionImg}
                   removeOption={removeOption}
                   handleChange={handleChange}
                   handleChangeAnswer={handleChangeAnswer}
@@ -317,11 +412,12 @@ const populate = async(data) =>{
   //IF THE TYPE IS 2 MULTIPLESELECTIONS
   if(type === 2){
   loadOptx =  optx && Array.isArray(Object.keys(optx)) && Object.keys(optx).length > 0 ? Object.keys(optx).map((index)=>{
-      return <CardFitbForm1 
+    let res = answer && Array.isArray(answers) && answers.includes(index) ? true : false;  
+    return <CardFitbForm1 
                   key={`abd_${index}`} 
                   index={index} 
                   num={type}
-                  val={answer}
+                  val={res}
                   data={optx[index]}
                   removeOption={removeOption}
                   handleChange={handleChange}
@@ -349,9 +445,10 @@ const populate = async(data) =>{
     }
 
   //OUTLINE ALL REGISTERED QUESTIONS
-  let numbering = 0;
-  const loadQuestions = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? Object.keys(qbank).map((index)=>{
-    let po = qbank[index] && qbank[index] !== undefined && Array.isArray(Object.keys(qbank[index])) ? qbank[index].type : 1;  
+   let numbering = 0;
+   const loadQuestions = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? Object.keys(qbank).map((index)=>{
+   let po = qbank[index] && qbank[index] !== undefined && Array.isArray(Object.keys(qbank[index])) ? qbank[index].type : 1;  
+    
     numbering = numbering + 1;
     return <CardQuestion
                   key={`abc_${index}`} 
@@ -363,8 +460,8 @@ const populate = async(data) =>{
                   handleDelete={(rid)=>setDeleteQuestion(index)}
               />
   }): null;
- let multichoice_array = [1, 2, 3];
- let essay_array = [4, 5, 6];
+  let multichoice_array = [1, 2, 3];
+  let essay_array = [4, 5, 6, 7];
   let editColor = 'primary';
   let objec = qbank && Array.isArray(Object.keys(qbank)) ? Object.keys(qbank).map((prop, ind)=>{
     let rw = qbank[prop] && qbank[prop] !== undefined ? qbank[prop] : {} 
@@ -374,7 +471,8 @@ const populate = async(data) =>{
      }
   }): [];
   let essay = [];
-  for(let prop in qbank){
+  for(let prop in qbank)
+  {
     let rw = qbank[prop] && qbank[prop] !== undefined ? qbank[prop] : {} ;
      if(essay_array.includes(parseInt(rw.type)))
      {
@@ -384,22 +482,31 @@ const populate = async(data) =>{
        essay.push(ar);
      }
   };
-
+ 
   let object_num = objec ? objec.length : 0;
-  let essay_num = essay ? essay.length : 0;
   return (
     <div>
-        <button class="btn btn-secondary" id={`too${id}`} onClick={()=>toggles(1)} type="button"  >
-          <i class="fa fa-question"></i>
-        </button>
-      <UncontrolledTooltip 
-          target={`too${id}`}
-      >
-        Questions
-        </UncontrolledTooltip>
-
-      <Modal isOpen={modal} toggle={toggle} contentClassName={{width:'800px', height:400}} >
-        <ModalHeader toggle={toggle}>Assessments</ModalHeader>
+      {img ?
+       <FormImage
+        mid={imgnum}
+        type={imgtype}
+        st={img}
+        getlink={(url, num)=>imgLoader(url, imgtype, imgnum)}
+        handleClose={()=>setImg(false)}
+        />:''
+      }
+      {txt ?
+       <FormTextx
+        mid={txtnum}
+        type={txttype}
+        val={txttype === 1 ? question : instruction }
+        st={txt}
+        getlink={(data, num)=>textLoader(data, num, txttype)}
+        handleClose={()=>setTxt(false)}
+        />:''
+      }
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' contentClassName={{width:'800px', height:400}} >
+        <ModalHeader toggle={resetdata}>Assessments</ModalHeader>
         <ModalBody style={{backgroundColor:'#cccccc'}}>
         <Container className='p-10'>
           <Card>
@@ -444,35 +551,71 @@ const populate = async(data) =>{
                     />
               </CardBody>
             : ''}
-            {page  === 1 ?<CardBody >
-              <Row>
-                <Col sm={10}>
+            {page  === 1 ?
+            <CardBody >
+              <Row className='m-0 p-0 h-50'>
+                    <Col xs='2'><a onClick={()=>handleImage('quest', 1)}><i className="fa fa-expand text-primary"></i></a></Col>
+                    <Col xs='2'><a onClick={()=>handleImage('quest', 2)}><i className="fa fa-dedent text-primary"></i></a></Col>
+                    <Col xs='2'><a onClick={()=>handleImage('quest', 3)}><i className="fa fa-image text-primary"></i></a></Col>
+                    <Col xs='2'><a onClick={()=>handleImage('quest', 4)}><i className="fa fa-volume-up text-primary"></i></a></Col>
+                    <Col xs='2'><a onClick={()=>handleImage('quest', 5)}><i className="fa fa-video text-primary"></i></a></Col>
+                    <Col></Col>
+              </Row>
+              {instruction && instruction.length > 0 ?
+              <Row className='m-0 p-0' >
+                <div  dangerouslySetInnerHTML={{__html: instruction}} />
+              
+              </Row>:''}
+              <Row className='m-0 p-0 h-50'>
+                <Col sm={12}>
                   <Input
                     name={question}
                     value={question}
                     type="textarea"
-                    row={5}
-                    col={8}
-                    placeholder="Question"
+                    row={15}
+                    col={15}
+                    placeholder="What is your question?"
                     onChange={(e)=>setQuestion(e.target.value)}
                     />
                 </Col>
-                <Col>
-                    <a onClick={handleSubmit}><h3><i className="fa fa-image"></i></h3></a>
-                </Col>
               </Row>
+              
+              {imgpic && imgpic !== null && imgpic.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + imgpic}
+                  type={1}
+              />
+              </Row>
+               :''}
+               {audpic && audpic !== null && audpic.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + audpic}
+                  type={2}
+              />
+              </Row>
+               :''}
+              {vidpic && vidpic !== null && vidpic.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + vidpic}
+                  type={3}
+              />
+              </Row>
+               :''}
               <Row>
                 <Col>
                   <div class="btn-group dropdown">
-                    <button class="btn btn-secondary dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle btn-primary btn-sm btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fa fa-plus"></i> Choose answer type
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
                         <a class="dropdown-item" href="#" onClick={()=>opts(1)}><i class='fa fa-question'></i> Multichoice (Single Answer)</a>
                         <a class="dropdown-item" href="#" onClick={()=>opts(2)}><i class='fa fa-question'></i> Multichoice (Multiple Answer)</a>
                         <a class="dropdown-item" href="#" onClick={()=>opts(3)}><i class='fa fa-question'></i> Fill in the blank</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(4)}><i class='fa fa-question'></i> Short Text</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(5)}><i class="fa fa-question" ></i> Long Text</a>
+                        <a class="dropdown-item" href="#" onClick={()=>opts(4)}><i class='fa fa-question'></i> Short Text Answer</a>
+                        <a class="dropdown-item" href="#" onClick={()=>opts(5)}><i class="fa fa-question" ></i> Long Text Answer</a>
                         <a class="dropdown-item" href="#" onClick={()=>opts(6)}><i class='fa fa-attachment'></i> Upload Answer</a>
                         <a class="dropdown-item" href="#" onClick={()=>opts(7)}><i class='fa fa-link'></i> Post Link</a>   
                       </div>
@@ -525,7 +668,7 @@ const populate = async(data) =>{
                 <Label sm={3}>Points</Label>
                 <Col sm={9}>
                   <Input
-                    classname="form-control form-control-sm"
+                    className="form-control form-control-sm"
                     style={{height:25}}
                     name='points'
                     value={points}
@@ -541,18 +684,19 @@ const populate = async(data) =>{
               : ''}
             <CardFooter>
 
-            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(1)}><i className='fa fa-question'></i></button>
-            <button className="btn btn-sm btn-icon btn-inf" onClick={()=>setPage(2)}><i className='fa fa-alarm-plus'></i></button>
-            <button className="btn btn-sm btn-icon btn-inf" onClick={()=>setPage(3)}><i className='fa fa-gearsj'></i></button>
-              <Button color={editColor} onClick={id ? handleUpdate : handleSubmit}>{id ? 'Change' : 'Save' }</Button>{' '}
-                { id ? <Button color="info" onClick={clearState}>Add New</Button> : null}
+            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(1)}><i className='fa fa-dedent'></i></button>
+            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(2)}><i className='fa fa-clock-o'></i></button>
+            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(3)}><i className='fa fa-gears'></i></button>
+              <Button size='sm' color={editColor} onClick={id ? handleUpdate : handleSubmit}>{id ? 'Change' : 'Save' }</Button>{' '}
+                { id ? <Button size='sm' color="info" onClick={clearForm}>Add New</Button> : null}
+                <Button size='sm' color="info" class='pull-left' onClick={resetdata}>Close</Button>
             </CardFooter>
           </Card>
         </Container>
           { page === 1 ? loadQuestions : ''}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={clearState}>Cancel</Button>
+          <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>

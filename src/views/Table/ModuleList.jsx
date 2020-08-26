@@ -1,7 +1,6 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { Link }  from 'react-router-dom';
 import { getModules, getModule, updateModule } from './../../actions/module';
 import Modals from "./../Form/ModuleForm"
 // reactstrap components

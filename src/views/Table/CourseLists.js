@@ -33,16 +33,16 @@ class Course extends React.Component {
   
   componentDidMount(){
     this.props.getUserstudentcourses({'studentId':this.props.user.id});
-    this.setState({page:2, subtitle:'My Courses'});
+    this.setState({page:2, subtitle:'My Classes'});
   }
 
   loadAllCourses = () =>{
     this.props.getCourses({'courses.is_active':0});
-    this.setState({page:1, subtitle:'All Courses'});
+    this.setState({page:1, subtitle:'All Classes'});
   }
   loadMyCourses = () =>{
     this.props.getUserstudentcourses({'studentId':this.props.user.id });
-    this.setState({page:2, subtitle:'My Courses'});
+    this.setState({page:2, subtitle:'My Classes'});
   } 
 
   loadRegister = id =>{
@@ -67,7 +67,7 @@ class Course extends React.Component {
 
   render() {
       
-      let tableTitle = "Course";
+      let tableTitle = "Class";
       let tableSubTitle = this.state.subtitle;
       let tbody = this.props.courses.courses;
       let tbody1 = this.props.userstudentcourses.userstudentcourses;
@@ -94,13 +94,13 @@ class Course extends React.Component {
                     <CardTitle tag="h4">
                       <Container>
                         <Row>
-                          <Col xs="12">
+                          <Col sm="6">
                           <i className="fa fa-file-text "></i>{" "+tableTitle}
                           <p className="category"> {tableSubTitle}</p>
                           </Col>
-                          <Col xs="12" className="pull-right"> 
-                            <button className="btn btn-sm btn-default" onClick={this.loadAllCourses} >Show All Classes</button>
-                            <button className="btn btn-sm btn-info" onClick={this.loadMyCourses} >Show My Classes</button>
+                          <Col sm="6" className="pull-right"> 
+                            <button className="btn btn-sm btn-block btn-default" onClick={this.loadAllCourses} >Show All Classes</button>
+                            <button className="btn btn-sm btn-block btn-info" onClick={this.loadMyCourses} >Show My Classes</button>
                           </Col>
                         </Row>
                       </Container>

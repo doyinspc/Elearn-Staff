@@ -18,26 +18,16 @@ class CardUserCourse extends React.Component {
         <Col md="4">
         <div class="card card-nav-tabs">
           <div class="card-header card-header-danger title" style={{textTransform:'capitalize'}}>
-           {`Courses Completed`}  
+           {`My Classes`}  
           </div>
           <ul class="list-group list-group-flush">
             {courses}
           </ul>
           <div class="card-footer" >
-           <button class="btn btn-info btn-sm">Go!</button> 
+           
           </div>
         </div>
-        <div class="card card-nav-tabs">
-          <div class="card-header card-header-danger title" style={{textTransform:'capitalize'}}>
-           {`Courses`}  
-          </div>
-          <ul class="list-group list-group-flush">
-            {coursesx}
-          </ul>
-          <div class="card-footer" >
-           <button class="btn btn-primary btn-sm">Go!</button> 
-          </div>
-        </div>
+      
         </Col>
       </>
     );

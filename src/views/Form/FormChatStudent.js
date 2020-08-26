@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { registerCoursecomment, deleteCoursecomment } from '../../actions/coursecomment';
-import { Row, Container } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { SERVER_URL } from "../../actions/common.js";
+import { SERVER_URL, imgx } from "../../actions/common.js";
 import "assets/css/chat.css"; 
-const imgx = require("assets/img/place.png");
 
 const Modals = (props) => {
   
-  const loadComment = async (id) =>{
+  const loadComment = async (id, msg, userz, mat) =>{
+    let msgs ='<blockqoute>'+ msg +'</blockqoute>';
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -18,6 +18,7 @@ const Modals = (props) => {
       buttonsStyling: false
     })
     const { value: text } = await Swal.fire({
+        title: msg,
         input: 'textarea',
         inputPlaceholder: 'Type your message here...',
         inputAttributes: {
@@ -28,15 +29,17 @@ const Modals = (props) => {
         cancelButtonText: 'Others',
         reverseButtons: true
       }).then((result) => {
-        if (text) {
+        if (text && text.length > 0) {
             let fd= new FormData();
-            fd.append('chat', text);
+            fd.append('chat', msgs + text);
             fd.append('userId', props.user.id);
-            fd.append('materialId', props.data.materialId);
+            fd.append('materialId', mat);
             fd.append('qid', 'mat');
             fd.append('grp', 1);
+            fd.append('cat', 'insert');
+            fd.append('table', 'course_comments');
             Swal.fire({
-                title: 'Make it',
+                title: 'Let this conversation be',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -45,6 +48,7 @@ const Modals = (props) => {
               }).then((result) => {
                 if (result.value) {
                     fd.append('types', 1);
+                    fd.append('recieverId', userz);
                     props.registerCoursecomment(fd);
                 }else{
                     fd.append('types', 2);
@@ -61,7 +65,7 @@ const Modals = (props) => {
                 cancelButtonText: 'Close',
               }).then((res) => {
                 if (res.value) {
-                    props.deleteCourseCoursecomment(id);
+                    props.deleteCourscomment({'id':id});
                 }
                 else if(result.dismiss === Swal.DismissReason.cancel) 
                 {
@@ -76,71 +80,52 @@ const Modals = (props) => {
       })
 }
 
+ let {username, fullname, photo, chat, modulename, materialname, userId, id, materialId, updated, grp } = props.data || '';
 
-const hig_but ={
-  fontSize:'0.8em',
-  color:'#ffffff'
-}
-
-const mid_but ={
-  
-}
-const low_but ={
-  fontSize:'0.7em',
-  color:'#cccccc'
-}
-const main_but={
-  maxWidth:'80%'
-
-}
-
-const mains ={
-  padding:'8px',
-  border:'3px solid #fff',
-  borderRadius: '8px',
-  color:'#ffffff',
-  backgroundColor:'#1FDA9A',
-   fontSize:'0.9em',
-   fontWeight:'bold',
-   minWidth:'80px',
-   opacity:1
-
-}
-  let pos = props.data.grp === 1 ? 'pull-left' : 'pull-right';
-  let bc = props.data.grp === 1 ? 'badge badge-info' : 'badge badge-primary';
   return (
    <>
-    <Row xs='12'>
-        {props.data.grp === 0 ?
-        <Row xs='10' className={pos} inline>
-        <Container>
-        <img
-                height='25px'
-                width='25px'
-                style={{margin:0, padding:0}}
-                className="avatar border-gray btn-round"
-                src={`${SERVER_URL + props.data.photo}`}
-                onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
-                />
-        <a className={bc} onClick={loadComment}>
-            {props.data.chat}
-        </a>
-        </Container>
-        </Row>:
-        <Row xs='10' className={pos} >
-        <img
-            height='50px'
-            width='50px'
-            style={{margin:0, padding:0}}
-            className="avatar border-gray btn-round"
-            src={`${SERVER_URL + props.data.photo}`}
-            onError={(e)=>{e.target.onerror = null; e.target.src=imgx}}
-            />
-            <a className={bc} style={mains} onClick={loadComment}>
-{props.data.chat}
-        </a>
-        </Row>}
-    </Row>
+        {userId === props.user.id && parseInt(grp) === 0 ?
+        <article class="msg-container msg-self" id="msg-0">
+                    <div class="msg-box">
+                        <div class="flr">
+                            <div class="messages">
+                                
+                                <p class="msg" id="msg-2">
+                                    {chat}
+                                </p>
+                            </div>
+        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
+                        </div>
+                        <img 
+                        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+                        class="user-img" 
+                        id="user-0" 
+                        src={`${SERVER_URL + photo}`}
+        onError={(e)=>{e.target.onerror = null; e.target.src=imgx}} 
+                        />
+                    </div>
+                </article>:
+    <article class="msg-container msg-remote" id="msg-0">
+      <div class="msg-box">
+        <img 
+        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+        class="user-img" 
+        id="user-0" 
+        src={`${SERVER_URL + photo}`}
+        onError={(e)=>{e.target.onerror = null; e.target.src=imgx}} 
+        />
+        <div class="flr">
+            <div class="messages">
+              
+                <p class="msg" id="msg-2">
+                   {chat}
+                </p>
+            </div>
+        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
+          </div>
+        </div>
+      </article>
+        }
    </>
   );
 }

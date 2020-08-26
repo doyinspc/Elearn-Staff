@@ -54,15 +54,18 @@ export const getCoursematerial = id => (dispatch, getState) => {
     });  
 };
 //COURSEMATERIAL DELETE
-export const deleteCoursematerial = data => (dispatch, getState) =>{
+export const deleteCoursematerial = dat => (dispatch, getState) =>{
     
-    axios.delete(path, JSON.stringify({data}), axiosConfig1)
-        .then(res => {
-            dispatch({
-                type: COURSEMATERIAL_DELETE_SUCCESS,
-                payload: res.data
-            })
+    params.data = JSON.stringify(dat);
+    params.cat = 'deleter';
+    dispatch({type : COURSEMATERIAL_LOADING});
+    axios.get(path, {params}, axiosConfig)
+    .then(res => {
+        dispatch({
+            type: COURSEMATERIAL_DELETE_SUCCESS,
+            payload: dat.id
         })
+    })
         .catch(err => {
             dispatch({
                 type : COURSEMATERIAL_DELETE_FAIL,

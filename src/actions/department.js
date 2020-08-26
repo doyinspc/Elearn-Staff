@@ -59,13 +59,15 @@ export const getDepartment = id => (dispatch, getState) => {
     });  
 };
 //DEPARTMENT DELETE
-export const deleteDepartment = data => (dispatch, getState) =>{
-    dispatch({type : DEPARTMENT_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteDepartment = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        dispatch({type : DEPARTMENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: DEPARTMENT_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

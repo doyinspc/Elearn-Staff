@@ -79,32 +79,57 @@ class Course extends React.Component {
         </label>
         </div>
         <div class="form-check form-check-inline">
+        {showstarts ?
+       
         <label class="form-check-label">
             <input 
             class="form-check-input" 
             name='showstarts'
             type="checkbox" 
-            checked={showstarts}
+            defaultChecked
             id="inlineCheckbox2" 
             onChange={(e)=>this.setState({'showstarts':e.target.checked})}
             value={showstarts}
             /> Start time
             <span class="form-check-sign"></span>
-        </label>
-        </div>
-        <div class="form-check form-check-inline">
+        </label>:
         <label class="form-check-label">
+            <input 
+            class="form-check-input" 
+            name='showstarts'
+            type="checkbox" 
+            id="inlineCheckbox2" 
+            onChange={(e)=>this.setState({'showstarts':e.target.checked})}
+            value={showstarts}
+            /> Start time
+            <span class="form-check-sign"></span>
+        </label>}
+        </div>
+       
+          <div class="form-check form-check-inline">
+          {showends ? <label class="form-check-label">
             <input 
             class="form-check-input" 
             name='showends'
             type="checkbox" 
-            checked={showends}
+            defaultChecked
             id="inlineCheckbox3" 
             onChange={(e)=>this.setState({'showends':e.target.checked})}
             value={showends}
             />Close time
             <span class="form-check-sign"></span>
-        </label>
+        </label>:
+         <label class="form-check-label">
+         <input 
+         class="form-check-input" 
+         name='showends'
+         type="checkbox" 
+         id="inlineCheckbox3" 
+         onChange={(e)=>this.setState({'showends':e.target.checked})}
+         value={showends}
+         />Close time
+         <span class="form-check-sign"></span>
+     </label>}
         </div>
           </Row>
           <br/>

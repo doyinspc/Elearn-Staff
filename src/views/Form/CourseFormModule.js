@@ -6,6 +6,7 @@ import { getCoursematerials } from './../../actions/coursematerial';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, FormText } from 'reactstrap';
 import axios from 'axios';
+import moment from 'moment';
 import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
 const path = API_PATHS;
 const Modals = (props) => {
@@ -85,8 +86,6 @@ const Modals = (props) => {
 
   const handleSubmit = (e) =>{
         e.preventDefault();
-        let sdate = new Date(starts).toISOString().slice(0, 19).replace('T', ' ');
-        let edate = new Date(ends).toISOString().slice(0, 19).replace('T', ' ');
         let fd = new FormData();
         fd.append('name', name.value);
         fd.append('title', title);
@@ -95,8 +94,8 @@ const Modals = (props) => {
         fd.append('dailyduration', dailyduration);
         fd.append('weeklyduration', weeklyduration);
         fd.append('objective', objective);
-        fd.append('starts', sdate);
-        fd.append('ends', edate);
+        fd.append('starts', starts);
+        fd.append('ends', ends);
         fd.append('table', 'course_modules');
         if(id && id > 0)
         {
@@ -124,8 +123,10 @@ const Modals = (props) => {
         setDailyduration(data.dailyduration);
         setWeeklyduration(data.weeklyduration);
         setDescription(data.description);
-        setStarts(data.starts);
-        setEnds(data.ends);
+        let gt0 =moment(data.starts).format('YYYY-MM-DDTHH:mm');
+        let gt1 =moment(data.ends).format('YYYY-MM-DDTHH:mm');
+        setStarts(gt0);
+        setEnds(gt1);
     }
 
    const resetdata= async() =>{
@@ -174,7 +175,7 @@ const Modals = (props) => {
       <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
       <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
       </div>
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
         <ModalHeader toggle={toggle}>{editName} Modules</ModalHeader>
         <ModalBody>
         <Form>

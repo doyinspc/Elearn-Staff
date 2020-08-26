@@ -6,8 +6,7 @@ import {
   UncontrolledTooltip,
   Button
 } from "reactstrap";
-import { SERVER_URL } from "actions/common";
-const imgx = require("assets/img/place.png");
+import { SERVER_URL, imgx } from "actions/common";
 
 class Course extends React.Component {
   constructor(props){

@@ -1,14 +1,12 @@
 
 import React from "react";
-import {Link} from "react-router-dom";
 // reactstrap components
 import {
   UncontrolledTooltip,
   Button,
 
 } from "reactstrap";
-import { SERVER_URL } from "actions/common";
-const imgx = require("assets/img/place.png");
+import { SERVER_URL, imgx } from "actions/common";
 
 class Course extends React.Component {
   constructor(props){
@@ -22,6 +20,7 @@ class Course extends React.Component {
     let {id, username, lastname, firstname, middlename, gender, phone, photo, email, title, is_active } = this.props.data || "";
     let fullname = lastname+" "+firstname+"  "+middlename;
     let key = this.props.key;
+    let pnum = '234'+phone.substring(phone.length -10);
     return (
       <>
       <tr key={this.props.key} id={`row${id}`}>
@@ -69,14 +68,15 @@ class Course extends React.Component {
                 delay={0}
                 target={`tooltipp${this.props.data.cid}`}
             >
-                Lesson content
+                Report
             </UncontrolledTooltip>
-                <button 
-                class="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success"  
-                onClick={this.props.loadWhatsapp}
+                <a
+                class="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success my-1 py-1"  
+                href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
+                target='_blank'
                 >
                     <i class="fab fa-whatsapp"></i>
-                </button>
+                </a>
                 <Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
                 color="info"
@@ -94,12 +94,12 @@ class Course extends React.Component {
             </UncontrolledTooltip>
                 
                 
-                <Button
+            {parseInt(this.props.data.sis_active) === 0 ? <><Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
                 color="info"
                 id={`tooltipe${this.props.data.cid}`}
                 type="button"
-                onClick={this.props.handleEdit}
+                onClick={()=>this.props.handleActive(1)}
             >
                 <i className="now-ui-icons ui-2_settings-90" />
             </Button>
@@ -107,8 +107,24 @@ class Course extends React.Component {
                 delay={0}
                 target={`tooltipe${this.props.data.cid}`}
             >
-                Edit
-            </UncontrolledTooltip>
+                Block
+            </UncontrolledTooltip></>:<><Button
+            className="btn-round btn-icon btn-icon-mini btn-neutral"
+            color="danger"
+            id={`tooltipe${this.props.data.cid}`}
+            type="button"
+            onClick={()=>this.props.handleActive(0)}
+        >
+            <i className="now-ui-icons ui-2_settings-90" />
+        </Button>
+        <UncontrolledTooltip
+            delay={0}
+            target={`tooltipe${this.props.data.cid}`}
+        >
+            Unblock
+        </UncontrolledTooltip>
+
+             </>  }
             <Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
                 color="danger"
@@ -124,23 +140,23 @@ class Course extends React.Component {
             >
                 Remove
             </UncontrolledTooltip>
-               
-                <Button className="btn-round btn-icon btn-icon-mini btn-neutral" color= {parseInt(is_active) === 0 ? 'default' : 'danger'} size="sm" key={`mdy${key}${id}`}  onClick={()=>this.props.loadActive(id, is_active)}>
-                      <i className="fa fa-times" />
-                </Button>
+             
                 </div> 
                 <div class="dropdown d-md-none">
                   <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-gear"></i>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Assignment</a>
-                    <a class="dropdown-item" href="#">Whatsapp</a>
-                    <a class="dropdown-item" href="#">Question Chat</a>
-                    <a class="dropdown-item" href="#">Edit</a>
-                    <a class="dropdown-item" href="#">Block/Unblock</a>
-                    <a class="dropdown-item" href="#">Remove</a>
+                    <a class="dropdown-item" href="#" onClick={this.props.loadUser} ><i className="now-ui-icons users_single-02"></i> Profile</a>
+                    <a class="dropdown-item" href="#" onClick={this.props.loadAssignment}><i className="now-ui-icons design-2_ruler-pencil" /> Assignment</a>
+                    <a class="dropdown-item" href="#" href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
+                target='_blank'><i style={{fontSize:'1.8em'}} class="fab fa-whatsapp text-success"></i> Whatsapp</a>
+                    <a class="dropdown-item" href="#" onClick={this.props.loadQuestion}><i className="now-ui-icons ui-2_chat-round" /> Question/Chat</a>
+                    { this.props.data.sis_active === 0 ?
+                    <a class="dropdown-item" href="#" onClick={()=>this.props.handleActive(1)}><i className="now-ui-icons ui-2_settings-90 text-info" /> Block</a>:
+                    <a class="dropdown-item" href="#" onClick={()=>this.props.handleActive(0)}><i className="now-ui-icons ui-2_settings-90 text-danger" /> Unblock</a>
+                    }
+                    <a class="dropdown-item" href="#"  onClick={this.props.handleDelete} ><i className="now-ui-icons ui-1_simple-remove" /> Remove</a>
                   </div>
                 </div>  
              </td>

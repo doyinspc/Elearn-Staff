@@ -105,13 +105,15 @@ export const registerUserstudentcourse = data => dispatch => {
 };
 
 //USERSTUDENTCOURSE DELETE
-export const deleteUserstudentcourse = data => (dispatch, getState) =>{
+export const deleteUserstudentcourse = dat => (dispatch, getState) =>{
+    params.data = JSON.stringify(dat);
+    params.cat = 'deleter';
     dispatch({type : USERSTUDENTCOURSE_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+    axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: USERSTUDENTCOURSE_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

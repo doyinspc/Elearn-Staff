@@ -1,17 +1,19 @@
 
 import React from "react";
 import { connect } from 'react-redux';
+import moment from 'moment';
 // reactstrap components
 import {
   Card,
   CardBody,
   CardHeader,
   CardFooter,
-  Button
+  Button,
+  Container,
+  Row,
+  Col
 } from "reactstrap";
 import CourseTimeLine from './CourseTimeline';
-import { SERVER_URL } from "actions/common";
-const imgx = require("assets/img/place.png");
 
 class TimeLine extends React.Component {
   constructor(props){
@@ -19,7 +21,6 @@ class TimeLine extends React.Component {
     this.state ={
       id:props.mid,
       data:[]
-      
     }
   }
   componentWillReceiveProps(nextProps, nexState)
@@ -31,13 +32,14 @@ class TimeLine extends React.Component {
 
    }
   render() {
-     let {title, modulename, description, objective, starts, ends } = this.props.coursemodules.coursemodule || '';
+     let {title, modulename, description, objective, starts, ends, dailyduration, weeklyduration, weight } = this.props.coursemodules.coursemodule || '';
      let mate =  this.state.data;
      let material = mate && Array.isArray(mate) ? mate.map((prop, index)=>{
             return <CourseTimeLine  key={index} data={prop}/>
      }): null;
-     let started = new Date(starts).toLocaleString();
-     let ended = new Date(ends).toLocaleString();
+     let started = starts ? moment(starts).format('MMM Do YYYY, h:mm:ss a') : '--';
+     let ended = ends ? moment(ends).format('MMM Do YYYY, h:mm:ss a'): '--';
+ 
     return (
       <>
         {!this.props.coursematerials.isLoading ?
@@ -51,12 +53,19 @@ class TimeLine extends React.Component {
             <CardBody>
               <p>{description}</p>
               <p>{objective}</p>
+              <p>
+                  <Container style={{fontSize:'0.8em', fontFamily:'fantasy'}}>
+                    <Row xs='12'>
+    <Col sm='4'><i className="fa fa-hourglass-half"></i> {dailyduration} hour(s) daily</Col>
+    <Col sm='4'><i className="fa fa-hourglass"></i> {weeklyduration} Week(s)</Col>
+    <Col sm='4'><i className="fa fa-check-circle"></i> {weight !== null ? weight : 0}{' Point(s)'}</Col>
+                    </Row>
+                  </Container>
+                </p>
             </CardBody>
             <CardFooter>
               <Button color='info' size='sm'>Report</Button>
-              
             </CardFooter>
-
           </Card>
           
             <div class="card card-timeline card-plain">

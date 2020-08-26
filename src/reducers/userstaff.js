@@ -17,7 +17,26 @@ import {
     USERSTAFF_DELETE_FAIL,
     USERSTAFF_EDIT
 } from "../types/userstaff";
+import Swal from 'sweetalert2';
 
+ const callError = ($err) =>{
+    Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Check your internet connection or confirm you are using the right loging information',
+        showConfirmButton: false,
+        timer: 1500
+      })
+ }
+ const callLoading = () =>{
+    Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: 'Please wait... processing',
+        showConfirmButton: false,
+        timer: 1500
+      })
+ }
 let userstaffStore = localStorage.getItem('userstaff') !== 'undefined' ? JSON.parse(localStorage.getItem('userstaff')):[];
 let user = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : {};
 let auth = localStorage.getItem('auth') !== 'undefined' ? JSON.parse(localStorage.getItem('auth')) : false;
@@ -55,6 +74,7 @@ export default function(state = initialState, action){
                 isEdit : action.payload
         };
         case USERSTAFF_LOADING:
+            callLoading();
             return {
                 ...state,
                 isLoading : true
@@ -133,13 +153,29 @@ export default function(state = initialState, action){
                 isLoading: false,
                 msg: action.msg
             };
-        case USERSTAFF_LOGIN_ERROR:
         case USERSTAFF_LOGOUT_SUCCESS:
         case USERSTAFF_LOGOUT_FAIL:
             localStorage.removeItem('token')
             localStorage.removeItem('auth')
             localStorage.removeItem('userstaff')
             localStorage.removeItem('user')
+
+            return{
+                ...state,
+                token: null,
+                isRegistered: true,
+                isAuthenticated: false,
+                isLoading: false,
+                userstaff: {},
+                user: {},
+                isAdmin : null
+            } 
+        case USERSTAFF_LOGIN_ERROR:
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth')
+            localStorage.removeItem('userstaff')
+            localStorage.removeItem('user')
+            callError(action.payload);
             return{
                 ...state,
                 token: null,

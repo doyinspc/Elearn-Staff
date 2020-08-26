@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Table } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {getMaterials} from './../../actions/courseprogress';
-import material from 'reducers/material';
-import CardTableScore from './CardTableScore';
 const Modals = (props) => {
   
   const [modal, setModal] = useState(props.st)

@@ -68,7 +68,6 @@ function ExamplesNavbar() {
             navbar
           >
             <Nav navbar>
-            
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Student
@@ -90,7 +89,7 @@ function ExamplesNavbar() {
               </li>
               <NavItem>
                 <NavLink to="#" tag={Link}>
-                  Help :+234-806-776-3457
+                  Help :+234-8136184913
                 </NavLink>
               </NavItem>
 

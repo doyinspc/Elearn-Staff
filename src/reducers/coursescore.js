@@ -107,7 +107,7 @@ export default function(state = initialState, action){
                 coursescores: ac
             }
         case COURSESCORE_DELETE_SUCCESS:
-            let rem = state.coursescores.filter(cat => cat.id != action.payload.id);
+            let rem = state.coursescores.filter(cat => cat.id != action.payload);
             localStorage.setItem('coursescore', JSON.stringify(rem));
             return{
                 ...state,

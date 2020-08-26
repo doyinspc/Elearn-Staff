@@ -177,8 +177,7 @@ else
             name="answer" 
             id="answer"  
             class='form-control'
-            row='5'
-            col='10'
+              
             defaultValue={answer}
             placeholder='Type in your answer'
             onChange={e=>setAnswer(e.target.value)} 
@@ -246,8 +245,8 @@ else
                     </Row>
                </Container>
                 
-                <Container>
-                    <Row>
+                <Container xs='12'>
+                    <Row xs='12'>
                         {ret}
                     </Row>
                 </Container>

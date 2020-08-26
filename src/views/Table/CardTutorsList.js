@@ -1,6 +1,6 @@
 import React from 'react';
-import { SERVER_URL } from "./../../actions/common.js";
-const imgx = require("assets/img/place.png");
+import { SERVER_URL, imgx } from "./../../actions/common.js";
+
 const List = (props) => {
   
   return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CKEditor from 'ckeditor4-react';
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,  FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,Row, Container,  FormText } from 'reactstrap';
 import { SERVER_URL } from 'actions/common';
 
 
@@ -84,7 +84,7 @@ const resetdata = () =>{
           datax.append('moduleId', props.moduleId);
           props.registerCoursematerial(datax);
         }
-        resetdata();
+        //resetdata();
   }
 
   const populate = async(data) =>{
@@ -95,7 +95,7 @@ const resetdata = () =>{
     }
 
   const handleInputChange = (evt) => {
-      setFiles(evt.target.files[0]);
+      setFiles(evt.target.files [0]);
     }
 
     const handleLoad = sid => {
@@ -128,7 +128,7 @@ const resetdata = () =>{
         </div>
       </div>
      
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
         <ModalHeader toggle={resetdata}>{editName} Learning Material/Task</ModalHeader>
         <ModalBody>
         <Form>
@@ -142,7 +142,7 @@ const resetdata = () =>{
                     required
                     defaultValue={title}
                     onChange={e=>setTitle(e.target.value)} 
-                     /><FormText class='muted'>Briefly title or describe the attachment</FormText>
+                     /><FormText class='muted'>Title the attachment</FormText>
                 </Col>
             </FormGroup>
             {type === 1 ? 
@@ -168,39 +168,44 @@ const resetdata = () =>{
                     required
                     defaultValue={description}
                     onChange={e=>setDescription(e.target.value)} 
-                     /><FormText class='muted'>Briefly title or describe the attachment/give instructions</FormText>
+                     /><FormText class='muted'>Briefly describe the attachment/give instructions</FormText>
                 </Col>
             </FormGroup>
               
               }
 
-              {type === 2 || type === 3 ||type === 4 || type === 5  ? 
+              {type === 2 || type === 3 || type === 4 || type === 5  ? 
             <FormGroup row>
             <Label for="files" sm={12}>Upload </Label>
-            <Col sm={12}>
-            <div className="fileinput fileinput-new text-center m-0" data-provides="fileinput">
-                    <div className="fileinput-new thumbnail">
-                      <i className={`fa ${props.coursematerials.isEditing ? 'fa-spinner' : pics[type]}`} style={{fontSize:100}} aria-hidden="true"></i>
-                      { files && files.length > 0 ?
+            
+            <Row xs={12} className="row fileinput fileinput-new text-center m-0 bg-green" data-provides="fileinput">
+                    
+                    <Col xs={6} className='h-150' >
+                    { files && files.length > 0 ?
                       <iframe src={`https://docs.google.com/gview?url=${ SERVER_URL + files }&embedded=true`} style={{width:'400px', height:'300px'}} frameborder="0"></iframe>
                       :''}
-                      </div>
-                    <div className="fileinput-preview fileinput-exists thumbnail img-raised"></div>
-                    <div >
-                    <span className="btn btn-raised btn-round btn-default btn-file">
-                    <span class="fileinput-new">Add</span>
-	                  <span class="fileinput-exists">Change</span>
-                    <input 
-                    style={{width:100}}
-                    type="file" 
-                    name="files" 
-                    id="files" 
-                    onChange={handleInputChange}
-                     />
-                    </span>
-                    </div>
-                </div>
-            </Col>
+                        
+                    </Col>
+                    <Col className="fileinput-new thumbnail h-150" xs={6} >
+                      <i className={props.coursematerials.isEditing ? 'border-spinner' :`fa ${pics[type]}`} style={{fontSize:100}} aria-hidden="true"></i>
+                      <div className="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+                        <span className="btn btn-raised btn-round btn-default btn-file">
+                        <span class="fileinput-new">Add</span>
+                        <span class="fileinput-exists">Change</span>
+                        <input 
+                        style={{width:200}}
+                        type="file" 
+                        name="files" 
+                        id="files" 
+                        onChange={handleInputChange}
+                        />
+                        </span>
+                    </Col>
+                    
+                   
+          </Row>
+                
+            
         </FormGroup>
               : ''}
           {type === 6  ? 
@@ -260,7 +265,13 @@ const resetdata = () =>{
         </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>{' '}
+          { !props.coursematerials.isEditing ?
+          <Button color={editColor} onClick={handleSubmit}>{editId ? 'Edit' : 'Submit'}</Button>:
+          <Button color='info' disabled>
+            <span className='spinner-border spinner-border-sm'></span>{' '}
+               Loading...
+          </Button>}
+          {' '}
           <Button color="secondary" onClick={resetdata}>Cancel</Button>
         </ModalFooter>
       </Modal>

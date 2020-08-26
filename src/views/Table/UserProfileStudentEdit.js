@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import axios from "axios";
 import Select  from 'react-select';
-import { MAIN_TOKEN, API_PATHS, axiosConfig, SERVER_URL} from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, SERVER_URL, imgx} from './../../actions/common';
 import {
   Row, CardFooter, CardHeader, Col, Form, FormGroup, Card, CardBody, Input, Button, Container
 } from "reactstrap";
@@ -11,7 +11,6 @@ import PanelHeader from "components/PanelHeader/PanelHeader.jsx";
 import { getUserstudent } from "./../../actions/userstudent";
 import { registerUserstudentPost } from "./../../actions/userstudent";
 const path = API_PATHS;
-const imgx = require("assets/img/place.png");
 const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -183,7 +182,7 @@ class UserProfileEdit extends React.Component {
                             onChange={this.onChange}
                             placeholder="Username"
                             type="text"
-                            required
+                            disabled
                           />
                         </FormGroup>
                       </Col>

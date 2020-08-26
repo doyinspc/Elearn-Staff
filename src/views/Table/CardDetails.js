@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import CardDetailsList from './CardDetailsList';
 import CardTutorsList from './CardTutorsList';
 import { registerUserstudentcourse } from './../../actions/userstudentcourse';
-import { SERVER_URL } from "./../../actions/common.js";
-
-const imgx = require("assets/img/place.png");
-const imgs = require("assets/img/bg3.jpg");
+import { SERVER_URL, imgx } from "./../../actions/common.js";
+import imgs from "assets/img/bg3.jpg";
 
 const Modals = (props) => {
   
-  const [modal, setModal] = useState(props.st);
+  const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [but, setBut] = useState(false);
  // const [modules, setModules] = useState([]);
@@ -28,7 +27,7 @@ const Modals = (props) => {
     if(parseInt(props.mid) > 0 )
     {
      setId(props.mid);
-     toggle(!modal);
+     setModal(true);
      populate(props.coursemodules.coursemodules);
     } 
     let da = props.userstudentcourses.userstudentcourses;
@@ -40,9 +39,7 @@ const Modals = (props) => {
     {
       setBut(false);
     }
-    return ()=>{
-      populate([]);
-    }
+    
 },[props.mid]);
 
 const populate =(data)=>{
@@ -62,8 +59,9 @@ const handleRegister = () =>{
 }
   
 let {course_name, course_description, course_code, course_objective, course_start, course_end, pics, departmentname, levelname} = props.data;
-let starts = new Date(parseInt(course_start)).toDateString();
-let ends = new Date(parseInt(course_end)).toDateString();
+let starts= course_start ? moment(course_start).format('MMM Do YYYY, h:mm:ss a') : '--';
+let ends = course_end ? moment(course_end).format('MMM Do YYYY, h:mm:ss a'): '--';
+  
 let modul = props.coursemodules.coursemodules;
 let tuto = props.coursetutors.coursetutors;
 let mod = modul && Array.isArray(modul) && modul.length > 0 ? modul.map((prop, index)=>{
@@ -75,7 +73,7 @@ let tut = tuto && Array.isArray(tuto) && tuto.length > 0 ? tuto.map((prop, index
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
         <ModalHeader toggle={resetdata}><i className={`fa fa-pen`}></i>{but ? 'Registered': 'Register'}</ModalHeader>
         <ModalBody>
         <div class="card" >
@@ -86,7 +84,7 @@ let tut = tuto && Array.isArray(tuto) && tuto.length > 0 ? tuto.map((prop, index
                 onError={(e)=>{e.target.onerror = null; e.target.src=imgs}}
                 alt="background"
                 />
-              <div style={{position:'absolute', top:'8px' , left:'10px'}}>
+              <div style={{position:'absolute', top:'8px' , left:'15%'}}>
                 <h4 class="card-title text-light">{course_name}</h4>
                 <h6 class="text-light">{departmentname} {levelname}</h6>
                 <small class="text-muted">{`${starts} - ${ends}`}</small>

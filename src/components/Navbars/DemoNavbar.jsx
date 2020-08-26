@@ -109,25 +109,31 @@ class Header extends React.Component {
     }
   }
   render() {
-    if(this.props.userstaffs.isAuthenticated || this.props.userstudents.isAuthenticated)
-    {
-
-    }
-    else{
-      return <Redirect to="/staff" />
-    }
     let editRoute = '';
     let editProfile = '';
+    let logoutroute = '';
     if(this.props.userstaffs.isAuthenticated )
     {
       editRoute = '/admin/useredit';
       editProfile = '/admin/staff';
+      logoutroute = '/staff';
       
     }else if(this.props.userstudents.isAuthenticated )
     {
       editRoute = '/admin/usereditstudent';
       editProfile = '/admin/student';
+      logoutroute = '/';
     }
+    if(this.props.userstaffs.isAuthenticated || this.props.userstudents.isAuthenticated)
+    {
+
+    }
+    else{
+      return <Redirect to={logoutroute} />
+    }
+    
+
+   
     
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
@@ -159,7 +165,7 @@ class Header extends React.Component {
                 <span className="navbar-toggler-bar bar3" />
               </button>
             </div>
-            <NavbarBrand href="/">{this.getBrand()}</NavbarBrand>
+           
           </div>
           <NavbarToggler onClick={this.toggle}>
             <span className="navbar-toggler-bar navbar-kebab" />
@@ -167,26 +173,16 @@ class Header extends React.Component {
             <span className="navbar-toggler-bar navbar-kebab" />
           </NavbarToggler>
           <div>
-      <h5>{process.env.REACT_APP_WEBSITE_NAME}</h5>
-      <h6>{this.props.user.lastname+" "+this.props.user.firstname}</h6>
-      </div>
+          <h5>{process.env.REACT_APP_WEBSITE_NAME}</h5>
+          <h6>{this.props.user.lastname+" "+this.props.user.firstname}</h6>
+          </div>
           <Collapse
             isOpen={this.state.isOpen}
             navbar
             className="justify-content-end"
           >
-            <form>
-              <InputGroup className="no-border">
-                <Input placeholder="Search..." />
-                <InputGroupAddon addonType="append">
-                  <InputGroupText>
-                    <i className="now-ui-icons ui-1_zoom-bold" />
-                  </InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-            </form>
+            
             <Nav navbar>
-              
               <Dropdown
                 nav
                 isOpen={this.state.dropdownOpen}

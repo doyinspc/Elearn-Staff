@@ -1,8 +1,9 @@
 
 import React from "react";
 import { connect } from 'react-redux';
-import { getCourses, getCourse, updateCourse } from './../../actions/course';
-import { getUserstaffcourses } from './../../actions/userstaffcourse';
+import { getCourses, getCourse, updateCourse, deleteCourse } from './../../actions/course';
+import { getUserstaffcourses, getUserstaffcoursesx } from './../../actions/userstaffcourse';
+import Swal from 'sweetalert2';
 import Modals from "./../Form/CourseForm";
 import CourseCard from "./CourseCard";
 
@@ -13,7 +14,8 @@ import {
   CardTitle,
   Container,
   Row,
-  Col
+  Col,
+  Button
 } from "reactstrap";
 
 // core components
@@ -31,7 +33,7 @@ class Course extends React.Component {
   }
   
   componentDidMount(){
-    this.props.getCourses({"course_owner":this.props.user.id});
+    //this.props.getCourses({"course_owner":this.props.user.id});
     this.props.getUserstaffcourses({'staffId':this.props.user.id});
   }
 
@@ -41,8 +43,25 @@ class Course extends React.Component {
   }
 
   loadDelete = id =>{
-    this.props.getCourse(id);
-    this.setState({st:true, id:id});
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.value) {
+        this.props.deleteCourse({'id':id});
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    })
+    
   }
 
   loadActive = (id, active) =>{
@@ -55,10 +74,12 @@ class Course extends React.Component {
   }
 
   loadMyCourse = () =>{
+    this.props.getUserstaffcourses({'staffId':this.props.user.id});
     this.setState({page:1, subtitle:'My Classes'});
   }
 
   loadOtherCourse = () =>{
+    this.props.getUserstaffcoursesx({'staffId':this.props.user.id, 'is_delete':0})
     this.setState({page:2, subtitle:'Co-teacher'});
   }
 
@@ -71,19 +92,15 @@ class Course extends React.Component {
       let tableTitle = "Class";
       let tableSubTitle = this.state.subtitle;
       let tbody = [];
-      if(this.state.page === 2)
-      {
-        tbody = this.props.userstaffcourses.userstaffcourses;
-      }else if(this.state.page === 1)
-      {
-        tbody = this.props.courses.courses;
-      }
+     
+      tbody = this.props.userstaffcourses.userstaffcourses;
+      
       let tablerows = tbody && Array.isArray(tbody) && tbody.length > 0 ? tbody.map((prop, key) => (
           <CourseCard 
             key={key} 
             data={prop} 
-            handleDelete={(rid)=>this.loadDelete(rid)} 
-            handleClick={(rid)=>this.loadModal(rid)} />
+            handleDelete={(rid)=>this.loadDelete(prop.id)} 
+            handleClick={(rid)=>this.loadModal(prop.id)} />
       )):null;
       
     return (
@@ -97,19 +114,36 @@ class Course extends React.Component {
                 <CardHeader>
                     <CardTitle tag="h4">
                       <Container>
-                        <Row cs='12'>
-                          <Col xs="4"><i className="fa fa-file-text"></i>{" "+tableTitle}
+                        <Row xs='12'>
+                          <Col xs="8" sm='10'><i className="fa fa-file-text"></i>{" "+tableTitle}
                           <p className="category"> {tableSubTitle}</p>
                           </Col>
-                          <Col xs="8" className="pull-right"> 
+                          <Col xs="4" sm='2' className="pull-right justify-content-end"> 
                           <div className="btn-group">
-                            <button className="btn btn-sm btn-info" onClick={this.loadMyCourse}>My Classes</button>
-                            <button className="btn btn-sm btn-info" onClick={this.loadOtherCourse}>Co-teacher</button>
-                            <Modals 
+                          <div className='dropdown' >
+                          <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-ellipsis-v"></i>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#" onClick={this.loadMyCourse}>My Classes</a>
+                            <a class="dropdown-item" href="#"  onClick={this.loadOtherCourse}>Co-teacher</a>
+                           <div class="dropdown-divider"></div>
+                          </div>
+                          </div>
+                            
+                            <Button 
+                                size='sm'
+                                color='primary'
+                                onClick={()=>{this.setState({st:true})}}
+                                >
+                                  <i className={`fa fa-plus`}></i> 
+                                  </Button>
+
+                            {this.state.st ? <Modals 
                               mid={this.state.id} 
                               toggle={this.state.st}
                               handleClose={()=>this.setState({id:null, st:false})}
-                            />
+                            />: ''}
                             </div>
                           </Col>
                         </Row>
@@ -135,4 +169,4 @@ const mapStateToProps = (state, ownProps) => ({
   user:state.userstaffReducer.user
 })
 
-export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, getUserstaffcourses })(Course)
+export default connect(mapStateToProps, { getCourses, getCourse, updateCourse, deleteCourse, getUserstaffcourses , getUserstaffcoursesx})(Course)

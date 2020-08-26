@@ -63,7 +63,7 @@ const Modals = (props) => {
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static'>
   <ModalHeader toggle={toggle}><i className={`fa ${pics[type]}`}></i>{ext} Learning Material/Assessment</ModalHeader>
         <ModalBody>
           <Container>

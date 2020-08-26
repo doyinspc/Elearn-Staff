@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import Swal from 'sweetalert2';
 import { Redirect } from "react-router-dom";
 import { getUserstaffLogin } from "./../actions/userstaff";
 
@@ -42,6 +43,15 @@ class LoginPage extends React.Component{
     if(email && password && email !== "" && password !== "") 
     {
       this.props.getUserstaffLogin({'username':email, password});
+    }else
+    {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Wrong login details',
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
     
   };

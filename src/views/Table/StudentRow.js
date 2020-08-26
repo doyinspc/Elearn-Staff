@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Link }  from 'react-router-dom';
 // reactstrap components
 import { Button } from "reactstrap";
-import { SERVER_URL } from "./../../actions/common.js"
-const imgx = require("assets/img/place.png");
+import { SERVER_URL, imgx } from "./../../actions/common";
+
 
 class Level extends React.Component {
   constructor(props){
@@ -56,7 +56,7 @@ class Level extends React.Component {
                     <i className="fa fa-edit"></i>
                 </Button>{` `}
                 <Button className="btn-icon" color= {parseInt(is_active) === 0 ? 'default' : 'danger'} size="sm" key={`mdy${key}${id}`}  onClick={()=>this.props.loadActive(id, is_active)}>
-                      <i className="fa fa-times" />
+                      <i className="fa fa-times" />  
                 </Button>
                 
              </td>

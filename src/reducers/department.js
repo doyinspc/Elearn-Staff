@@ -80,7 +80,7 @@ export default function(state = initialState, action){
                 departments: ac
             }
         case DEPARTMENT_DELETE_SUCCESS:
-            let rem = state.departments.filter(cat => cat.id != action.payload.id);
+            let rem = state.departments.filter(cat => cat.id != action.payload);
             localStorage.setItem('department', JSON.stringify(rem));
             return{
                 ...state,

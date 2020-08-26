@@ -59,13 +59,14 @@ export const getLevel = id => (dispatch, getState) => {
     });  
 };
 //LEVEL DELETE
-export const deleteLevel = data => (dispatch, getState) =>{
-    dispatch({type : LEVEL_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteLevel = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: LEVEL_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

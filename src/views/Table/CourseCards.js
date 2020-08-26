@@ -2,10 +2,10 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { deleteUserstudentcourse, getUserstudentcourse } from './../../actions/userstudentcourse';
-import { SERVER_URL } from "./../../actions/common.js";
+import { SERVER_URL, imgx } from "./../../actions/common.js";
 import Swal from 'sweetalert2';
+import moment from 'moment';
 import { Link } from "react-router-dom";
-const imgx = require("assets/img/bg3.jpg");
 
 class Course extends React.Component {
   constructor(props){
@@ -48,8 +48,8 @@ removeCourse = (id) =>{
   render() {
     
     let {course_name, course_description, course_code, course_start, course_end, id, pics, departmentname, levelname} = this.props.data;
-    let starts = new Date(parseInt(course_start)).toLocaleString();
-    let ends = new Date(parseInt(course_end)).toLocaleString();
+    let starts = moment(course_start).format('MMM Do YYYY, h:mm:ss a');
+    let ends = moment(course_end).format('MMM Do YYYY, h:mm:ss a');
     return (
       <>
         <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >

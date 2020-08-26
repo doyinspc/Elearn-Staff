@@ -80,7 +80,7 @@ export default function(state = initialState, action){
                 modules: ac
             }
         case MODULE_DELETE_SUCCESS:
-            let rem = state.modules.filter(cat => cat.id != action.payload.id);
+            let rem = state.modules.filter(cat => cat.id != action.payload);
             localStorage.setItem('module', JSON.stringify(rem));
             return{
                 ...state,

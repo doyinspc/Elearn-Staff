@@ -54,21 +54,23 @@ export const getCoursemodule = id => (dispatch, getState) => {
     });  
 };
 //COURSEMODULE DELETE
-export const deleteCoursemodule = data => (dispatch, getState) =>{
+export const deleteCoursemodule = dat => (dispatch, getState) =>{
+    params.data = JSON.stringify(dat);
+    params.cat = 'deleter';
     dispatch({type : COURSEMODULE_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
-        .then(res => {
-            dispatch({
-                type: COURSEMODULE_DELETE_SUCCESS,
-                payload: res.data
-            })
+    axios.get(path, {params}, axiosConfig)
+    .then(res => {
+        dispatch({
+            type: COURSEMODULE_DELETE_SUCCESS,
+            payload: dat.id
         })
-        .catch(err => {
+    })
+    .catch(err => {
             dispatch({
                 type : COURSEMODULE_DELETE_FAIL,
                 payload : err
             })
-        })
+    })
         
 }
 //COURSEMODULE REGISTER

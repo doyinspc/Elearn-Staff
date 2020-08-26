@@ -95,7 +95,7 @@ export default function(state = initialState, action){
                 coursecomments: ac
             }
         case COURSECOMMENT_DELETE_SUCCESS:
-            let rem = state.coursecomments.filter(cat => cat.id != action.payload.id);
+            let rem = state.coursecomments.filter(cat =>cat.id != action.payload);
             localStorage.setItem('coursecomment', JSON.stringify(rem));
             return{
                 ...state,

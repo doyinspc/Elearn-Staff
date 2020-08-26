@@ -35,6 +35,24 @@ const changeState = (aluu, actid) =>
     });
     return newCoursemodule;
 }
+const dynamicsort = (property, order)=>{
+    var sort_order = 1;
+    if(order === "desc"){
+        sort_order = -1;
+    }
+    return function (a, b){
+        // a should come before b in the sorted order
+        if(a[property] < b[property]){
+                return -1 * sort_order;
+        // a should come after b in the sorted order
+        }else if(a[property] > b[property]){
+                return 1 * sort_order;
+        // a and b are the same
+        }else{
+                return 0 * sort_order;
+        }
+    }
+}
 
 
 export default function(state = initialState, action){
@@ -65,10 +83,12 @@ export default function(state = initialState, action){
             })
             let sto = store.filter(r=>r != null);
             let oldss = [...olds, ...sto];
-            localStorage.setItem('coursemodule', JSON.stringify(action.payload));
+            let fd = action.payload;
+            fd.sort(dynamicsort("moduleid","asc"))
+            localStorage.setItem('coursemodule', JSON.stringify(fd));
             return {
                 ...state,
-                coursemodules : action.payload,
+                coursemodules : fd,
                 msg:'DONE!!!'
             };
         case COURSEMODULE_GET_ONE:
@@ -95,7 +115,7 @@ export default function(state = initialState, action){
                 coursemodules: ac
             }
         case COURSEMODULE_DELETE_SUCCESS:
-            let rem = state.coursemodules.filter(cat => cat.id != action.payload.id);
+            let rem = state.coursemodules.filter(cat =>cat.id != action.payload);
             localStorage.setItem('coursemodule', JSON.stringify(rem));
             return{
                 ...state,

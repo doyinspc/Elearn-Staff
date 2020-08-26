@@ -94,13 +94,15 @@ export const getStudent = id => (dispatch, getState) => {
     });  
 };
 //STUDENT DELETE
-export const deleteStudent = data => (dispatch, getState) =>{
-    dispatch({type : STUDENT_LOADING});
-    axios.get(path, JSON.stringify({data}), {params})
+export const deleteStudent = dat => (dispatch, getState) =>{
+        params.data = JSON.stringify(dat);
+        params.cat = 'deleter';
+        dispatch({type : STUDENT_LOADING});
+        axios.get(path, {params}, axiosConfig)
         .then(res => {
             dispatch({
                 type: STUDENT_DELETE_SUCCESS,
-                payload: res.data
+                payload: dat.id
             })
         })
         .catch(err => {

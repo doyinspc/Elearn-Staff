@@ -11,6 +11,8 @@ import {
  CardBody,
  CardFooter
 } from "reactstrap";
+import { SERVER_URL } from "actions/common";
+import ShowImage from './ShowImage';
 
 const arr ={
   1: 'Upload as attachment',
@@ -28,7 +30,7 @@ class Course extends React.Component {
  
   render() {
     
-     let { question, type, answer, points, options } = this.props.data;
+     let { question, type, answer, points, options, instruction, imgs, vids, auds } = this.props.data;
      let ans = answer && answer.length > 0 ? answer.split('::::::') : [];
      options = options && options !=  "" ? options.split("::::::") : [];
      let option1 = options && Array.isArray(Object.keys(options)) && Object.keys(options).length > 0 ? Object.keys(options).map((prop)=>{
@@ -53,10 +55,38 @@ class Course extends React.Component {
               <Col xs={2} >
                   {this.props.numbering}
               </Col>
+              {instruction && instruction.length > 0 ?
+              <Row className='m-0 p-0' >
+                <div  dangerouslySetInnerHTML={{__html: instruction.substring(0, 20)}} />
+              </Row>:''}
               <Col xs={10}>
                   <div dangerouslySetInnerHTML={{__html: question}} />
               </Col>
           </Row>
+          {imgs && imgs !== null && imgs.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + imgs}
+                  type={1}
+              />
+              </Row>
+               :''}
+               {auds && auds !== null && auds.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + auds}
+                  type={2}
+              />
+              </Row>
+               :''}
+              {vids && vids !== null && vids.length > 0 ?
+              <Row xs='12' className='m-1 p-1'>
+               <ShowImage
+                  path={SERVER_URL + vids}
+                  type={3}
+              />
+              </Row>
+               :''}
           <Row sm={12}>
               <Col>
                 {type === 1 || type === 2 || type === 3 ? option1 : null}

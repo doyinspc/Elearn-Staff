@@ -157,7 +157,7 @@ class LoginPage extends React.Component{
                     <a
                       className="btn btn-sm btn-secondary btn-round mt-1"
                       type="button"
-                      href="/staff"
+                      href="/elearn/staff"
                     >
                       Staff Login
                     </a>

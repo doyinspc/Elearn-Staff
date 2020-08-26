@@ -80,7 +80,7 @@ export default function(state = initialState, action){
                 levels: ac
             }
         case LEVEL_DELETE_SUCCESS:
-            let rem = state.levels.filter(cat => cat.id != action.payload.id);
+            let rem = state.levels.filter(cat => cat.id != action.payload);
             localStorage.setItem('level', JSON.stringify(rem));
             return{
                 ...state,

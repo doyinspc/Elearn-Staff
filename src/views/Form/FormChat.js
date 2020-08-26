@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { registerCoursecomment, deleteCoursecomment } from '../../actions/coursecomment';
 import { Row } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { SERVER_URL } from "../../actions/common.js"
-const imgx = require("assets/img/place.png");
+import { SERVER_URL, imgx } from "../../actions/common.js";
 
 const Modals = (props) => {
   
