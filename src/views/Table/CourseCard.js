@@ -253,13 +253,13 @@ handleStudent=id=>{
                     </div>
                     </div>
                     <div className="col-sm-3">
-                      <div class="btn-group">
-                      <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div className="btn-group">
+                      <button type="button" className="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i className='fa fa-ellipsis-v'></i>
                       </button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" onClick={()=>{this.props.handleClick(id)}}><i className='fa fa-edit'></i> Edit</a>
-                        <a class="dropdown-item" href="#"  onClick={()=>{this.props.handleDelete(id)}}><i className='fa fa-trash'></i> Delete</a>
+                      <div className="dropdown-menu">
+                        <a className="dropdown-item" href="#" onClick={()=>{this.props.handleClick(id)}}><i className='fa fa-edit'></i> Edit</a>
+                        <a className="dropdown-item" href="#"  onClick={()=>{this.props.handleDelete(id)}}><i className='fa fa-trash'></i> Delete</a>
                        </div>
                     </div>
                      
@@ -270,20 +270,20 @@ handleStudent=id=>{
                   <div className="nav-tabs-wrapper">
                       <ul className="nav nav-tabs flex-row" data-tabs="tabs">
                       <li className="nav-item">
-                              <a className="nav-link active"  href={`#stage0${id}`} data-toggle="tab"><i className="fa fa-home"></i> <span className="d-none d-md-inline">Home</span></a>
+                              <a className="nav-link active"   href={`#stage0${id}`} data-toggle="tab"><i className="fa fa-home"></i> Home</a>
                           </li>
                           <li className="nav-item">
-                              <a className="nav-link"  href={`#stage1${id}`} data-toggle="tab"><i className="fa fa-dashboard"></i> <span className="d-none d-md-inline">About</span></a>
+                              <a className="nav-link"  href={`#stage1${id}`} data-toggle="tab"><i className="fa fa-dashboard"></i> About</a>
                           </li>
                           
                           <li className="nav-item">
-                              <a className="nav-link"  href={`#stage3${id}`} data-toggle="tab"><i className="fa fa-book"></i> <span className="d-none d-md-inline">Content</span></a>
+                              <a className="nav-link"  href={`#stage3${id}`} data-toggle="tab"><i className="fa fa-book"></i> Content</a>
                           </li>
                           <li className="nav-item">
-                              <a className="nav-link"  href={`#stage2${id}`} data-toggle="tab"><i className="fa fa-user"></i> <span className="d-none d-md-inline">Facilitators</span></a>
+                              <a className="nav-link"  href={`#stage2${id}`} data-toggle="tab"><i className="fa fa-user"></i> Facilitators</a>
                           </li>
                           <li className="nav-item">
-                              <a className="nav-link"   href={`#stage4${id}`} data-toggle="tab"><i className="fa fa-users"></i> <span className="d-none d-md-inline">Students</span></a>
+                              <a className="nav-link"   href={`#stage4${id}`} data-toggle="tab"><i className="fa fa-users"></i> Students</a>
                           </li>
                       </ul>
                   </div>

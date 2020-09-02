@@ -1,6 +1,7 @@
 
 import React from "react";
 import CKEditor from 'ckeditor4-react';
+import {callError} from './../../actions/common';
 // reactstrap components
 import {
   Label,
@@ -12,6 +13,7 @@ import {
   CustomInput,
   Button
 } from "reactstrap";
+import { callError } from "actions/common";
 
 class Course extends React.Component {
   constructor(props){
@@ -27,6 +29,7 @@ class Course extends React.Component {
 
   componentDidMount(){
     let {data} = this.props;
+    try{
     if(data && Object.keys(data).length > 0 )
     {
       this.setState({
@@ -37,6 +40,13 @@ class Course extends React.Component {
         indx:data.indx
       })
 
+    }else
+    {
+      throw 'Not an array'
+    }
+    }catch(err)
+    {
+      callError(err)
     }
 
   }

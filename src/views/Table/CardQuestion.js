@@ -29,37 +29,50 @@ class Course extends React.Component {
   }
  
   render() {
-    
-     let { question, type, answer, points, options, instruction, imgs, vids, auds } = this.props.data;
+     
+     let { question, type, answer, points, options, optionstype, instruction, imgs, vids, auds } = this.props.data;
      let ans = answer && answer.length > 0 ? answer.split('::::::') : [];
      options = options && options !=  "" ? options.split("::::::") : [];
-     let option1 = options && Array.isArray(Object.keys(options)) && Object.keys(options).length > 0 ? Object.keys(options).map((prop)=>{
+     optionstype = optionstype && optionstype !=  "" ? optionstype.split("::::::") : [];
+            let option1 = options && Array.isArray(Object.keys(options)) && Object.keys(options).length > 0 ? Object.keys(options).map((prop)=>{
             let oop = options[prop].split("::::")
             let finalAnswer = ans && ans.includes(oop[0]) ? true : false;
-            return <CardMultiForm key={`ABCD_${oop[0]}`} type={type} answer={finalAnswer} data={oop[1]} index={oop[0]} />
+            let oop1 = optionstype && Array.isArray(Object.keys(optionstype)) && Object.keys(optionstype).length > 0 ? optionstype[prop].split("::::") : null;
+            
+            return <CardMultiForm 
+              key={`ABCD_${oop[0]}`} 
+              type={type} 
+              answer={finalAnswer} 
+              data={oop[1]} 
+              datatype={oop1 !== null ? oop1[1] : 0}
+              index={oop[0]} 
+            />
+            
         }): null; 
+
+
     return (
       <>
       <Card>
         <CardHeader>
+          <b>
           {type === 1 ? 'Choose the correct option':''}
           {type === 2 ? 'Choose all the correct options':''}
           {type === 3 ? 'Give the answer that best fit the empty space':''}
           {type === 4 ? 'Using a short sentence or phrase answer the question below':''}
           {type === 5 ? 'Essay':''}
+          </b>
       </CardHeader>
       <hr />
       <CardBody >
         <Container>
-          <Row sm={12}>
-              <Col xs={2} >
-                  {this.props.numbering}
-              </Col>
-              {instruction && instruction.length > 0 ?
-              <Row className='m-0 p-0' >
+        {instruction && instruction.length > 0 ?
+              <Row xs='12' className='m-0 p-0' >
                 <div  dangerouslySetInnerHTML={{__html: instruction.substring(0, 20)}} />
               </Row>:''}
-              <Col xs={10}>
+              <Row >
+              <Col xs='1' sm='1'> {this.props.numbering}</Col>
+              <Col xs='10' sm='11'>
                   <div dangerouslySetInnerHTML={{__html: question}} />
               </Col>
           </Row>

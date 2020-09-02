@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Select  from 'react-select';
 import { getCoursestudents,getCoursestudent, registerCoursestudent, updateCoursestudent } from './../../actions/coursestudent';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, UncontrolledTooltip } from 'reactstrap';
 import axios from 'axios';
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, callError } from './../../actions/common';
 const path = API_PATHS;
 const Modals = (props) => {
   
@@ -49,7 +49,7 @@ const Modals = (props) => {
         setOptions(optionx);
     })
     .catch(err=>{
-        //alert(JSON.stringify(err));
+        callError(err);
     });
     
     
@@ -112,11 +112,14 @@ const Modals = (props) => {
 
   return (
     <div>
-       <div class="btn-group">
-          <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
-          <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
-        </div>
-      <Modal isOpen={modal} toggle={toggle} keyboard='false' backdrop='static' >
+      
+      <div className="btn-group">
+      <Button id='reloaderst' className="btn-sm" color="default" onClick={()=>handleLoad()} ><i className="now-ui-icons arrows-1_cloud-download-93"></i></Button>
+      <Button id='adderst' className="btn-sm" color={editColor} onClick={toggle}><i className="now-ui-icons ui-1_simple-add"></i></Button>
+      </div>
+      <UncontrolledTooltip target='reloaderst'>Load all students</UncontrolledTooltip>
+      <UncontrolledTooltip target='adderst'>Add a new student</UncontrolledTooltip>
+      <Modal isOpen={modal} toggle={toggle} keyboard={false} backdrop='static' >
         <ModalHeader toggle={resetdata}>{editName} Facilitator</ModalHeader>
         <ModalBody>
         <Form>

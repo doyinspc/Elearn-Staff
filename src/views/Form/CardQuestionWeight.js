@@ -11,7 +11,8 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  FormText
+  FormText,
+  Label
 } from "reactstrap";
 
 
@@ -49,6 +50,7 @@ class Course extends React.Component {
           <br/>
         <Row>
             <FormGroup row>
+              <Label>Total Weight</Label>
             <Col xs='12'>
             <Input
                 name='weight'
@@ -59,7 +61,7 @@ class Course extends React.Component {
                 placeholder="0"
                 onChange={(e)=>this.setState({'weight':e.target.value})}
                 />
-            <FormText><small>The total assessment would be calculated bse on this weight</small></FormText>
+            <FormText><small>The total assessment would be calculated base on this weight</small></FormText>
             </Col>
         </FormGroup>
      

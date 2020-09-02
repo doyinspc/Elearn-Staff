@@ -110,25 +110,25 @@ class Course extends React.Component {
      
     return (
       <>
-          <div class="card card-plain">
-            <div class="card-header" role="tab" id={`headingOne_${this.props.data.id}`}>
+          <div className="card card-plain">
+            <div className="card-header" role="tab" id={`headingOne_${this.props.data.id}`}>
                 <a data-toggle="collapse" data-parent="#accordion" href={`#collapseOne_${this.props.data.id}`} aria-expanded="true" aria-controls="collapseOne">
                   {this.props.data.modulename} : {this.props.data.title.toUpperCase()} <small>{startx}{" <=> "}{endx}</small>
-                {' '}<i class="now-ui-icons arrows-1_minimal-up"></i>
+                {' '}<i className="now-ui-icons arrows-1_minimal-up"></i>
                 </a>
             </div>
 
-            <div id={`collapseOne_${this.props.data.id}`} class="collapse" role="tabpanel" aria-labelledby="headingOne">
-              <div class="card-body">
-                <p>
-                <div class="btn-group dropup">
-      <Button className="btn-sm" size='sm' color="link" onClick={()=>this.handleEdit(this.props.data.id)} ><i class="fa fa-edit"></i> </Button>
-      <Button className="btn-sm" size='sm' color="link" onClick={()=>this.handleDelete(this.props.data.id)} ><i class="fa fa-trash"></i></Button>
+            <div id={`collapseOne_${this.props.data.id}`} className="collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div className="card-body">
+               
+                <div className="btn-group dropup">
+      <Button className="btn-sm" size='sm' color="link" onClick={()=>this.handleEdit(this.props.data.id)} ><i className="fa fa-edit"></i> </Button>
+      <Button className="btn-sm" size='sm' color="link" onClick={()=>this.handleDelete(this.props.data.id)} ><i className="fa fa-trash"></i></Button>
                 </div>
-                </p>
+               
                 <p>{this.props.data.description}</p>
                 <p>{this.props.data.objective}</p>
-                <p>
+               
                   <Container style={{fontSize:'0.9em', fontFamily:'fantasy'}}>
                     <Row xs='12'>
     <Col sm='4'><i className="fa fa-hourglass-half"></i> {this.props.data.dailyduration} hours daily</Col>
@@ -136,7 +136,7 @@ class Course extends React.Component {
     <Col small='4'><i className="fa fa-check-circle"></i> {this.props.data.weight !== null ? this.props.data.weight : 0}{' Point(s)'}</Col>
                     </Row>
                   </Container>
-                </p>
+               
                 <CourseFormMaterial 
                   moduleId={this.props.data.id} 
                   mid={this.state.id}

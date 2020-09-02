@@ -8,6 +8,7 @@ import {
   CardBody,
   Col
 } from "reactstrap";
+import { Link } from "react-router-dom";
 class User extends React.Component {
   render() {
 
@@ -52,26 +53,12 @@ class User extends React.Component {
                 >
                 <i className="fa fa-edit" />
                 </a>}
-                <a
-                className="btn-neutral btn-icon btn-round"
-                color="default"
-                href="/usereditstudent"
-                size="lg"
-                >
-                <i className="fa fa-envelope" />
-                </a>
-                <a
-                className="btn-neutral btn-icon btn-round"
-                color="default"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-                size="lg"
-                >
-                <i className="fa fa-trash" />
-                </a>
                
             </div>
             </Card>
+          </Col>
+          <Col>
+          <Link to='/courses' className='btn btn-block btn-info btn-bg'>Go to class</Link>
           </Col>
         </>
     );

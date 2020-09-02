@@ -17,11 +17,11 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-jqui')(root, $).$;
+				$ = require('../build1/table/Buttons-1.6.2/js/node_modules/datatables.net-jqui')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.Buttons ) {
-				require('datatables.net-buttons')(root, $);
+				require('../build1/table/node_modules/datatables.net-buttons')(root, $);
 			}
 
 			return factory( $, root, root.document );

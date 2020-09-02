@@ -17,11 +17,11 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-bs4')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net-bs4')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.FixedColumns ) {
-				require('datatables.net-fixedcolumns')(root, $);
+				require('../build1/table/FixedColumns-3.3.1/js/node_modules/datatables.net-fixedcolumns')(root, $);
 			}
 
 			return factory( $, root, root.document );

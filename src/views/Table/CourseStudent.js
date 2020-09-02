@@ -71,11 +71,11 @@ class Course extends React.Component {
                 Report
             </UncontrolledTooltip>
                 <a
-                class="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success my-1 py-1"  
+                className="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success my-1 py-1"  
                 href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
                 target='_blank'
                 >
-                    <i class="fab fa-whatsapp"></i>
+                    <i className="fab fa-whatsapp"></i>
                 </a>
                 <Button
                 className="btn-round btn-icon btn-icon-mini btn-neutral"
@@ -142,21 +142,21 @@ class Course extends React.Component {
             </UncontrolledTooltip>
              
                 </div> 
-                <div class="dropdown d-md-none">
-                  <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-gear"></i>
+                <div className="dropdown d-md-none">
+                  <button className="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i className="fa fa-gear"></i>
                   </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" onClick={this.props.loadUser} ><i className="now-ui-icons users_single-02"></i> Profile</a>
-                    <a class="dropdown-item" href="#" onClick={this.props.loadAssignment}><i className="now-ui-icons design-2_ruler-pencil" /> Assignment</a>
-                    <a class="dropdown-item" href="#" href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
-                target='_blank'><i style={{fontSize:'1.8em'}} class="fab fa-whatsapp text-success"></i> Whatsapp</a>
-                    <a class="dropdown-item" href="#" onClick={this.props.loadQuestion}><i className="now-ui-icons ui-2_chat-round" /> Question/Chat</a>
+                  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a className="dropdown-item" href="#" onClick={this.props.loadUser} ><i className="now-ui-icons users_single-02"></i> Profile</a>
+                    <a className="dropdown-item" href="#" onClick={this.props.loadAssignment}><i className="now-ui-icons design-2_ruler-pencil" /> Assignment</a>
+                    <a className="dropdown-item" href="#" href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
+                target='_blank'><i style={{fontSize:'1.8em'}} className="fab fa-whatsapp text-success"></i> Whatsapp</a>
+                    <a className="dropdown-item" href="#" onClick={this.props.loadQuestion}><i className="now-ui-icons ui-2_chat-round" /> Question/Chat</a>
                     { this.props.data.sis_active === 0 ?
-                    <a class="dropdown-item" href="#" onClick={()=>this.props.handleActive(1)}><i className="now-ui-icons ui-2_settings-90 text-info" /> Block</a>:
-                    <a class="dropdown-item" href="#" onClick={()=>this.props.handleActive(0)}><i className="now-ui-icons ui-2_settings-90 text-danger" /> Unblock</a>
+                    <a className="dropdown-item" href="#" onClick={()=>this.props.handleActive(1)}><i className="now-ui-icons ui-2_settings-90 text-info" /> Block</a>:
+                    <a className="dropdown-item" href="#" onClick={()=>this.props.handleActive(0)}><i className="now-ui-icons ui-2_settings-90 text-danger" /> Unblock</a>
                     }
-                    <a class="dropdown-item" href="#"  onClick={this.props.handleDelete} ><i className="now-ui-icons ui-1_simple-remove" /> Remove</a>
+                    <a className="dropdown-item" href="#"  onClick={this.props.handleDelete} ><i className="now-ui-icons ui-1_simple-remove" /> Remove</a>
                   </div>
                 </div>  
              </td>

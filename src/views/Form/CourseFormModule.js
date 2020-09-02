@@ -4,10 +4,10 @@ import Select  from 'react-select';
 import { getCoursemodules, getCoursemodule, registerCoursemodule, updateCoursemodule } from './../../actions/coursemodule';
 import { getCoursematerials } from './../../actions/coursematerial';
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, FormText } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, FormText, UncontrolledTooltip } from 'reactstrap';
 import axios from 'axios';
 import moment from 'moment';
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, callError } from './../../actions/common';
 const path = API_PATHS;
 const Modals = (props) => {
   
@@ -86,6 +86,7 @@ const Modals = (props) => {
 
   const handleSubmit = (e) =>{
         e.preventDefault();
+      try{
         let fd = new FormData();
         fd.append('name', name.value);
         fd.append('title', title);
@@ -110,6 +111,10 @@ const Modals = (props) => {
         }
           
           resetdata();
+      }catch(err)
+        {
+          callError(err);
+        }
   }
 
   const populate = async(data) =>{
@@ -171,11 +176,13 @@ const Modals = (props) => {
 
   return (
     <div>
-      <div class="btn-group">
-      <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
-      <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
+      <div className="btn-group">
+      <Button id='reloader' className="btn-sm" color="default" onClick={()=>handleLoad()} ><i className="now-ui-icons arrows-1_cloud-download-93"></i></Button>
+      <Button id='adder' className="btn-sm" color={editColor} onClick={toggle}><i className="now-ui-icons ui-1_simple-add"></i></Button>
       </div>
-      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
+      <UncontrolledTooltip target='reloader'>Load all Modules</UncontrolledTooltip>
+      <UncontrolledTooltip target='adder'>Add a new Modules</UncontrolledTooltip>
+      <Modal isOpen={modal} toggle={toggle}  keyboard={false} backdrop='static' >
         <ModalHeader toggle={toggle}>{editName} Modules</ModalHeader>
         <ModalBody>
         <Form>

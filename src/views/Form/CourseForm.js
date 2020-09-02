@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Fo
 import axios from 'axios';
 import moment from 'moment';
 import Select  from 'react-select';
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, callError } from './../../actions/common';
 
 const path = API_PATHS;
 const ses = [
@@ -105,6 +105,7 @@ const Modals = (props) => {
        setOptions1(opt1);
     }))
     .catch(err=>{
+       callError(err)
         //console.log(JSON.stringify(err));
     })
   

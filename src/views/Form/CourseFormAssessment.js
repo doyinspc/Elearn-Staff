@@ -12,6 +12,7 @@ import FormImage from './FormImage';
 import FormTextx from './FormTextx';
 import ShowImage from './../Table/ShowImage';
 import { SERVER_URL } from 'actions/common';
+import { callError } from 'actions/common';
 
 
 
@@ -23,6 +24,7 @@ const Modals = (props) => {
   const [instruction, setInstruction] = useState('');
   const [question, setQuestion] = useState('');
   const [optx, setOptx] = useState({});
+  const [optxtype, setOptxtype] = useState({});
   const [answer, setAnswer] = useState('');
   const [answers, setAnswers] = useState({});
   const [points, setPoints] = useState(1);
@@ -36,11 +38,13 @@ const Modals = (props) => {
   const [txt, setTxt] = useState(false);
   const [txtnum, setTxtnum] = useState(null);
   const [txttype, setTxttype] = useState(null);
-
   const [imgpic, setImgpic] = useState('');
   const [vidpic, setVidpic] = useState('');
   const [audpic, setAudpic] = useState('');
-
+ /**
+  * REMOVE ALL DATA
+  * SET TO INITIAL STATE AND CLOSE
+  */
   const resetdata = () =>{
     setId(null);
     setType(0);
@@ -50,11 +54,15 @@ const Modals = (props) => {
     setAudpic('');
     setVidpic('');
     setOptx(['']);
+    setOptxtype(['']);
     setAnswer([]);
     setPoints(1);
     props.handleClose();
   }
-
+ /**
+  * CLEAR FORM DATA SON NEW
+  * DATA CAN BE ENTERED
+  */
   const clearForm = () =>{
     setId(null);
     setType(0);
@@ -64,24 +72,45 @@ const Modals = (props) => {
     setAudpic('');
     setVidpic('');
     setOptx(['']);
+    setOptxtype(['']);
     setAnswer([]);
     setPoints(1);
   }
+  /**
+   * CLOSE THE MODAL
+   */
   const toggle = () => setModal(false);
-  
+  /**
+   * 
+   * @param {*} rid 
+   */
   const opts = (rid) => {
     setType(rid);
   }
-  
+  /**
+   * ON LOAD
+   * OPEN MODAL IF AND ID IS INCLUDES
+   * @param {*} props.data
+   * UPDATE THE STATE
+   */
   useEffect(() => {
     if(parseInt(props.mid) > 0 )
     {
-    //setId(props.mid);
      setModal(true);     
     } 
     populate(props.data);
 },[props.mid]);
 
+/**
+ * SET STATE FOR ADDITIONAL QUESTION ITEMS
+ * @param {*} imgnum THE ID THAT IDENTIFIES THE IMAGE
+ * @param {*} imgtype THE TYPE 1,2,3,4,5
+ * 1 FORMAT QUESTION
+ * 2 INPUT INTRUCTION
+ * 3 INPUT IMAGE
+ * 4 INPUT AUDIO
+ * 5 INPUT VIDEO
+ */
  const handleImage = (imgnum, imgtype) =>{
    switch (imgtype) 
    {
@@ -102,8 +131,16 @@ const Modals = (props) => {
        break;
    }
  }
- const textLoader = (data, num, id) =>{
-   if(id === 1)
+ /**
+  * 
+  * @param {*} data THE RESPONSE TEXT
+  * @param {*} id THE QUESTION ID
+  * @param {*} type THE QUESTION TYPE
+  * IF THE type IS 1 SET STATE QUESTION : DATA
+  * IF THE type IS 2 SET STATE INSTRUCTION : DATA
+  */
+ const textLoader = (data, id, type) =>{
+   if(type === 1)
    {
       setQuestion(data);
    }else
@@ -112,25 +149,33 @@ const Modals = (props) => {
    }
 
  }
- const imgLoader = (url, num, grp) =>{
+ /**
+  * RESPONSE FOM IMGAGE
+  * @param {*} url 
+  * @param {*} id 
+  * @param {*} type 
+  * CLOSE THE MODAL
+  */
+ const imgLoader = (url, id, type) =>{
    setImg(false);
-    
-     if(grp === 'quest')
+    /**
+     * CONFIRM THE ID IF ITS FRO QUESTION OR OPTIONS
+     * SET STATE
+     */
+    console.log(url, id, type);
+     if(id === 'quest')
      {
-       if(num === 3)
+       if(type === 3)
        {
         setImgpic(url);
         setImgnum(null)
        }
-       else if(num === 4)
+       else if(type === 4)
        {
-        console.log(num)
-        console.log(grp);
-        console.log(url);
         setAudpic(url);
         setImgnum(null)
        }
-       else if(num === 5)
+       else if(type === 5)
        {
         setVidpic(url);
         setImgnum(null)
@@ -140,12 +185,17 @@ const Modals = (props) => {
      {
        //set options
        let ops = {...optx};
-       ops[num] = url;
+       ops[id] = url;
        setOptx(ops);
+       
+       let opx = {...optxtype};
+       opx[id] = 1;
+       setOptxtype(opx);
      }
 
  }
-  const handleSubmit = (e) =>{
+ const handleSubmit = (e) =>{
+   try{
         //GET TYPE
         let arr = {}
         //SET CONSTANTS
@@ -170,9 +220,12 @@ const Modals = (props) => {
         else if(type === 4 || type === 5)
         {
           arr['answer'] = answer;
-        }else
+        }else if(type === 6 || type === 7 || type === 8)
         {
           arr['answer'] = '';
+        }else
+        {
+          throw 'Select Question type'
         }
 
 
@@ -193,7 +246,23 @@ const Modals = (props) => {
         {
           arr['options'] = '';
         }
-        console.log(arr);
+        let optionstype = optxtype;
+        if(type === 1 || type === 2 )
+        {
+          let all_option_types = Object.keys(optionstype).map((prop, ind)=>{
+            if(optionstype[prop] !== '' || optionstype[prop] !== null)
+            {
+              let ar_sub = [prop, optionstype[prop]];
+              return ar_sub.join("::::");
+            }    
+          })
+          let filter_all_option_types = all_option_types.filter(row=>row !== '' || row !== null);
+          arr['optionstype'] = filter_all_option_types.join("::::::");
+        }else
+        {
+          arr['optionstype'] = '';
+        }
+        
         //GET ALL QUESTIONS FROM BANK
         let all = qbank && Array.isArray(Object.keys(qbank)) ? {...qbank} : {};
         let alls = settings && Array.isArray(Object.keys(settings)) ? {...settings} : {};
@@ -209,9 +278,14 @@ const Modals = (props) => {
         props.updateCoursematerial({'question':JSON.stringify(all), 'settings':JSON.stringify(alls)}, props.id);
         //RESET
         clearForm();
+      }catch(err)
+      {
+        callError();
+      }
   }
-  const handleUpdate = (e) =>{
+ const handleUpdate = (e) =>{
     //GET TYPE
+  try{
     let arr = {}
     arr['instruction'] = instruction;
     arr['question'] = question;
@@ -256,116 +330,180 @@ const Modals = (props) => {
     {
       arr['options'] = '';
     }
-
+    let optionstype = optxtype;
+        if(type === 1 || type === 2 )
+        {
+          let all_option_types = Object.keys(optionstype).map((prop, ind)=>{
+            if(optionstype[prop] !== '' || optionstype[prop] !== null)
+            {
+              let ar_sub = [prop, optionstype[prop]];
+              return ar_sub.join("::::");
+            }    
+          })
+          let filter_all_option_types = all_option_types.filter(row=>row !== '' || row !== null);
+          arr['optionstype'] = filter_all_option_types.join("::::::");
+        }else
+        {
+          arr['optionstype'] = '';
+        }
     //STORE
     let all = qbank && Array.isArray(Object.keys(qbank)) ? {...qbank} : {};
     all[id] = arr;
     setQbank(all);
     props.updateCoursematerial({'question':JSON.stringify(all)}, props.id);
     clearForm();
+  }catch(err)
+    {
+      callError(err);
+    }
   }
   //ADD SPACE FOR NEW OPTION
-  const addOption = (e) =>{
+ const addOption = (e) =>{
     e.preventDefault();
-    let rand = Math.floor(Math.random() * 12345)
+    let rand = Math.floor(Math.random() * 1234567)
     let ops = {...optx};
     ops['d' + rand] = '';
     setOptx(ops);
+    let opx = {...optxtype};
+    opx['d' + rand] = 0;
+    setOptxtype(opx);
   }
-  //ADD SPACE FOR NEW OPTION
-  const addOptionImg = (num) =>{
-    let rand = Math.floor(Math.random() * 12345)
-    handleImage('d' + rand);
-    
-  }
+
   //REMOVE SPACE AND OPTION ITEM
   const removeOption = indx =>{
+    try{
     let ed = {...optx};
+    let edx = {...optxtype};
     delete ed[indx];
+    delete edx[indx];
     setOptx(ed);
+    setOptxtype(edx);
+    }catch(err)
+    {
+      callError(err);
+    }
   }
   //CHANGE VALUE
   const handleChange = (data, ind) =>{
-    let ed = {...optx}
-    ed[ind] = data;
-    setOptx(ed);  
+    try{
+      let ed = {...optx}
+      ed[ind] = data;
+      setOptx(ed);  
+    }catch(err)
+    {
+      callError(err);
+    }
   }
-//SET ANSWER
+  //SET ANSWER
   const handleChangeAnswer = (data, st, ind) =>{
-  if(data !== "" || data !== null || data !== 'undefined')
-  {
-      let ed = type === 1 ? {} : {...answers};
-      if(st)
+    try{
+      if(data !== "" || data !== null || data !== 'undefined')
       {
-        ed[ind] = st;
-      }else{
-        delete ed[ind];
+          let ed = type === 1 ? {} : {...answers};
+          if(st)
+          {
+            ed[ind] = st;
+          }else{
+            delete ed[ind];
+          }
+          setAnswers(ed);  
       }
-      setAnswers(ed);  
-  }
+    }catch(err)
+    {
+      callError(err);
+    }
   
   }
   const setEditQuestion = indx =>{
-     let ed = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? {...qbank} : {};
-     let eds = ed[indx];
-     if(eds && Object.keys(eds).length > 0 )
-     { 
-       let ops = eds.options ? eds.options.split('::::::') :[];
-       let ans = "";
-       let opx = {};
-       
-       if(parseInt(eds.type) === 1 || parseInt(eds.type) === 2 || parseInt(eds.type) === 3)
-       {
-          opx ={}; 
-          for(let row of ops){
-              let r = row.split("::::");
-              opx[r[0]] = r[1];
-          }
-          setOptx(opx);
-          
-          if(eds.type === 1 ||  eds.type === 2)
-          {
-            ans = eds.answer ? eds.answer.split('::::::') :[];
-          }else{
-            ans = opx;
-          }
-          
+    try{
+      let ed = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? {...qbank} : {};
+      let eds = ed[indx];
+      console.log(indx, ed[indx])
+      if(eds && Object.keys(eds).length > 0 )
+      { 
+        let ops = eds.options ? eds.options.split('::::::') :[];
+        let opstype = eds.optionstype ? eds.optionstype.split('::::::') :[];
+        let ans = "";
+        let opx = {};
+        let opxtype = {};
+        
+        if(parseInt(eds.type) === 1 || parseInt(eds.type) === 2 || parseInt(eds.type) === 3)
+        {
+            opx ={}; 
+            for(let row of ops)
+            {
+                let r = row.split("::::");
+                opx[r[0]] = r[1];
+            }
+            setOptx(opx);
+            
+            if(eds.type === 1 ||  eds.type === 2)
+            {
+              ans = eds.answer ? eds.answer.split('::::::') :[];
+            }else{
+              ans = opx;
+            }
+            
         }else
         {
-          ans = eds.answer;
+            ans = eds.answer;
         }
-       setId(indx);
-       setInstruction(eds.instruction);
-       setQuestion(eds.question);
-       setType(parseInt(eds.type));
-       setPoints(eds.points);
-       setAnswer(ans);
-       setAnswers(ans);
-       setImgpic(eds.imgs);
-       setAudpic(eds.auds);
-       setVidpic(eds.vids);
-       
+        if(parseInt(eds.type) === 1 || parseInt(eds.type) === 2 )
+        {
+            opxtype ={}; 
+            for(let row of opstype)
+            {
+                let r = row.split("::::");
+                opxtype[r[0]] = r[1];
+            }
+            setOptxtype(opxtype); 
+        }
+        setId(indx);
+        setInstruction(eds.instruction);
+        setQuestion(eds.question);
+        setType(parseInt(eds.type));
+        setPoints(eds.points);
+        setAnswer(ans);
+        setAnswers(ans);
+        setImgpic(eds.imgs);
+        setAudpic(eds.auds);
+        setVidpic(eds.vids);
+        
       }
+  }catch(err)
+  {
+    callError(err);
+  }
   }
   const setDeleteQuestion = indx =>{
-    let ed = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? {...qbank} : {};
-    let sd = settings && Array.isArray(Object.keys(settings)) && Object.keys(settings).length > 0 ? {...settings} : {};
-  
-    delete ed[indx];
-    delete sd[indx];
+    try{
+      let ed = qbank && Array.isArray(Object.keys(qbank)) && Object.keys(qbank).length > 0 ? {...qbank} : {};
+      let sd = settings && Array.isArray(Object.keys(settings)) && Object.keys(settings).length > 0 ? {...settings} : {};
 
-    setQbank(ed);
-    setSettings(sd);
+      delete ed[indx];
+      delete sd[indx];
 
-    props.updateCoursematerial({'question':JSON.stringify(ed), 'settings':JSON.stringify(sd)}, props.id);
- }
+      setQbank(ed);
+      setSettings(sd);
+
+      props.updateCoursematerial({'question':JSON.stringify(ed), 'settings':JSON.stringify(sd)}, props.id);
+    }catch(err)
+    {
+      callError(err);
+    }
+  }
   const handleSave =() =>{
   }
   const handleSubmitSettings = (name, value) => {
+   try{
       let sts = settings;
       sts[name] = value;
       setSettings(sts);
       props.updateCoursematerial({'settings':JSON.stringify(sts)}, props.id);
+   }catch(err)
+   {
+     callError(err);
+   }
         
   }
   const handleSubmitWeight = (weight) => {
@@ -394,14 +532,15 @@ const populate = async(data) =>{
   { 
   loadOptx =  optx && Array.isArray(Object.keys(optx)) && Object.keys(optx).length > 0 ? Object.keys(optx).map((rw, index)=>{
     let res = answer && Array.isArray(answers) && answers.includes(rw) ? true : false;
-    
+    //console.log(rw, optx[rw], optxtype[rw]);
     return <CardFitbForm 
                   key={`ab_${rw}`} 
                   index={rw} 
                   num={type}
                   val={res}
                   data={optx[rw]}
-                  handleImg={addOptionImg}
+                  datatype={optxtype[rw]}
+                  handleImg={handleImage}
                   removeOption={removeOption}
                   handleChange={handleChange}
                   handleChangeAnswer={handleChangeAnswer}
@@ -419,13 +558,15 @@ const populate = async(data) =>{
                   num={type}
                   val={res}
                   data={optx[index]}
+                  datatype={optxtype[index]}
+                  handleImg={handleImage}
                   removeOption={removeOption}
                   handleChange={handleChange}
                   handleChangeAnswer={handleChangeAnswer}
                   handleSave={handleSave}
                   />
       }): null;
-    }
+  }
   //IF TYPE IS 3 FILL IN THE BLANKS
   if(type === 3)
   {
@@ -442,7 +583,7 @@ const populate = async(data) =>{
                   handleSave={handleSave}
                   />
       }): null;
-    }
+  }
 
   //OUTLINE ALL REGISTERED QUESTIONS
    let numbering = 0;
@@ -491,7 +632,7 @@ const populate = async(data) =>{
         mid={imgnum}
         type={imgtype}
         st={img}
-        getlink={(url, num)=>imgLoader(url, imgtype, imgnum)}
+        getlink={(url, num)=>imgLoader(url, imgnum, imgtype)}
         handleClose={()=>setImg(false)}
         />:''
       }
@@ -526,18 +667,18 @@ const populate = async(data) =>{
                     />
                   {essay.length > 0 ? essay.map((pr, ind)=>{
                         let ids = pr[0];
-                        return <CardQuestionSettings
-                        key={ind}
-                        num={ind + 1}
-                        name={ids}
-                        data={pr[1]}
-                        timer={settings && settings[ids] && settings[ids]['timer'] ? settings[ids]['timer'] : ''}
-                        starts={settings && settings[ids] && settings[ids]['starts'] ? settings[ids]['starts'] : ''}
-                        ends={settings && settings[ids] && settings[ids]['ends'] ? settings[ids]['ends'] : ''}
-                        showtimer={settings && settings[ids] && settings[ids]['showtimer'] ? settings[ids]['showtimer'] : false}
-                        showstarts={settings && settings[ids] && settings[ids]['showstart'] ? settings[ids]['showstart'] : false}
-                        showends={settings && settings[ids] && settings[ids]['showend'] ? settings[ids]['showend'] : false}
-                        handleSubmit={(val)=>handleSubmitSettings(ids, val)}
+                    return  <CardQuestionSettings
+                      key={ind}
+                      num={ind + 1}
+                      name={ids}
+                      data={pr[1]}
+                      timer={settings && settings[ids] && settings[ids]['timer'] ? settings[ids]['timer'] : ''}
+                      starts={settings && settings[ids] && settings[ids]['starts'] ? settings[ids]['starts'] : ''}
+                      ends={settings && settings[ids] && settings[ids]['ends'] ? settings[ids]['ends'] : ''}
+                      showtimer={settings && settings[ids] && settings[ids]['showtimer'] ? settings[ids]['showtimer'] : false}
+                      showstarts={settings && settings[ids] && settings[ids]['showstart'] ? settings[ids]['showstart'] : false}
+                      showends={settings && settings[ids] && settings[ids]['showend'] ? settings[ids]['showend'] : false}
+                      handleSubmit={(val)=>handleSubmitSettings(ids, val)}
                         />
                       })
                   : ''} 
@@ -562,7 +703,7 @@ const populate = async(data) =>{
                     <Col></Col>
               </Row>
               {instruction && instruction.length > 0 ?
-              <Row className='m-0 p-0' >
+              <Row className='m-0 p-0 bg-grey' style={{border:"2px solid #000"}} >
                 <div  dangerouslySetInnerHTML={{__html: instruction}} />
               
               </Row>:''}
@@ -606,18 +747,18 @@ const populate = async(data) =>{
                :''}
               <Row>
                 <Col>
-                  <div class="btn-group dropdown">
-                    <button class="btn btn-secondary dropdown-toggle btn-primary btn-sm btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-plus"></i> Choose answer type
+                  <div className="btn-group dropdown">
+                    <button className="btn btn-secondary dropdown-toggle btn-primary btn-sm btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i className="fa fa-plus"></i> Choose answer type
                       </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(1)}><i class='fa fa-question'></i> Multichoice (Single Answer)</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(2)}><i class='fa fa-question'></i> Multichoice (Multiple Answer)</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(3)}><i class='fa fa-question'></i> Fill in the blank</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(4)}><i class='fa fa-question'></i> Short Text Answer</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(5)}><i class="fa fa-question" ></i> Long Text Answer</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(6)}><i class='fa fa-attachment'></i> Upload Answer</a>
-                        <a class="dropdown-item" href="#" onClick={()=>opts(7)}><i class='fa fa-link'></i> Post Link</a>   
+                      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(1)}><i className='fa fa-question'></i> Multichoice (Single Answer)</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(2)}><i className='fa fa-question'></i> Multichoice (Multiple Answer)</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(3)}><i className='fa fa-question'></i> Fill in the blank</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(4)}><i className='fa fa-question'></i> Short Text Answer</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(5)}><i className="fa fa-question" ></i> Long Text Answer</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(6)}><i className='fa fa-attachment'></i> Upload Answer</a>
+                        <a className="dropdown-item" href="#" onClick={()=>opts(7)}><i className='fa fa-link'></i> Post Link</a>   
                       </div>
                     </div>
                 </Col>
@@ -628,7 +769,7 @@ const populate = async(data) =>{
                   <div >
                    {loadOptx}
                   <FormGroup inline>
-                    <a href="#" className="btn btn-primary btn-icon" onClick={addOption}><i className="fa fa-plus"></i></a>
+                    <a href="#" className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-primary" onClick={addOption}><i className="fa fa-plus"></i></a>
                   </FormGroup>
                   </div>
                 : ""}
@@ -656,7 +797,7 @@ const populate = async(data) =>{
                 /></FormGroup>:""
                 }
                 {type === 6 ? 
-                 <p><i className='text-mute'>Answer to be submitted as an attachement</i></p>:""
+                 <p><i className='text-mute'>Answer to be submitted as an attachment</i></p>:""
                 }
                 {type === 7 ? 
                  <p><i className='text-mute'>Link to answer would be submitted</i></p>:""
@@ -683,13 +824,13 @@ const populate = async(data) =>{
             </CardBody>
               : ''}
             <CardFooter>
-
-            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(1)}><i className='fa fa-dedent'></i></button>
-            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(2)}><i className='fa fa-clock-o'></i></button>
-            <button className="btn btn-sm btn-icon btn-info" onClick={()=>setPage(3)}><i className='fa fa-gears'></i></button>
-              <Button size='sm' color={editColor} onClick={id ? handleUpdate : handleSubmit}>{id ? 'Change' : 'Save' }</Button>{' '}
-                { id ? <Button size='sm' color="info" onClick={clearForm}>Add New</Button> : null}
-                <Button size='sm' color="info" class='pull-left' onClick={resetdata}>Close</Button>
+            <Button color="info" className='pull-left' onClick={resetdata}>Close</Button> {" "}
+            <button className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={()=>setPage(1)}><i className='fa fa-dedent'></i></button>
+            <button className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={()=>setPage(2)}><i className='fa fa-clock-o'></i></button>
+            <button className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={()=>setPage(3)}><i className='fa fa-gears'></i></button>
+              <Button color={editColor} onClick={id ? handleUpdate : handleSubmit}>{id ? 'Change' : 'Save' }</Button>{' '}
+                { id ? <Button color="info" onClick={clearForm}>Add New</Button> : null}
+                
             </CardFooter>
           </Card>
         </Container>

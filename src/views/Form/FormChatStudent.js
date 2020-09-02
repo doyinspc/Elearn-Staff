@@ -9,7 +9,7 @@ import "assets/css/chat.css";
 const Modals = (props) => {
   
   const loadComment = async (id, msg, userz, mat) =>{
-    let msgs ='<blockqoute>'+ msg +'</blockqoute>';
+    let msgs =`<blockqoute style="padding:'5px', color:'#cccccc'"><i><cite>${msg}<cite></i></blockqoute><br>`;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -28,56 +28,58 @@ const Modals = (props) => {
         confirmButtonText: 'Send !',
         cancelButtonText: 'Others',
         reverseButtons: true
-      }).then((result) => {
-        if (text && text.length > 0) {
-            let fd= new FormData();
-            fd.append('chat', msgs + text);
-            fd.append('userId', props.user.id);
-            fd.append('materialId', mat);
-            fd.append('qid', 'mat');
-            fd.append('grp', 1);
-            fd.append('cat', 'insert');
-            fd.append('table', 'course_comments');
-            Swal.fire({
-                title: 'Let this conversation be',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Public',
-                cancelButtonText: 'Private',
-              }).then((result) => {
-                if (result.value) {
-                    fd.append('types', 1);
-                    fd.append('recieverId', userz);
-                    props.registerCoursecomment(fd);
-                }else{
-                    fd.append('types', 2);
-                    props.registerCoursecomment(fd);
-                }
-              })
-        } else{
-            Swal.fire({
-                title: 'Remove or ',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Remove',
-                cancelButtonText: 'Close',
-              }).then((res) => {
-                if (res.value) {
-                    props.deleteCourscomment({'id':id});
-                }
-                else if(result.dismiss === Swal.DismissReason.cancel) 
-                {
-                    swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'No Action',
-                    'error'
-                    )
-                }
-                })
-        }
       })
+
+      if (text && text.length > 0) {
+        let fd= new FormData();
+        fd.append('chat', msgs + text);
+        fd.append('userId', props.user.id);
+        fd.append('materialId', mat);
+        fd.append('qid', 'mat');
+        fd.append('grp', 0);
+        fd.append('types', 1);
+        fd.append('cat', 'insert');
+        fd.append('table', 'course_comments');
+        Swal.fire({
+            title: 'Let this conversation be',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Public',
+            cancelButtonText: 'Private',
+          }).then((result) => {
+            if (result.value) {
+                fd.append('types', 1);
+                fd.append('recieverId', 0);
+                props.registerCoursecomment(fd);
+            }else{
+              fd.append('recieverId', 0);
+                fd.append('types', 2);
+                props.registerCoursecomment(fd);
+            }
+          })
+         } else{
+        Swal.fire({
+            title: 'Remove or ',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Remove',
+            cancelButtonText: 'Close',
+          }).then((res) => {
+            if (res.value) {
+                props.deleteCourscomment({'id':id});
+            }
+            else if(res.dismiss === Swal.DismissReason.cancel) 
+            {
+                swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'No Action',
+                'error'
+                )
+            }
+            })
+    }
 }
 
  let {username, fullname, photo, chat, modulename, materialname, userId, id, materialId, updated, grp } = props.data || '';
@@ -89,15 +91,14 @@ const Modals = (props) => {
                     <div class="msg-box">
                         <div class="flr">
                             <div class="messages">
-                                
                                 <p class="msg" id="msg-2">
-                                    {chat}
+                                <div dangerouslySetInnerHTML={{__html:chat}} />
                                 </p>
                             </div>
         <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
                         </div>
                         <img 
-                        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+                        onClick={()=>loadComment(id, chat.substring(0, 200), userId, materialId)}
                         class="user-img" 
                         id="user-0" 
                         src={`${SERVER_URL + photo}`}
@@ -116,9 +117,8 @@ const Modals = (props) => {
         />
         <div class="flr">
             <div class="messages">
-              
                 <p class="msg" id="msg-2">
-                   {chat}
+                  <div dangerouslySetInnerHTML={{__html:chat}} />
                 </p>
             </div>
         <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>

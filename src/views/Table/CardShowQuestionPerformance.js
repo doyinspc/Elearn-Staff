@@ -70,7 +70,7 @@ let tdquestions = qd.map((prop, ind)=>{
           <Container classname='m-0 p-0'>
           <div class="card card-nav-tabs card-plain">
             <div class="card-header card-header-danger small">
-                <span className='badge badge-info'>{props.data.points} points</span>
+                <span className='badge badge-info'>{props.data.points} Points</span>
                 <span className='badge badge-success'>{marked} Marked</span>
                 <span className='badge badge-danger'>{unmarked} Unmarked</span>
                 <span className='badge badge-primary'>{totaled} Candidates</span>
@@ -78,11 +78,11 @@ let tdquestions = qd.map((prop, ind)=>{
             <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrappers">
                         <ul class="nav nav-tabs" data-tabs="tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#home" data-toggle="tab">Scores</a>
+                            <li class="nav-items">
+                                <a class="nav-links active" href="#home" data-toggle="tab">Scores</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#updates" data-toggle="tab">Grade</a>
+                            <li class="nav-items">
+                                <a class="nav-links" href="#updates" data-toggle="tab">Grade</a>
                             </li>
                            
                         </ul>

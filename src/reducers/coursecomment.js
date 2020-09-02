@@ -50,21 +50,6 @@ export default function(state = initialState, action){
                 isLoading : true
             };
         case COURSECOMMENT_GET_MULTIPLE:
-            let olds = [...state.coursecomments];
-            let news = action.payload;
-             
-             let store = news.map(row =>{
-                let av = olds.filter(r=>parseInt(r.id) === parseInt(row.id));
-                if(av && Array.isArray(av) && av.length > 0){
-                    
-                 }else{
-                    return row;
-                };
-                
-                return null;
-            })
-            let sto = store.filter(r=>r != null);
-            let oldss = [...olds, ...sto];
             localStorage.setItem('coursecomment', JSON.stringify(action.payload));
             return {
                 ...state,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { registerCoursecomment } from './../../actions/coursecomment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
@@ -9,7 +9,7 @@ const Modals = (props) => {
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [namez, setNamez] = useState('');
-  
+  const messageEndRef = useRef(null);
   const toggle = () => setModal(!modal);
   
   useEffect(() => {
@@ -18,7 +18,7 @@ const Modals = (props) => {
      setId(props.mmid);
      setModal(!modal);
     }
-    
+    scrollToBottom();
 },[props.mmid]);
  const handleSubmit =()=>{
   let fd= new FormData();
@@ -42,7 +42,11 @@ const Modals = (props) => {
                     data={props}
                 />
   }): null;
-
+ const scrollToBottom = () =>{
+   console.log(messageEndRef.current);
+   if(messageEndRef.current !== null) 
+   messageEndRef.current.scrollIntoView({behavior: "smooth"})
+ }
   const resetdata = () =>{
     props.handleClose()
   }
@@ -69,10 +73,8 @@ const Modals = (props) => {
             </button>
         </form>
     </section>
+    <div id='el' ref={messageEndRef}></div>
     </ModalBody>
-      
-        
-        
       </Modal>
     </div>
   );

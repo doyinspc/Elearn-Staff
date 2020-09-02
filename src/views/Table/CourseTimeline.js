@@ -8,7 +8,6 @@ import OpenEssTest from './OpenEssTest';
 import { API_PATHS, axiosConfig1 } from './../../actions/common';
 // reactstrap components
 import {
-  
   Col,
   Container,
   Row
@@ -18,7 +17,6 @@ import { registerCoursecomment, updateCoursecomment, getCoursecomment, getCourse
 import { SERVER_URL, imgx } from "actions/common";
 import AudioPlayer from 'react-audio-player';
 import VideoPlayer from 'react-player';
-import CardChat from "./CardChat";
 import CardChatStudent from "./CardChatStudent";
 
 let path = API_PATHS;
@@ -592,9 +590,9 @@ class TimeLine extends React.Component {
                 </div>
                 { type === 2 || type === 3 || type === 4 || type === 5 ?
                     <a href={path} target="_blank" class={`btn btn-${themeColor} btn-block btn-bg`}><i className="fa fa-cloud-download"></i> Download File {sizedd}</a>
-                    : ''}
-                    <button  class={`btn btn-${themeColor} btn-sm`} onClick={this.lunchPost}><i className="fa fa-comment"></i> Comment</button>
-                    <button  class={`btn btn-${themeColor} btn-sm`} onClick={this.lunchComments}><i className="fa fa-comments"></i> Chat</button>
+                : ''}
+                    <button  className={`btn btn-${themeColor} btn-sm`} onClick={this.lunchPost}><i className="fa fa-comment"></i> Comment</button>
+                    <button  className={`btn btn-${themeColor} btn-sm`} onClick={this.lunchComments}><i className="fa fa-comments"></i> Chat</button>
                     <p>
                         {obj_buttons}
                         {ess_buttons}

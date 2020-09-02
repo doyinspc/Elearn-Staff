@@ -4,6 +4,7 @@ import CKEditor from 'ckeditor4-react';
 import { getCoursematerials,getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col,Row, Container,  FormText } from 'reactstrap';
 import { SERVER_URL } from 'actions/common';
+import { callError } from 'actions/common';
 
 
 const pics = {
@@ -53,6 +54,7 @@ const resetdata = () =>{
   
   const handleSubmit = (e) =>{
         e.preventDefault();
+      try{
         const datax = new FormData();
         if(type === 1 )
         {
@@ -85,6 +87,10 @@ const resetdata = () =>{
           props.registerCoursematerial(datax);
         }
         //resetdata();
+      }catch(err)
+      {
+          callError(err);
+      }
   }
 
   const populate = async(data) =>{
@@ -110,25 +116,25 @@ const resetdata = () =>{
 
   return (
     <div>
-      <div class="btn-group dropup">
-        <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i class="fa fa-refresh"></i> </Button>
-        <button class="btn btn-secondary dropdown-toggle btn-primary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         <i class="fa fa-plus"></i>
+      <div className="btn-group dropup">
+        <Button className="btn-sm" color="default" onClick={()=>handleLoad(props.moduleId)} ><i className="now-ui-icons arrows-1_cloud-download-93"></i> </Button>
+        <button className="btn btn-secondary dropdown-toggle btn-primary btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         <i className="fa fa-plus"></i>
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(1)}><i class='fa fa-file'></i> Text</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(2)}><i class="fa fa-file-pdf" ></i> Upload Document</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(3)}><i class='fa fa-file-image'></i> Upload Image</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(4)}><i class='fa fa-file-video'></i> Upload Video</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(5)}><i class='fa fa-file-audio'></i> Upload Audio</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(6)}><i class='fa fa-youtube'></i> Youtube link</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(7)}><i class='fa fa-link'></i> Links/Code</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(8)}><i class='fa fa-comment'></i> Discussion/Chat</a>
-          <a class="dropdown-item" href="#" onClick={()=>toggles(9)}><i class='fa fa-question'></i> Questions only</a>    
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton" style={{zIndex:201}}>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(1)}><i className='fa fa-file'></i> Text</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(2)}><i className="fa fa-file-pdf" ></i> Upload Document</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(3)}><i className='fa fa-file-image'></i> Upload Image</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(4)}><i className='fa fa-file-video'></i> Upload Video</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(5)}><i className='fa fa-file-audio'></i> Upload Audio</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(6)}><i className='fa fa-youtube'></i> Youtube link</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(7)}><i className='fa fa-link'></i> Links/Code</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(8)}><i className='fa fa-comment'></i> Discussion/Chat</a>
+          <a className="dropdown-item" href="#" onClick={()=>toggles(9)}><i className='fa fa-question'></i> Questions only</a>    
         </div>
       </div>
      
-      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
+      <Modal isOpen={modal} toggle={toggle}  keyboard={false} backdrop='static' >
         <ModalHeader toggle={resetdata}>{editName} Learning Material/Task</ModalHeader>
         <ModalBody>
         <Form>
@@ -142,7 +148,7 @@ const resetdata = () =>{
                     required
                     defaultValue={title}
                     onChange={e=>setTitle(e.target.value)} 
-                     /><FormText class='muted'>Title the attachment</FormText>
+                     /><FormText className='muted'>Title the attachment</FormText>
                 </Col>
             </FormGroup>
             {type === 1 ? 
@@ -168,7 +174,7 @@ const resetdata = () =>{
                     required
                     defaultValue={description}
                     onChange={e=>setDescription(e.target.value)} 
-                     /><FormText class='muted'>Briefly describe the attachment/give instructions</FormText>
+                     /><FormText className='muted'>Briefly describe the attachment/give instructions</FormText>
                 </Col>
             </FormGroup>
               
@@ -190,8 +196,8 @@ const resetdata = () =>{
                       <i className={props.coursematerials.isEditing ? 'border-spinner' :`fa ${pics[type]}`} style={{fontSize:100}} aria-hidden="true"></i>
                       <div className="fileinput-preview fileinput-exists thumbnail img-raised"></div>
                         <span className="btn btn-raised btn-round btn-default btn-file">
-                        <span class="fileinput-new">Add</span>
-                        <span class="fileinput-exists">Change</span>
+                        <span className="fileinput-new">Add</span>
+                        <span className="fileinput-exists">Change</span>
                         <input 
                         style={{width:200}}
                         type="file" 
@@ -238,7 +244,7 @@ const resetdata = () =>{
                 defaultValue={files}
                 onChange={e=>setFiles(e.target.value)} 
                 placeholder="" />
-                <FormText class='muted'>Websites, Document links, Google meet or Zoom code</FormText>
+                <FormText className='muted'>Websites, Document links, Google meet or Zoom code</FormText>
             </Col>
             
         </FormGroup>
@@ -256,7 +262,7 @@ const resetdata = () =>{
                 defaultValue={files}
                 onChange={e=>setFiles(e.target.value)} 
                 placeholder="" />
-                <FormText class='muted'>Whatsapp, Telegram</FormText>
+                <FormText className='muted'>Whatsapp, Telegram</FormText>
             </Col>
             
         </FormGroup>

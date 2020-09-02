@@ -48,7 +48,7 @@ class Course extends React.Component {
   
  
   render() {
-    let {starts, ends, timer, showstarts, showends, showtimer, data, num, name} = this.state
+    let {starts, ends, timer, showstarts, showends, showtimer, data, num, name} = this.state || '';
     return (
       <>
       <Card>

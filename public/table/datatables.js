@@ -15396,7 +15396,7 @@
 				// Require DataTables, which attaches to jQuery, including
 				// jQuery if needed and have a $ property so we can access the
 				// jQuery object that is used
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -15571,7 +15571,7 @@ return DataTable;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -17677,11 +17677,11 @@ return Buttons;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-bs4')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net-bs4')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.Buttons ) {
-				require('datatables.net-buttons')(root, $);
+				require('../build1/table/node_modules/datatables.net-buttons')(root, $);
 			}
 
 			return factory( $, root, root.document );
@@ -17765,7 +17765,7 @@ return DataTable.Buttons;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -19446,7 +19446,7 @@ return FixedColumns;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -20182,7 +20182,7 @@ return FixedHeader;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -21657,7 +21657,7 @@ return Responsive;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -22145,7 +22145,7 @@ return RowGroup;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );
@@ -25825,7 +25825,7 @@ return Scroller;
                     root = window;
                 }
                 if (!$ || !$.fn.dataTable) {
-                    $ = require('datatables.net')(root, $).$;
+                    $ = require('../build1/table/node_modules/datatables.net')(root, $).$;
                 }
                 return factory($, root, root.document);
             };
@@ -25954,10 +25954,10 @@ return Scroller;
                 root = window;
             }
             if (!$ || !$.fn.dataTable) {
-                $ = require('datatables.net-bs4')(root, $).$;
+                $ = require('../build1/table/node_modules/datatables.net-bs4')(root, $).$;
             }
             if (!$.fn.dataTable.searchPanes) {
-                require('datatables.net-searchPanes')(root, $);
+                require('../build1/table/node_modules/datatables.net-searchPanes')(root, $);
             }
             return factory($, root, root.document);
         };
@@ -26036,7 +26036,7 @@ return Scroller;
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );

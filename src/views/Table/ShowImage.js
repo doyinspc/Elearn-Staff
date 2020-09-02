@@ -20,8 +20,8 @@ const Modals = (props) => {
     {types === 1 ?
     <img
         src={path}
-        height='250'
-        width='250'
+        height={props.height ? '100':'250'}
+        width={props.width ? '100':'250'}
         alt={path}
     />:''}
     {types === 2 ?

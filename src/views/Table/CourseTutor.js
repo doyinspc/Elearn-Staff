@@ -23,7 +23,6 @@ class Course extends React.Component {
          <tr>
             <td width="100px">
               <img 
-                object 
                 src={SERVER_URL + this.props.data.photo}
                 height="100px"
                 width="90px"

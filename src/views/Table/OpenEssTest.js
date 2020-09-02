@@ -18,18 +18,23 @@ import {
   Alert
 } from 'reactstrap';
 import { updateCoursescore } from './../../actions/coursescore';
+import ShowImage from './ShowImage';
 import { SERVER_URL } from "./../../actions/common.js";
 
 const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [instruction, setInstruction] = useState('');
   const [question, setQuestion] = useState(null);
   const [answer, setAnswer] = useState('');
   const [type, setType] = useState(null);
   const [points, setPoints] = useState();
   const [timer, setTimer] = useState();
   const [timeused, setTimeused] = useState(0);
+  const [imgs, setImgs] = useState('');
+  const [vids, setVids] = useState('');
+  const [auds, setAuds] = useState('');
   const [corr, setCorr] = useState('');
   const [score, setScore] = useState('');
   const [marked, setMarked] = useState(0);
@@ -56,6 +61,10 @@ const Modals = (props) => {
      setQuestion(dt.question); //QUESTION
      setType(parseInt(dt.type)); //TYPE
      setPoints(parseInt(dt.points)); //POINTS
+     setInstruction(dt.instruction);
+     setImgs(dt.imgs);
+     setAuds(dt.auds);
+     setVids(dt.vids);
      setAnswer(sc.answer);// STUDENT ANSWER
      setTimer(props.timer); //TIMER
      setTimeused(100000); //TIME LET BY STUDENTS
@@ -235,6 +244,10 @@ else
         </div>
             <div class="card-body">
             <Container>
+            {instruction && instruction.length > 0 ?
+                    <Row xs='12' className='m-0 p-0' >
+                      <div  dangerouslySetInnerHTML={{__html: instruction}} />
+                    </Row>:''}
                     <Row xs='12'>
                       <Col xs='9'>
                           <p><div dangerouslySetInnerHTML={{__html:question}}/></p>
@@ -243,6 +256,30 @@ else
                         <small>{`${points} points`}</small>
                       </Col>
                     </Row>
+                    {imgs && imgs !== null && imgs.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + imgs}
+                          type={1}
+                      />
+                      </Row>
+                      :''}
+                      {auds && auds !== null && auds.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + auds}
+                          type={2}
+                      />
+                      </Row>
+                      :''}
+                      {vids && vids !== null && vids.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + vids}
+                          type={3}
+                      />
+                      </Row>
+                      :''}
                </Container>
                 
                 <Container xs='12'>

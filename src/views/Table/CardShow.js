@@ -65,7 +65,7 @@ const Modals = (props) => {
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
+      <Modal isOpen={modal} toggle={toggle}  keyboard={false} backdrop='static' >
   <ModalHeader toggle={resetdata}><i className={`fa ${pics[type]}`}></i>Learning Material/Assessment</ModalHeader>
         <ModalBody>
           <Container>
@@ -74,9 +74,9 @@ const Modals = (props) => {
           </Row>
           <Row sm={12} width={300}>
         
-          {description && description.length > 0 && description != 'null' ? <p >
+          {description && description.length > 0 && description != 'null' ? 
                     <div  dangerouslySetInnerHTML={{__html: description}} />
-                  </p>:null}
+                  :null}
           {type === 2 ? 
            <iframe src={`https://docs.google.com/gview?url=${path}&embedded=true`} style={{width:'400px', height:'170px'}} frameborder="0"></iframe>
             : ''}

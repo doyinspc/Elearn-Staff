@@ -8,6 +8,7 @@ import {
   CardBody,
   Col
 } from "reactstrap";
+import { Link } from "react-router-dom";
 class User extends React.Component {
   render() {
 
@@ -72,6 +73,7 @@ class User extends React.Component {
             </div>
             </Card>
           </Col>
+          
         </>
     );
   }

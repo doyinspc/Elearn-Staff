@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import { getCoursetutors,getCoursetutor, registerCoursetutor, updateCoursetutor } from './../../actions/coursetutor';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, UncontrolledTooltip } from 'reactstrap';
 import axios from 'axios';
 import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
 const path = API_PATHS;
@@ -118,11 +118,13 @@ const Modals = (props) => {
 
   return (
     <div>
-       <div class="btn-group">
-          <Button className="btn-sm" color="default" onClick={()=>handleLoad()} ><i class="fa fa-refresh"></i></Button>
-          <Button className="btn-sm" color={editColor} onClick={toggle}><i class={`fa ${editIcon}`}></i></Button>
-        </div>
-      <Modal isOpen={modal} toggle={toggle}  keyboard='false' backdrop='static' >
+      <div className="btn-group">
+      <Button id='reloadertt' className="btn-sm" color="default" onClick={()=>handleLoad()} ><i className="now-ui-icons arrows-1_cloud-download-93"></i></Button>
+      <Button id='addertt' className="btn-sm" color={editColor} onClick={toggle}><i className="now-ui-icons ui-1_simple-add"></i></Button>
+      </div>
+      <UncontrolledTooltip target='reloadertt'>Load all Tutors</UncontrolledTooltip>
+      <UncontrolledTooltip target='addertt'>Add a new Tutors</UncontrolledTooltip>
+      <Modal isOpen={modal} toggle={toggle}  keyboard={false} backdrop='static' >
         <ModalHeader toggle={resetdata}>{editName} Facilitator</ModalHeader>
         <ModalBody>
         <Form>

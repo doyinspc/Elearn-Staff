@@ -21,11 +21,11 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.Buttons ) {
-				require('datatables.net-buttons')(root, $);
+				require('../build1/table/node_modules/datatables.net-buttons')(root, $);
 			}
 
 			return factory( $, root, root.document );

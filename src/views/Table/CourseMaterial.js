@@ -104,7 +104,7 @@ class Material extends React.Component {
 
     let {qid, qst, qdata } = this.state;
     let butts =  tm.map((r, i)=>{
-      return <Button key={i} type='button'  color='info' class="btn btn-info mx-1 mb-1" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</Button>
+      return <Button key={i} type='button'  color='info' className="btn btn-info mx-1 mb-1" onClick={()=>this.showQuestion(r[0], r[1])}>Essay {i + 1}</Button>
       })
 
       
@@ -134,21 +134,21 @@ class Material extends React.Component {
             handleClose={()=>this.setState({ast:false})}
           /> : ''}
          <Row xs='12'>
-         <div class="card">
-            <div class="card-body">
-              <blockquote class={`blockquote ${parseInt(this.props.data.is_active) === 1 ? 'blockquote-primary': 'blockquote-info' } mb-0`}>
+         <div className="card">
+            <div className="card-body">
+              <blockquote className={`blockquote ${parseInt(this.props.data.is_active) === 1 ? 'blockquote-primary': 'blockquote-info' } mb-0`}>
                 <p>{this.props.data.title}</p>
-                <footer class="blockquote-footer">{this.props.title}{' '}<cite title="Source Title">{this.props.title1}</cite></footer>
+                <footer className="blockquote-footer">{this.props.title}{' '}<cite title="Source Title">{this.props.title1}</cite></footer>
               </blockquote>
             </div>
-            <div class="card-footer">
-                <button id={`too1${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon"  onClick={()=>this.setState({ast:true})} handleClose={()=>this.setState({ast:false})} type="button"  ><i class="now-ui-icons education_paper"></i></button> 
+            <div className="card-footer">
+                <button id={`too1${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon"  onClick={()=>this.setState({ast:true})} type="button"  ><i className="now-ui-icons education_paper"></i></button> 
                 {parseInt(this.props.data.is_active) === 1 ? 
-                <button id={`too2${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-primary " onClick={()=>this.handleActive(0)}><i class="now-ui-icons ui-1_lock-circle-open"></i></button>:
-                <button id={`too2${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-primary" onClick={()=>this.handleActive(1)}><i class="now-ui-icons business_bulb-63"></i></button>}
-                <button id={`too4${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-info " onClick={()=>this.props.handleEdit(this.props.data.id)}><i class="now-ui-icons ui-1_lock-circle-open"></i></button>
-                <button id={`too5${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-danger" onClick={()=>this.props.handleDelete(this.props.data.id)}><i class="now-ui-icons ui-1_simple-remove"></i></button>
-                <button id={`too6${this.props.data.id}`} class="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={this.showMaterial}><i class={`fa ${pics[this.props.data.types]}`}></i></button>
+                <button id={`too2${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-primary " onClick={()=>this.handleActive(0)}><i className="now-ui-icons ui-1_lock-circle-open"></i></button>:
+                <button id={`too2${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-primary" onClick={()=>this.handleActive(1)}><i className="now-ui-icons business_bulb-63"></i></button>}
+                <button id={`too4${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-info " onClick={()=>this.props.handleEdit(this.props.data.id)}><i className="now-ui-icons ui-1_lock-circle-open"></i></button>
+                <button id={`too5${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-danger" onClick={()=>this.props.handleDelete(this.props.data.id)}><i className="now-ui-icons ui-1_simple-remove"></i></button>
+                <button id={`too6${this.props.data.id}`} className="btn  mx-1 mb-1 btn-round btn-raised btn-icon btn-outline-danger" onClick={this.showMaterial}><i className={`fa ${pics[this.props.data.types]}`}></i></button>
                 
                 <UncontrolledTooltip target={`too1${this.props.data.id}`}>Questions</UncontrolledTooltip>
                 {parseInt(this.props.data.is_active) === 1 ? 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Row, Col, Input} from 'reactstrap';
 import { updateCoursescore } from './../../actions/coursescore';
+import ShowImage from './ShowImage';
 import { SERVER_URL, imgx } from "./../../actions/common.js";
 
 
@@ -9,13 +10,18 @@ const Modals = (props) => {
   
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
+  const [instruction, setInstruction] = useState('');
   const [question, setQuestion] = useState(null);
   const [answer, setAnswer] = useState('');
   const [optionx, setOptionx] = useState(null);
+  const [optionxtype, setOptionxtype] = useState(null);
   const [type, setType] = useState(null);
   const [points, setPoints] = useState();
   const [timer, setTimer] = useState();
   const [timeused, setTimeused] = useState(0);
+  const [imgs, setImgs] = useState('');
+  const [vids, setVids] = useState('');
+  const [auds, setAuds] = useState('');
   const [corr, setCorr] = useState('');
   const [score, setScore] = useState('');
   const [marked, setMarked] = useState(0);
@@ -36,18 +42,31 @@ const Modals = (props) => {
         let d = all[index];
         if(d && d instanceof Object)
         {
-        let ops = 'options' in d && d.options.length > 0 ? d.options.split('::::::') : [];
-        let ops_arr =  {};
-        let opx ={}; 
-        for(let row of ops){
-            let r = row.split("::::");
-            opx[r[0]] = r[1];
-        }
-        
-        setQuestion(d.question);
-        setType(d.type);
-        setPoints(d.points);
-        setOptionx(opx);
+          let ops = 'options' in d && d.options.length > 0 ? d.options.split('::::::') : [];
+          let opstype = 'optionstype' in d && d.optionstype.length > 0 ? d.optionstype.split('::::::') : [];
+          let ops_arr =  {};
+          let opx ={}; 
+          let opxtype ={}; 
+          for(let row of ops)
+          {
+              let r = row.split("::::");
+              opx[r[0]] = r[1];
+          }
+          for(let row of opstype)
+          {
+              let r = row.split("::::");
+              opxtype[r[0]] = r[1];
+          }
+          
+          setQuestion(d.question);
+          setType(d.type);
+          setPoints(d.points);
+          setOptionx(opx);
+          setOptionxtype(opxtype);
+          setInstruction(d.instruction);
+          setImgs(d.imgs);
+          setAuds(d.auds);
+          setVids(d.vids);
         }
     }
 
@@ -318,7 +337,7 @@ useEffect(()=>{
             * IF THE SAME STORE IN SCORE ARRAY
             * ELSE DO NOTHING
             */
-          console.log(single_answer, single_correct_answer)
+          
           if(single_answer === single_correct_answer[0])
           {
             all_scores.push(s_points);
@@ -403,6 +422,10 @@ useEffect(()=>{
         </div>
             <div class="card-body">
             {ind > -1 ? <> <Container>
+                    {instruction && instruction.length > 0 ?
+                    <Row xs='12' className='m-0 p-0' >
+                      <div  dangerouslySetInnerHTML={{__html: instruction}} />
+                    </Row>:''}
                     <Row xs='12'>
                       <Col sm='9'>
                           <p style={{color:'#000000'}}><div dangerouslySetInnerHTML={{__html:question}}/></p>
@@ -411,20 +434,60 @@ useEffect(()=>{
                         <small>{`${points} points`}</small>
                       </Col>
                     </Row>
+                    {imgs && imgs !== null && imgs.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + imgs}
+                          type={1}
+                      />
+                      </Row>
+                      :''}
+                      {auds && auds !== null && auds.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + auds}
+                          type={2}
+                      />
+                      </Row>
+                      :''}
+                      {vids && vids !== null && vids.length > 0 ?
+                      <Row xs='12' className='m-1 p-1'>
+                      <ShowImage
+                          path={SERVER_URL + vids}
+                          type={3}
+                      />
+                      </Row>
+                      :''}
                </Container>
                 
                 <Container>
                 {type === 1 ?
                     Object.keys(optionx).map((prop, index)=>{
-                        return <Button
-                                    key={index}
-                                    color={answer[keyz[ind]] && answer[keyz[ind]] !== undefined && answer[keyz[ind]] === prop ? 'info' : 'secondary'}
-                                    onClick={()=>saveAnswer(keyz[ind], prop)}
-                                    size='sm'
-                                    block
-                                    >
-                                     {optionx[prop]}
-                                </Button>
+                    { return optionxtype && optionxtype && parseInt(optionxtype[prop]) === 1 ?
+                    <a
+                      key={index}
+                      style={{borderStyle:'solid',borderWidth:'2px', borderColor: answer[keyz[ind]] && answer[keyz[ind]] !== undefined && answer[keyz[ind]] === prop ? '#000000' : '#cfcfcf'}}
+                      onClick={()=>saveAnswer(keyz[ind], prop)}
+                      >
+                        <ShowImage
+                          path={SERVER_URL + optionx[prop]}
+                          type={1}
+                          width="100"
+                          height="100"
+                        />
+                    </a>
+                      :
+                      <Button
+                              key={index}
+                              color={answer[keyz[ind]] && answer[keyz[ind]] !== undefined && answer[keyz[ind]] === prop ? 'info' : 'secondary'}
+                              onClick={()=>saveAnswer(keyz[ind], prop)}
+                              size='sm'
+                              block
+                              >
+                                {optionx[prop]}
+                          </Button>
+                    
+                    }
                     })
                 : ''}
                  {type === 2 ?
@@ -442,7 +505,8 @@ useEffect(()=>{
                 : ''}
                  {type === 3 ?
                         <Input
-                          type ='text'
+                          type ='textarea'
+                          placeholder='Answer.....'
                           className='form-control'
                           value={answer[keyz[ind]] && answer[keyz[ind]] !== undefined ? answer[keyz[ind]] : ''}
                           onChange={(e)=>saveAns(keyz[ind], e.target.value)}

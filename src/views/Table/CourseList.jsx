@@ -15,7 +15,8 @@ import {
   Container,
   Row,
   Col,
-  Button
+  Button,
+  UncontrolledTooltip
 } from "reactstrap";
 
 // core components
@@ -29,7 +30,8 @@ class Course extends React.Component {
       st:false,
       page:1,
       subtitle:'My Classes'
-    }
+    };
+    
   }
   
   componentDidMount(){
@@ -88,6 +90,8 @@ class Course extends React.Component {
     this.setState({st:false, id:null});
   }
 
+ 
+
   render() {
       let tableTitle = "Class";
       let tableSubTitle = this.state.subtitle;
@@ -106,7 +110,6 @@ class Course extends React.Component {
     return (
       <>
         <PanelHeader size="sm" />
-        
         <div className="content">
           <Row>
             <Col xs={12}>
@@ -121,24 +124,29 @@ class Course extends React.Component {
                           <Col xs="4" sm='2' className="pull-right justify-content-end"> 
                           <div className="btn-group">
                           <div className='dropdown' >
-                          <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-ellipsis-v"></i>
+                          <button className="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i className="fa fa-ellipsis-v"></i>
                           </button>
-                          <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onClick={this.loadMyCourse}>My Classes</a>
-                            <a class="dropdown-item" href="#"  onClick={this.loadOtherCourse}>Co-teacher</a>
-                           <div class="dropdown-divider"></div>
+                          <div className="dropdown-menu">
+                            <a className="dropdown-item" href="#" onClick={this.loadMyCourse}>My Classes</a>
+                            <a className="dropdown-item" href="#"  onClick={this.loadOtherCourse}>Co-teacher</a>
+                           <div className="dropdown-divider"></div>
                           </div>
                           </div>
                             
                             <Button 
+                            id='createclass'
                                 size='sm'
                                 color='primary'
                                 onClick={()=>{this.setState({st:true})}}
                                 >
                                   <i className={`fa fa-plus`}></i> 
-                                  </Button>
-
+                            </Button>
+                            <UncontrolledTooltip
+                                target='createclass'
+                                >
+                                  Create New Class
+                            </UncontrolledTooltip>
                             {this.state.st ? <Modals 
                               mid={this.state.id} 
                               toggle={this.state.st}
@@ -154,6 +162,7 @@ class Course extends React.Component {
               </Card>
             </Col>
           </Row>
+          
           {tablerows}
         </div>
         

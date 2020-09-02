@@ -35,7 +35,7 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net')(root, $).$;
+				$ = require('../build1/table/node_modules/datatables.net')(root, $).$;
 			}
 
 			return factory( $, root, root.document );

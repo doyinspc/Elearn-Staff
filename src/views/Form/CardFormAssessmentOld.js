@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getCoursematerial, registerCoursematerial, updateCoursematerial } from './../../actions/coursematerial';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-
+import {callError} from './../../actions/common';
 
 import CardFitb from './../Table/CardFitb';
 import CardMulti from './../Table/CardMulti';
@@ -40,7 +40,6 @@ const Modals = (props) => {
      setModal(!modal);
      
     } 
-    console.log(props.data);
      populate(props.data);
 },[props.mid]);
 
@@ -54,8 +53,13 @@ const Modals = (props) => {
         toggle();
   }
   const setSubmitQuestion = data =>{
-    let q = [...question, data]
-    setQuestion(q);
+    try{
+      let q = [...question, data]
+      setQuestion(q);
+    }catch(err)
+    {
+        callError(err);
+    }
   }
   const setUpdateQuestion = (data, id) =>{
     let q = [...question];

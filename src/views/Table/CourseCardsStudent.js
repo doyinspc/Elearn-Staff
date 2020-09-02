@@ -4,13 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { getCoursemodules} from './../../actions/coursemodule';
 import { getCoursetutors} from './../../actions/coursetutor';
-
-// reactstrap components
-import {
-  
-  Row,
- 
-} from "reactstrap";
 import CardDetails from "./CardDetails";
 import { SERVER_URL, imgx } from "./../../actions/common.js";
 
@@ -53,7 +46,7 @@ class Course extends React.Component {
           data={this.props.data}
           handleClose={this.handleClose}
         />:''}
-        <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0" >
+        <div class="card col-md-3 col-sm-6 col-xs-12 ml-1 mr-1 px-0 h-100" >
         
             <img 
                 class="card-img-top" 
@@ -73,7 +66,7 @@ class Course extends React.Component {
                 
                 <h6 class="card-subtitle mb-2 text-muted">{course_code}</h6>
                 <small class="text-muted">{`${starts} - ${ends}`}</small>
-                <p class="card-text">{course_description}</p>
+                <p class="card-text">{course_description.length > 100 ? `${course_description.substing(0, 100)}...`: course_description}</p>
             </div>
             <div class="card-footer" >
             <a href="#" class="btn btn-primary" onClick={()=>{this.loadDetails(id)}}>Details/Register</a>

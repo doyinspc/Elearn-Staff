@@ -91,6 +91,7 @@ const Modals = (props) => {
           
         for(let element in res[1])
         {
+          
             let prop = res[1][element];
             let ar = {};
             ar['materialname'] = prop.title;
