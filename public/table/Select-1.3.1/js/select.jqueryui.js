@@ -17,11 +17,11 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-jqui')(root, $).$;
+				$ = require('../build1/table/Buttons-1.6.2/js/node_modules/datatables.net-jqui')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.select ) {
-				require('datatables.net-select')(root, $);
+				require('../build1/table/Select-1.3.1/js/node_modules/datatables.net-select')(root, $);
 			}
 
 			return factory( $, root, root.document );

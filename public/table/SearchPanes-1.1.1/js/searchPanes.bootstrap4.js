@@ -12,10 +12,10 @@
                 root = window;
             }
             if (!$ || !$.fn.dataTable) {
-                $ = require('datatables.net-bs4')(root, $).$;
+                $ = require('../build1/table/node_modules/datatables.net-bs4')(root, $).$;
             }
             if (!$.fn.dataTable.searchPanes) {
-                require('datatables.net-searchPanes')(root, $);
+                require('../build1/table/node_modules/datatables.net-searchPanes')(root, $);
             }
             return factory($, root, root.document);
         };

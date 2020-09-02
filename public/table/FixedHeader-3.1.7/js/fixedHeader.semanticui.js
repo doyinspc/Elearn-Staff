@@ -17,11 +17,11 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
-				$ = require('datatables.net-se')(root, $).$;
+				$ = require('../build1/table/Buttons-1.6.2/js/node_modules/datatables.net-se')(root, $).$;
 			}
 
 			if ( ! $.fn.dataTable.FixedHeader ) {
-				require('datatables.net-fixedheader')(root, $);
+				require('../build1/table/FixedHeader-3.1.7/js/node_modules/datatables.net-fixedheader')(root, $);
 			}
 
 			return factory( $, root, root.document );
