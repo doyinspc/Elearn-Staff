@@ -50,7 +50,7 @@ const Modals = (props) => {
     //GET BOTH REQUEST FILTER AND RETURN UNUSED MODELS
     let requestOne = axios.get(path, {params:params1}, axiosConfig);
     let requestTwo = axios.get(path, {params:params2}, axiosConfig);
-
+    try{
     axios.all([requestOne, requestTwo])
     .then(axios.spread(async (...responses)=>{
         const res0 = responses[0]; //all modules
@@ -79,8 +79,12 @@ const Modals = (props) => {
         await setOptions(optionx);
     })
     .catch(err=>{
-        //console.log(JSON.stringify(err));
+        callError(err);
     })
+  }catch(err)
+  {
+    callError(err);
+  }
     
 },[props.mid]);
 

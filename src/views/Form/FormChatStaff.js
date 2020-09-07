@@ -80,11 +80,11 @@ const Modals = (props) => {
       })
 }
 
- let {username, fullname, photo, chat, modulename, materialname, userId, id, materialId, updated } = props.data || '';
+ let {username, fullname, photo, chat, modulename, materialname, userId, id, materialId, updated, grp } = props.data || '';
 
   return (
    <>
-        {userId === props.user.id ?
+        {parseInt(userId) === parseInt(props.user.id) && parseInt(grp) === 1 ?
         <article class="msg-container msg-self" id="msg-0">
                     <div class="msg-box">
                         <div class="flr">
@@ -100,7 +100,7 @@ const Modals = (props) => {
         <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
                         </div>
                         <img 
-                        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+                        onClick={()=>loadComment(id, chat, userId, materialId)}
                         class="user-img" 
                         id="user-0" 
                         src={`${SERVER_URL + photo}`}
@@ -111,7 +111,7 @@ const Modals = (props) => {
     <article class="msg-container msg-remote" id="msg-0">
       <div class="msg-box">
         <img 
-        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+        onClick={()=>loadComment(id, chat, userId, materialId)}
         class="user-img" 
         id="user-0" 
         src={`${SERVER_URL + photo}`}

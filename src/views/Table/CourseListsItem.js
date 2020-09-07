@@ -43,6 +43,7 @@ class Course extends React.Component {
     let ids = this.props.userstudentcourses.userstudentcourse.id;
     this.props.getCoursemodules({'courseId':ids,'is_active':0});
     this.setState({data:this.props.userstudentcourses.userstudentcourse})
+    console.log(this.props.userstudentcourses.userstudentcourse);
   }
   componentWillReceiveProps(nextProps, nexState)
    {
@@ -68,39 +69,39 @@ class Course extends React.Component {
   }
 
   render() {
-    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname} = this.state.data;
+    let {course_code, course_objective, course_description, course_name, cid:id, departmentname, levelname } = this.state.data;
       let tableTitle = course_name;
       let tableSubTitle = levelname +" "+departmentname;
       let listmodules = this.props.coursemodules.coursemodules.map((prop, ind)=>{
       let diz = new Date(prop.starts) < new Date() && new Date(prop.ends) > new Date() ? false: true;
       if(diz)
       {
-       return <a class="dropdown-item" href="#" onClick={()=>{this.loadModuls(prop.id)}} >
-       <Container class='my-0 py-0'>
-         <Row xs='12' class='my-0 py-0'>
-           <Col xs='11' class='my-0 py-0 bg-dark'>
-             <i class="fa fa-forward my-0 py-0"></i> 
-             <small class='my-0 py-0'>{prop.modulename}</small>
-             <br class='my-0 py-0'/>
-             <h6  class='my-0 py-0' style={{lineHeight:1}} ><small >{prop.title}</small></h6>
+       return <a key={ind} className="dropdown-item" href="#" onClick={()=>{this.loadModuls(prop.id)}} >
+       <Container className='my-0 py-0'>
+         <Row xs='12' className='my-0 py-0'>
+           <Col xs='11' className='my-0 py-0 bg-dark'>
+             <i className="fa fa-forward my-0 py-0"></i> 
+             <small className='my-0 py-0'>{prop.modulename}</small>
+             <br className='my-0 py-0'/>
+             <h6  className='my-0 py-0' style={{lineHeight:1}} ><small >{prop.title}</small></h6>
            </Col>
          </Row>
          </Container>
          </a>
       }else
       {
-        return <a class="dropdown-item" href="#" onClick={()=>{this.loadMaterial(prop.id)}} >
-        <Container class='my-0 py-0'>
-          <Row xs='12' class='my-0 py-0'>
-            <Col xs='11' class='my-0 py-0 bg-dark'>
-              <i class="fa fa-forward my-0 py-0"></i> 
-              <small class='my-0 py-0'>{prop.modulename}</small>
-              <br class='my-0 py-0'/>
-              <h6  class='my-0 py-0' style={{lineHeight:1}} ><small className='text-info' style={{ fontWeight:'bold'}}>{prop.title}</small></h6>
+        return (<a className="dropdown-item" key={ind} href="#" onClick={()=>{this.loadMaterial(prop.id)}} >
+        <Container className='my-0 py-0'>
+          <Row xs='12' className='my-0 py-0'>
+            <Col xs='11' className='my-0 py-0 bg-dark'>
+              <i className="fa fa-forward my-0 py-0"></i> 
+              <small className='my-0 py-0'>{prop.modulename}</small>
+              <br className='my-0 py-0'/>
+              <h6  className='my-0 py-0' style={{lineHeight:1}} ><small className='text-info' style={{ fontWeight:'bold'}}>{prop.title}</small></h6>
             </Col>
           </Row>
           </Container>
-          </a>
+          </a>)
       }
       });
     return (
@@ -130,13 +131,13 @@ class Course extends React.Component {
                           <p className="category"> {tableSubTitle}</p>
                           </Col>
                           <Col xs="4" className="pull-right"> 
-                          <div class="btn-group">
-                          <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className='fa fa-ellipsis-v'></i>
+                          <div className="btn-group">
+                          <button type="button" className="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i className='fa fa-ellipsis-v'></i>
                           </button>
-                          <div class="dropdown-menu">
-                            <Link class="dropdown-item" to="/admin/courses">My Classes</Link>
-                            <a class="dropdown-item" href="#" onClick={this.loadReport}>Report</a>
-                            <div class="dropdown-divider"></div>
+                          <div className="dropdown-menu">
+                            <Link className="dropdown-item" to="/admin/courses">My Classes</Link>
+                            <a className="dropdown-item" href="#" onClick={this.loadReport}>Report</a>
+                            <div className="dropdown-divider"></div>
                             {listmodules}
                           </div>
                         </div>

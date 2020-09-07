@@ -59,7 +59,7 @@ class TimeLine extends React.Component {
   }
 
   lunchObjTest = (data, act, timer, starts, ends) =>{
-    console.log(timer);
+    
     let timers = timer && timer !== 'x' ? `test duration ${timer}` : '';
     let starter = starts && starts !== 'x' ? ` test starts ${ new  Date(starts).toString()} ` : '';
     let ender = ends && ends !== 'x' ? ` test ends ${ new  Date(ends).toString()}` : '';
@@ -292,9 +292,17 @@ class TimeLine extends React.Component {
     let que = JSON.parse(question);
     let sets = JSON.parse(settings);
     let weightd = weight ? weight : 0;
-    let sizesd = sizes && parseInt(sizes) > 0 ? Math.round(parseInt(sizes)/1024) : 0;
-    let sizedd = sizesd + ' mb';
-
+    let sizesd = 0;
+    let sizedd = '';
+    if(sizes && (parseInt(sizes)/1024) > (1024 * 1024))
+    {
+      sizesd = sizes && parseFloat(sizes) > 0 ? Math.round(parseInt(sizes)/1024) : 0;
+      sizedd = Number(sizesd).toFixed(2) + ' kb';
+    }else if(sizes && parseInt(sizes) > (1024 * 1024))
+    {
+      sizesd = sizes && parseFloat(sizes) > 0 ? Math.round(parseInt(sizes)/(1024 * 1024)) : 0;
+      sizedd = Number(sizesd).toFixed(2) + ' mb';
+    }
     let obj = [];
     let ess = [];
     let total_obj = [];
@@ -457,6 +465,7 @@ class TimeLine extends React.Component {
       if(score !== null)
       {
          ess_button = <button 
+         key={index}
                   className={`btn btn-success btn-sm`} 
                   >
                     Essay {index + 1} <span className='badge badge-light'>{`${score}/${points_obj[keyed]}`}</span>
@@ -464,6 +473,7 @@ class TimeLine extends React.Component {
       }else
       {
           ess_button = <button 
+          key={index}
                   className={`btn btn-${butn} btn-sm `} 
                   onClick={ canStart && !canEnd ? ()=>this.lunchEssTest(keyed, valed, act, timers, startDate, endDate) : ()=>this.lunchEssTest(keyed, valed, act,  timers, startDate, endDate)}  
                   >
@@ -476,7 +486,7 @@ class TimeLine extends React.Component {
 
     let sum_student_scores = Object.values(points_obj_student).reduce((a, b)=> a + b, 0);
     let sum_total_max_points = total_obj_points + total_ess_points;
-    let final_scoress = (sum_student_scores / sum_total_max_points) * parseInt(weightd);
+    let final_scoress = weightd > 0 ? (sum_student_scores / sum_total_max_points) * parseInt(weightd) : 0 ;
     let final_score = Number(final_scoress).toFixed(1);
     return (
       <>
@@ -504,7 +514,7 @@ class TimeLine extends React.Component {
         }
         {this.state.cst ? 
         <CardChatStudent
-          materialId={this.state.data.id}
+          materialId={this.props.data.id}
           studentId={this.props.user.id}
           data={this.state.data}
           st={this.state.cst}
@@ -606,7 +616,7 @@ class TimeLine extends React.Component {
                       </Col>
                       <Col xs='6'>
                         <i class="fa fa-check"></i>{""}
-                        <b>Score : </b>{Math.round(final_score)}
+                        <b>Score : </b>{Number(final_score).toFixed(1)}
                       </Col>
                     </Row>
                     </Container>

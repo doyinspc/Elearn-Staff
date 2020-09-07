@@ -32,7 +32,7 @@ class TimeLine extends React.Component {
 
    }
   render() {
-     let {title, modulename, description, objective, starts, ends, dailyduration, weeklyduration, weight } = this.props.coursemodules.coursemodule || '';
+     let {title, modulename, description, objective, starts, ends, dailyduration, weeklyduration, weight, is_active } = this.props.coursemodules.coursemodule || '';
      let mate =  this.state.data;
      let material = mate && Array.isArray(mate) ? mate.map((prop, index)=>{
             return <CourseTimeLine  key={index} data={prop}/>

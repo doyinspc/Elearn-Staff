@@ -34,10 +34,10 @@ const Modals = (props) => {
       table:'students',
       token:MAIN_TOKEN
     }
-
+    try{
     axios.get(path, {params}, axiosConfig)
-    .then(res=>{
-      let opt = res.data.map(row=>{
+    .then(async res=>{
+      let opt = await res.data.map(row=>{
          let obs = {};
          obs['value'] = row.id;
          obs['label'] = row.username+" "+row.firstname+" "+row.lastname;
@@ -45,13 +45,17 @@ const Modals = (props) => {
       })
       return opt;
     })
-    .then(optionx =>{
-        setOptions(optionx);
+    .then(async optionx =>{
+        await setOptions(optionx);
     })
     .catch(err=>{
         callError(err);
     });
-    
+  }
+  catch(err)
+  {
+    callError(err);
+  }
     
 },[props.mid]);
 
@@ -120,7 +124,7 @@ const Modals = (props) => {
       <UncontrolledTooltip target='reloaderst'>Load all students</UncontrolledTooltip>
       <UncontrolledTooltip target='adderst'>Add a new student</UncontrolledTooltip>
       <Modal isOpen={modal} toggle={toggle} keyboard={false} backdrop='static' >
-        <ModalHeader toggle={resetdata}>{editName} Facilitator</ModalHeader>
+        <ModalHeader toggle={resetdata}>{editName} Student</ModalHeader>
         <ModalBody>
         <Form>
             <FormGroup row>

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SERVER_URL, imgx } from "./../../actions/common.js"
+import { SERVER_URL, imgx, imgb } from "./../../actions/common.js"
 
 import {
   Button,
@@ -21,7 +21,8 @@ class User extends React.Component {
             <Card className="card-user">
             <div className="image">
                 <img 
-                alt={username} src={require("assets/img/bg5.jpg")} />
+                alt={username} src={imgb} 
+                />
             </div>
             <CardBody>
                 <div className="author">

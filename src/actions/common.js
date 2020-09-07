@@ -5,6 +5,7 @@ export const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 export const MAIN_TOKEN ='';
 export const PICS = process.env.REACT_APP_PHOTO;
 export const imgx = process.env.REACT_APP_PHOTO;
+export const imgb = process.env.REACT_APP_BG;
 export const axiosConfig = {
     headers: {
         "Content-Type": "application/json;charset=UTF-8",

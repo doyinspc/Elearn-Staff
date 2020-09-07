@@ -90,7 +90,7 @@ const Modals = (props) => {
             <Row xs={12} className="row fileinput fileinput-new text-center m-auto" data-provides="fileinput">
                     <Col className="fileinput-new thumbnail h-150" xs={12} >
                       <i className={icons} style={{fontSize:100}} aria-hidden="true"></i>
-                    </Col>
+                    </Col> 
                     <Col xs='12'>
                         <span className="btn btn-raised btn-block btn-round btn-default btn-file">
                         <span class="fileinput-new">Add</span>

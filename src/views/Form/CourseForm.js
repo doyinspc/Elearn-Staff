@@ -11,7 +11,8 @@ const path = API_PATHS;
 const ses = [
   {'value':'First Term', 'label':'First Term'},
   {'value':'Second Term', 'label':'Second Term'},
-  {'value':'Third Term', 'label':'Third Term'}
+  {'value':'Third Term', 'label':'Third Term'},
+  {'value':'Admission', 'label':'Admission'}
 ];
 const Modals = (props) => {
   
@@ -83,7 +84,7 @@ const Modals = (props) => {
    
     let requestOne = axios.get(path, {params:params1}, axiosConfig);
     let requestTwo = axios.get(path, {params:params2}, axiosConfig);
-   
+   try{
     axios.all([requestOne, requestTwo])
     .then(axios.spread((...responses)=>{
         const res0 = responses[0]; //all modules
@@ -105,9 +106,12 @@ const Modals = (props) => {
        setOptions1(opt1);
     }))
     .catch(err=>{
-       callError(err)
-        //console.log(JSON.stringify(err));
+       callError(err);
     })
+  }catch(err)
+  {
+    callError(err);
+  }
   
     
 },[props.mid]);

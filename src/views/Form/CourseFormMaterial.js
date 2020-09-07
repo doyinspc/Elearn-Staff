@@ -183,16 +183,11 @@ const resetdata = () =>{
               {type === 2 || type === 3 || type === 4 || type === 5  ? 
             <FormGroup row>
             <Label for="files" sm={12}>Upload </Label>
-            
-            <Row xs={12} className="row fileinput fileinput-new text-center m-0 bg-green" data-provides="fileinput">
-                    
-                    <Col xs={6} className='h-150' >
-                    { files && files.length > 0 ?
-                      <iframe src={`https://docs.google.com/gview?url=${ SERVER_URL + files }&embedded=true`} style={{width:'400px', height:'300px'}} frameborder="0"></iframe>
-                      :''}
-                        
-                    </Col>
-                    <Col className="fileinput-new thumbnail h-150" xs={6} >
+            <Row xs={12} className="row fileinput fileinput-new text-center m-auto" data-provides="fileinput">
+                    <Col className="fileinput-new thumbnail h-150" xs={12} >
+                      <i className='fa fa-video-camera' style={{fontSize:100}} aria-hidden="true"></i>
+                    </Col> 
+                    <Col xs='12'>
                       <i className={props.coursematerials.isEditing ? 'border-spinner' :`fa ${pics[type]}`} style={{fontSize:100}} aria-hidden="true"></i>
                       <div className="fileinput-preview fileinput-exists thumbnail img-raised"></div>
                         <span className="btn btn-raised btn-round btn-default btn-file">

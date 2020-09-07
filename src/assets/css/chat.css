@@ -8,6 +8,13 @@
     font-family: sans-serif;
     background: #1c1e22;
 }
+#mainchat_body blockqoute {
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    color: #cccfff;
+    font-size: 0.8em;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 #mainchat_body {
     display: flex;
     align-items: center;

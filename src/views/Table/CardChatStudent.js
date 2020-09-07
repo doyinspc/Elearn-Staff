@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { registerCoursecomment } from './../../actions/coursecomment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import FormChatStudent from 'views/Form/FormChatStudent';
+import $ from 'jquery';
 import "assets/css/chat.css"; 
 const Modals = (props) => {
   
@@ -20,10 +21,12 @@ const Modals = (props) => {
     }
     scrollToBottom();
 },[props.mmid]);
+
+
  const handleSubmit =()=>{
   let fd= new FormData();
   fd.append('chat', namez);
-  fd.append('userId', props.user.id);
+  fd.append('userId', props.user.id);  
   fd.append('materialId', props.materialId);
   fd.append('qid', 'mat');
   fd.append('grp', 0);
@@ -32,32 +35,34 @@ const Modals = (props) => {
   fd.append('cat', 'insert');
   fd.append('table', 'course_comments');
   props.registerCoursecomment(fd);
+  setNamez('');
+  scrollToBottom();
+ 
  }
 
  
   let ch = props.coursecomments.coursecomments;
-  let chats = ch && Array.isArray(ch) ? ch.map((props, ind)=>{
+  let chats = ch && Array.isArray(ch) ? ch.map((prop, ind)=>{
         return <FormChatStudent
                     key={ind}
-                    data={props}
+                    materialId={props.materialId}
+                    data={prop}
                 />
   }): null;
  const scrollToBottom = () =>{
-   console.log(messageEndRef.current);
-   if(messageEndRef.current !== null) 
-   messageEndRef.current.scrollIntoView({behavior: "smooth"})
+  $('#winds').scrollTop($('#winds')[0].scrollHeight);
  }
   const resetdata = () =>{
     props.handleClose()
   }
   return (
     <div>
-      <Modal isOpen={modal}  toggle={toggle} backdrop='static'  keyboard={false}>
+  <Modal isOpen={modal}  toggle={toggle} backdrop='static'  keyboard={false}>
     
-  <ModalHeader toggle={resetdata}><h6><i className={`fa fa-comments-o`}></i> {}</h6></ModalHeader>
+  <ModalHeader toggle={resetdata}><h5><i className={`fa fa-comments-o`}></i> {}</h5></ModalHeader>
         <ModalBody id='mainchat_body'>
         <section class="chatbox">
-        <section class="chat-window">
+        <section class="chat-window" id='winds'>
            {chats}
         </section>
         <form class="chat-input"  onsubmit="return false;">

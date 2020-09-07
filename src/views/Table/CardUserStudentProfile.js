@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SERVER_URL, imgx } from "./../../actions/common.js"
+import { SERVER_URL, imgx, imgb } from "./../../actions/common.js"
 
 import {
   Button,
@@ -23,7 +23,7 @@ class User extends React.Component {
             <Card className="card-user">
             <div className="image">
                 <img 
-                alt={username} src={require("assets/img/bg5.jpg")} />
+                alt={username} src={imgb} />
             </div>
             <CardBody>
                 <div className="author">
@@ -56,10 +56,9 @@ class User extends React.Component {
                
             </div>
             </Card>
+            <Link to='/admin/courses' className='btn btn-block btn-info btn-bg'>My Class(es)</Link>
           </Col>
-          <Col>
-          <Link to='/courses' className='btn btn-block btn-info btn-bg'>Go to class</Link>
-          </Col>
+          
         </>
     );
   }

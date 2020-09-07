@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { getCoursetutors,getCoursetutor, registerCoursetutor, updateCoursetutor } from './../../actions/coursetutor';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Col, UncontrolledTooltip } from 'reactstrap';
 import axios from 'axios';
-import { MAIN_TOKEN, API_PATHS, axiosConfig } from './../../actions/common';
+import { MAIN_TOKEN, API_PATHS, axiosConfig, callError } from './../../actions/common';
 const path = API_PATHS;
 const Modals = (props) => {
   
@@ -38,10 +38,10 @@ const Modals = (props) => {
       table:'staffs',
       token:MAIN_TOKEN
     }
-
+    try{
     axios.get(path, {params}, axiosConfig)
-    .then(res=>{
-      let opt = res.data.map(row=>{
+    .then(async res=>{
+      let opt = await res.data.map(row=>{
          let obs = {};
          obs['value'] = row.id;
          obs['label'] = row.username+" "+row.firstname+" "+row.lastname;
@@ -49,13 +49,17 @@ const Modals = (props) => {
       })
       return opt;
     })
-    .then(optionx =>{
-        setOptions(optionx);
+    .then(async optionx =>{
+        await setOptions(optionx);
     })
     .catch(err=>{
-        //alert(JSON.stringify(err));
+        callError(err);
     });
-    
+  }
+  catch(err)
+  {
+    callError(err);
+  }
     
 },[props.mid]);
 

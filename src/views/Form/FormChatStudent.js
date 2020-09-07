@@ -4,6 +4,7 @@ import moment from 'moment';
 import { registerCoursecomment, deleteCoursecomment } from '../../actions/coursecomment';
 import Swal from 'sweetalert2';
 import { SERVER_URL, imgx } from "../../actions/common.js";
+import $ from 'jquery';
 import "assets/css/chat.css"; 
 
 const Modals = (props) => {
@@ -34,10 +35,9 @@ const Modals = (props) => {
         let fd= new FormData();
         fd.append('chat', msgs + text);
         fd.append('userId', props.user.id);
-        fd.append('materialId', mat);
+        fd.append('materialId', props.materialId);
         fd.append('qid', 'mat');
         fd.append('grp', 0);
-        fd.append('types', 1);
         fd.append('cat', 'insert');
         fd.append('table', 'course_comments');
         Swal.fire({
@@ -50,10 +50,10 @@ const Modals = (props) => {
           }).then((result) => {
             if (result.value) {
                 fd.append('types', 1);
-                fd.append('recieverId', 0);
+                fd.append('receiverId', props.user.id);
                 props.registerCoursecomment(fd);
             }else{
-              fd.append('recieverId', 0);
+              fd.append('receiverId', props.user.id);
                 fd.append('types', 2);
                 props.registerCoursecomment(fd);
             }
@@ -86,7 +86,7 @@ const Modals = (props) => {
 
   return (
    <>
-        {userId === props.user.id && parseInt(grp) === 0 ?
+        {parseInt(userId) === parseInt(props.user.id) && parseInt(grp) === 0 ?
         <article class="msg-container msg-self" id="msg-0">
                     <div class="msg-box">
                         <div class="flr">
@@ -95,10 +95,10 @@ const Modals = (props) => {
                                 <div dangerouslySetInnerHTML={{__html:chat}} />
                                 </p>
                             </div>
-        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
+        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).format('LLL')}</span></span>
                         </div>
                         <img 
-                        onClick={()=>loadComment(id, chat.substring(0, 200), userId, materialId)}
+                        onClick={()=>loadComment(id, chat, userId, materialId)}
                         class="user-img" 
                         id="user-0" 
                         src={`${SERVER_URL + photo}`}
@@ -109,7 +109,7 @@ const Modals = (props) => {
     <article class="msg-container msg-remote" id="msg-0">
       <div class="msg-box">
         <img 
-        onClick={()=>loadComment(id, chat.substring(0, 30), userId, materialId)}
+        onClick={()=>loadComment(id, chat, userId, materialId)}
         class="user-img" 
         id="user-0" 
         src={`${SERVER_URL + photo}`}
@@ -121,7 +121,7 @@ const Modals = (props) => {
                   <div dangerouslySetInnerHTML={{__html:chat}} />
                 </p>
             </div>
-        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).startOf('hour').fromNow()}</span></span>
+        <span class="timestamp"><span class="username">{fullname}</span>&bull;<span class="posttime">{moment(updated).format('LLL')}</span></span>
           </div>
         </div>
       </article>

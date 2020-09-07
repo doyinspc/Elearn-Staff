@@ -32,6 +32,8 @@ const Modals = (props) => {
   fd.append('cat', 'insert');
   fd.append('table', 'course_comments');
   props.registerCoursecomment(fd);
+  setNamez('');
+  //messageEndRef.current.scrollTop = messageEndRef.scrollHeight;
  }
 
  

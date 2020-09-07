@@ -18,9 +18,13 @@ class Course extends React.Component {
   }
   render() {
     let {id, username, lastname, firstname, middlename, gender, phone, photo, email, title, is_active } = this.props.data || "";
-    let fullname = lastname+" "+firstname+"  "+middlename;
+    let fu1 = lastname && lastname.length ? lastname.toUpperCase() : '';
+    let fu2 = firstname && firstname.length ? firstname.toUpperCase() : '';
+    let fu3 =  middlename && middlename.length ? middlename.toUpperCase() : '';
+    let fullname =  fu1 +" "+ fu2 +" "+ fu3 ;
     let key = this.props.key;
-    let pnum = '234'+phone.substring(phone.length -10);
+    let pnum = phone && phone.length > 0 ? '234'+phone.substring(phone.length, -10) : '';
+    let fulld = `Hello ${ fullname }, Thank you for choosing Joy International College, Kaduna. You have been included in our online preparatory class starting 8th September, 2020. Kindly, visit www.jickaduna.com.ng/elearn/ Your login credentials are as follows.  USERNAME:${username} and PASSWORD:${phone}`
     return (
       <>
       <tr key={this.props.key} id={`row${id}`}>
@@ -36,7 +40,7 @@ class Course extends React.Component {
                 />{" "}
               {username}</td>
              
-            <td className="text-left" style={{textTransform:"capitalize"}}>{fullname}</td>
+    <td className="text-left" style={{textTransform:"capitalize"}}>{fullname}</td>
             <td className="text-center"><a href={`tel:${phone}`}>{phone}</a></td>
             <td className="text-center"><a href={`mailto:${email}`}>{email}</a></td>
             <td className="text-right">
@@ -70,6 +74,13 @@ class Course extends React.Component {
             >
                 Report
             </UncontrolledTooltip>
+            <a
+                className="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success my-1 py-1"  
+                href={`https://wa.me/${pnum}?text=${encodeURI(fulld)}`}
+                target='_blank'
+                >
+                    <i className="now-ui-icons travel_info"></i>
+                </a>
                 <a
                 className="btn btn-sm btn-icon btn-neutral btn-whatsapp btn-success my-1 py-1"  
                 href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
@@ -149,6 +160,8 @@ class Course extends React.Component {
                   <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a className="dropdown-item" href="#" onClick={this.props.loadUser} ><i className="now-ui-icons users_single-02"></i> Profile</a>
                     <a className="dropdown-item" href="#" onClick={this.props.loadAssignment}><i className="now-ui-icons design-2_ruler-pencil" /> Assignment</a>
+                    <a className="dropdown-item" href="#" href={`https://wa.me/${pnum}?text=${encodeURI(fulld)}`}
+                target='_blank'><i style={{fontSize:'1.8em'}} className="now-ui-icons travel_info text-success"></i> Send Login Data</a>
                     <a className="dropdown-item" href="#" href={`https://wa.me/${pnum}?text=Hello%20${encodeURI(fullname)}`}
                 target='_blank'><i style={{fontSize:'1.8em'}} className="fab fa-whatsapp text-success"></i> Whatsapp</a>
                     <a className="dropdown-item" href="#" onClick={this.props.loadQuestion}><i className="now-ui-icons ui-2_chat-round" /> Question/Chat</a>
